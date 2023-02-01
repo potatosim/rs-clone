@@ -1,0 +1,34 @@
+.content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ghost {
+  animation: up-down 2s ease-in-out infinite alternate;
+}
+
+@keyframes up-down {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+.btnHome {
+  padding: 10px 20px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background: #000;
+  color: #fff;
+  font-size: 1.2rem;
+}
+.btnHome:hover {
+  background: #fff;
+  color: #000;
+}
