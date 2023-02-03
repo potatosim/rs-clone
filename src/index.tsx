@@ -10,7 +10,6 @@ root.render(
   <FirebaseProvider>
     <BrowserRouter>
       <AppRouter />
-      <TestPage />
     </BrowserRouter>
   </FirebaseProvider>,
 );

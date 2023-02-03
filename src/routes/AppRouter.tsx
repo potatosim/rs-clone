@@ -2,8 +2,9 @@ import React from 'react';
 import NotFoundPage from 'pages/NotFoundPage';
 import BoardPage from 'pages/BoardPage';
 import BoardsPage from 'pages/BoardsPage';
-import { Route, Routes } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
+import TestPage from 'pages/UserThemes';
+import { Route, Routes } from 'react-router-dom';
 import Layout from 'layout/Layout';
 import LoginPage from 'pages/LoginPage';
 import SignUpPage from 'pages/SignUpPage';
@@ -22,6 +23,8 @@ const AppRouter = () => {
           <Route path={AppRoutes.Boards} element={<BoardsPage />} />
           <Route path={AppRoutes.Board} element={<BoardPage />} />
           <Route path={AppRoutes.AccountPage} element={<AccountPage />} />
+          <Route path={AppRoutes.UserThemes} element={<TestPage />} />
+          <Route path={AppRoutes.AllThemes} element={<TestPage />} />
         </Route>
       </Route>
     </Routes>
