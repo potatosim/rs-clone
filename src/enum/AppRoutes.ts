@@ -6,4 +6,6 @@ export enum AppRoutes {
   LoginPage = '/login',
   SignUpPage = '/signup',
   AccountPage = '/account',
+  UserThemes = '/user-themes',
+  AllThemes = '/all-themes',
 }
