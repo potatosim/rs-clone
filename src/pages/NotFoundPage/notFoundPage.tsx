@@ -1,7 +1,7 @@
-import ghostImg from './not-found-ghost.png';
-import style from './NotFound.module.css';
+import ghostImg from 'static/images/ghost.png';
+import style from './NotFoundPage.module.css';
 
-const NotFound = () => {
+const NotFoundPage = () => {
   return (
     <>
       <div className={style.content}>
@@ -18,4 +18,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default NotFoundPage;
