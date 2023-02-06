@@ -11,11 +11,17 @@ interface CreateColumnFormProps {
   boardId: string;
   isModalOpen: boolean;
   handleClose: () => void;
+  columnLength: number;
 }
 
-const CreateColumnForm: FC<CreateColumnFormProps> = ({ isModalOpen, handleClose, boardId }) => {
+const CreateColumnForm: FC<CreateColumnFormProps> = ({
+  isModalOpen,
+  handleClose,
+  boardId,
+  columnLength,
+}) => {
   const [columnTitle, setColumnTitle] = useState<string>('');
-  const addColumn = useAddColumn(columnTitle, boardId);
+  const addColumn = useAddColumn(columnTitle, boardId, columnLength);
 
   const handleCreateColumn = async () => {
     handleClose();

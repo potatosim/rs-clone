@@ -3,13 +3,13 @@ import { Collections } from 'enum/Collection';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
 import { useContext } from 'react';
 
-export const useAddColumn = (title: string, boardId: string) => {
+export const useAddColumn = (title: string, boardId: string, length: number) => {
   const { firestore } = useContext(FirebaseContext);
 
   const handleAddColumn = async () => {
     const column = await addDoc(collection(firestore, Collections.Columns), {
       title,
-      createdAt: Date.now(),
+      order: length,
       tasks: [],
     });
 

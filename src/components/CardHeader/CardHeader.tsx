@@ -10,10 +10,9 @@ interface CardHeaderProps {
   handleUpdate: (title: string) => void;
   handleDelete: () => void;
   padding?: string;
-  divider?: boolean;
 }
 
-const BoardCardHeader = styled(Box)<{ padding?: string; divider?: boolean }>`
+const BoardCardHeader = styled(Box)<{ padding?: string }>`
   max-width: 100%;
   padding: ${({ padding }) => padding || ''};
   display: flex;
@@ -21,16 +20,9 @@ const BoardCardHeader = styled(Box)<{ padding?: string; divider?: boolean }>`
   align-items: center;
   column-gap: 0.5rem;
   background-color: transparent;
-  border-bottom: ${({ divider }) => (divider && '4px solid blue') || ''};
 `;
 
-const CardHeader = ({
-  cardTitle,
-  handleDelete,
-  handleUpdate,
-  padding,
-  divider = false,
-}: CardHeaderProps) => {
+const CardHeader = ({ cardTitle, handleDelete, handleUpdate, padding }: CardHeaderProps) => {
   const [isChangeTitle, setIsChangeTitle] = useState(false);
 
   const [title, setTitle] = useState(cardTitle);
@@ -47,7 +39,7 @@ const CardHeader = ({
 
   if (isChangeTitle) {
     return (
-      <BoardCardHeader divider={divider} padding={padding} onClick={(e) => e.stopPropagation()}>
+      <BoardCardHeader padding={padding} onClick={(e) => e.stopPropagation()}>
         <TextField
           label="Title"
           size="small"
@@ -75,7 +67,7 @@ const CardHeader = ({
   }
 
   return (
-    <BoardCardHeader divider={divider} padding={padding}>
+    <BoardCardHeader padding={padding}>
       <Typography
         whiteSpace="nowrap"
         overflow="hidden"

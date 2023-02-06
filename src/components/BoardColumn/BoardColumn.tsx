@@ -13,13 +13,26 @@ import { Collections } from 'enum/Collection';
 import AddIcon from '@mui/icons-material/Add';
 import CardHeader from 'components/CardHeader';
 import Skeleton from '@mui/material/Skeleton';
+import { Draggable } from 'react-beautiful-dnd';
+import styled from '@emotion/styled';
+import { DnDPostfix } from 'enum/DnDPostfix';
 
 interface BoardColumnProps {
   columnId: string;
   boardId: string;
+  order: number;
 }
 
-const BoardColumn: FC<BoardColumnProps> = ({ columnId, boardId }) => {
+const Column = styled(Paper)`
+  padding: 1rem 2rem;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  background-color: lightgray;
+  row-gap: 1rem;
+`;
+
+const BoardColumn: FC<BoardColumnProps> = ({ columnId, boardId, order }) => {
   const { firestore } = useContext(FirebaseContext);
   const { column } = useColumn(columnId);
   const { tasks } = useTasks(column?.tasks);
@@ -29,6 +42,7 @@ const BoardColumn: FC<BoardColumnProps> = ({ columnId, boardId }) => {
   const handleClose = () => setIsOpen(false);
 
   const handleDeleteColumn = async () => {
+    // TODO: check deleting of tasks according to its column
     await deleteDoc(doc(firestore, Collections.Columns, columnId));
     await updateDoc(doc(firestore, Collections.Boards, boardId), {
       columns: arrayRemove(columnId),
@@ -46,33 +60,26 @@ const BoardColumn: FC<BoardColumnProps> = ({ columnId, boardId }) => {
   };
 
   return (
-    <Paper
-      sx={{
-        padding: '1rem 2rem',
-        width: '200px',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'lightgray',
-        rowGap: '1rem',
-      }}
-      elevation={8}
-    >
-      <CardHeader
-        divider
-        cardTitle={column.title}
-        handleDelete={handleDeleteColumn}
-        handleUpdate={handleUpdateTitle}
-      />
-      <Stack spacing={2} sx={{ width: '100%' }}>
-        {tasks.map((task) => (
-          <TaskCard description={task.description} title={task.title} key={task.id} />
-        ))}
-      </Stack>
-      <Button sx={{ padding: '1rem 2rem' }} onClick={handleOpen} startIcon={<AddIcon />}>
-        Add task
-      </Button>
-      <CreateTaskForm columnId={columnId} handleClose={handleClose} isModalOpen={isOpen} />
-    </Paper>
+    <Draggable draggableId={columnId + DnDPostfix.Drag} index={order}>
+      {({ draggableProps, innerRef: r, dragHandleProps }) => (
+        <Column ref={r} {...draggableProps} {...dragHandleProps} elevation={8}>
+          <CardHeader
+            cardTitle={column.title}
+            handleDelete={handleDeleteColumn}
+            handleUpdate={handleUpdateTitle}
+          />
+          <Stack spacing={2} sx={{ width: '100%' }}>
+            {tasks.map((task) => (
+              <TaskCard description={task.description} title={task.title} key={task.id} />
+            ))}
+          </Stack>
+          <Button sx={{ padding: '1rem 2rem' }} onClick={handleOpen} startIcon={<AddIcon />}>
+            Add task
+          </Button>
+          <CreateTaskForm columnId={columnId} handleClose={handleClose} isModalOpen={isOpen} />
+        </Column>
+      )}
+    </Draggable>
   );
 };
 
