@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  Container,
   CssBaseline,
   Grid,
   IconButton,
@@ -15,8 +16,9 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
-import CurrentTheme from 'components/Themes/ThemeThumbnail';
-import ThemeCreator from 'components/Themes/ThemeCreator';
+import CurrentTheme from 'components/UserThemes/ThemeThumbnail';
+import ThemeCreator from 'components/UserThemes/ThemeCreator';
+import ThemeCard from 'components/UserThemes/ThemeCard';
 
 enum Colors {
   primary = '#f5a506',
@@ -86,61 +88,53 @@ const TestPage = () => {
             Create new theme
           </Button>
         )}
-        <Grid container spacing={0} columns={4}>
-          <Grid xs={1}>
-            <Paper
-              sx={{
-                height: '150px',
-                background: 'linear-gradient(180deg, #3f51b5 50%, #f50057 50%)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Button variant="contained">Apply</Button>
-            </Paper>
+        <Container maxWidth={false}>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <ThemeCard />
+            </Grid>
+            <Grid item xs={3}>
+              <Paper
+                sx={{
+                  height: '150px',
+                  background: 'linear-gradient(180deg, #d91818 50%, #12a71e 50%)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Button variant="contained">Apply</Button>
+              </Paper>
+            </Grid>
+            <Grid item xs={3}>
+              <Paper
+                sx={{
+                  height: '150px',
+                  background:
+                    'linear-gradient(180deg, rgba(237,204,32,1) 50%, rgba(138,208,22,1) 50%)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Button variant="contained">Apply</Button>
+              </Paper>
+            </Grid>
+            <Grid item xs={3}>
+              <Paper
+                sx={{
+                  height: '150px',
+                  background: 'linear-gradient(180deg, #a918d9 50%, #12a6a7 50%)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Button variant="contained">Apply</Button>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid xs={1}>
-            <Paper
-              sx={{
-                height: '150px',
-                background: 'linear-gradient(180deg, #d91818 50%, #12a71e 50%)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Button variant="contained">Apply</Button>
-            </Paper>
-          </Grid>
-          <Grid xs={1}>
-            <Paper
-              sx={{
-                height: '150px',
-                background:
-                  'linear-gradient(180deg, rgba(237,204,32,1) 50%, rgba(138,208,22,1) 50%)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Button variant="contained">Apply</Button>
-            </Paper>
-          </Grid>
-          <Grid xs={1}>
-            <Paper
-              sx={{
-                height: '150px',
-                background: 'linear-gradient(180deg, #a918d9 50%, #12a6a7 50%)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Button variant="contained">Apply</Button>
-            </Paper>
-          </Grid>
-        </Grid>
+        </Container>
       </Box>
     </ThemeProvider>
   );

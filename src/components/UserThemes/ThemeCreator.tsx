@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import React, { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ArrowIcon from '@mui/icons-material/ExpandMore';
 import { addDoc, collection } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { isNamespaceImport } from 'typescript';
@@ -55,7 +55,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
         sx={{ maxWidth: '400px', width: '100%', border: '1px solid black', borderRadius: '5px' }}
       >
         <Accordion disableGutters={true}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<ArrowIcon />}>
             <Typography variant="h6">Name</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -70,7 +70,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
         </Accordion>
         <Divider />
         <Accordion disableGutters={true}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<ArrowIcon />}>
             <Typography variant="h6">Primary Color</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -85,7 +85,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
         </Accordion>
         <Divider />
         <Accordion disableGutters={true}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<ArrowIcon />}>
             <Typography variant="h6">Secondary Color</Typography>
           </AccordionSummary>
           <AccordionDetails>
