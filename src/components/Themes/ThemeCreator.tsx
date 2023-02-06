@@ -8,20 +8,35 @@ import {
   AccordionDetails,
   AccordionSummary,
   Divider,
-  ButtonGroup,
 } from '@mui/material';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { addDoc, collection } from 'firebase/firestore';
+import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { isNamespaceImport } from 'typescript';
 
 interface ThemeCreatorProps {
   setIsCreating: (value: boolean) => void;
 }
 
 const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
-  const [name, setName] = useState('');
-  const [primary, setPrimary] = useState('#000000');
-  const [secondary, setSecondary] = useState('#000000');
+  const { firestore } = useContext(FirebaseContext);
+  const [name, setName] = useState<string>('');
+  const [primary, setPrimary] = useState<string>('#9E9E9E');
+  const [secondary, setSecondary] = useState<string>('#9E9E9E');
+
+  const addTheme = async () => {
+    try {
+      const docTheme = await addDoc(collection(firestore, 'themes'), {
+        name: name,
+        primary: primary,
+        secondary: secondary,
+      });
+    } catch (error) {
+      console.log('Error adding document: ', error);
+    }
+  };
 
   return (
     <Paper
@@ -44,7 +59,13 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
             <Typography variant="h6">Name</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <TextField label="Name" type="text" sx={{ width: '250px', mb: '20px' }} />
+            <TextField
+              label="Name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              sx={{ width: '250px', mb: '20px' }}
+            />
           </AccordionDetails>
         </Accordion>
         <Divider />
@@ -53,7 +74,13 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
             <Typography variant="h6">Primary Color</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <TextField label="primary" type="color" sx={{ width: '250px', mb: '20px' }} />
+            <TextField
+              label="primary"
+              type="color"
+              value={primary}
+              onChange={(e) => setPrimary(e.target.value)}
+              sx={{ width: '250px', mb: '20px' }}
+            />
           </AccordionDetails>
         </Accordion>
         <Divider />
@@ -62,7 +89,13 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
             <Typography variant="h6">Secondary Color</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <TextField label="secondary" type="color" sx={{ width: '250px' }} />
+            <TextField
+              label="secondary"
+              type="color"
+              value={secondary}
+              onChange={(e) => setSecondary(e.target.value)}
+              sx={{ width: '250px' }}
+            />
           </AccordionDetails>
         </Accordion>
       </Box>
@@ -75,9 +108,13 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
           width: '100%',
         }}
       >
-        <ThemeThumbnail />
+        <ThemeThumbnail name={name} primary={primary} secondary={secondary} />
         <Box sx={{ mt: '1rem' }}>
-          <Button variant="contained" sx={{ width: '100px', mr: '1rem' }}>
+          <Button
+            variant="contained"
+            sx={{ width: '100px', mr: '1rem' }}
+            onClick={() => addTheme()}
+          >
             Create
           </Button>
           <Button variant="contained" sx={{ width: '100px' }} onClick={() => setIsCreating(false)}>

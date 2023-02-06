@@ -53,18 +53,6 @@ const TestPage = () => {
   const [isLightTheme, setIsLightTheme] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
 
-  const addTheme = async () => {
-    try {
-      const docTheme = await addDoc(collection(firestore, 'themes'), {
-        name: 'name',
-        primary: 'primaryColor',
-        secondary: 'secondaryColor',
-      });
-    } catch (error) {
-      console.log('Error adding document: ', error);
-    }
-  };
-
   const handleChangeTheme = () => {
     if (isLightTheme) {
       setTheme(darkMode);
