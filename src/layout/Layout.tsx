@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
-import Footer from './Footer';
-import Header from './Header';
-// import Main from './Main';
+import Footer from 'layout/Footer';
+import Header from 'layout/Header';
+import Main from 'layout/Main';
 import { Outlet } from 'react-router-dom';
 import React from 'react';
 import styled from '@emotion/styled';
@@ -26,9 +26,9 @@ const Layout = () => {
     <LayoutWrapper>
       <TopContentWrapper>
         <Header />
-        {/* <Main> */}
-        <Outlet />
-        {/* </Main> */}
+        <Main>
+          <Outlet />
+        </Main>
       </TopContentWrapper>
       <Footer />
     </LayoutWrapper>
