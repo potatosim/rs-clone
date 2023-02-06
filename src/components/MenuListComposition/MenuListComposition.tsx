@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import Button from '@mui/material/Button';
+import { FC, useRef, useState } from 'react';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
@@ -11,89 +10,47 @@ import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface MenuListCompositionProps {
-  handleDeleteBoard: () => void;
-  handleRenameClick: () => void;
+  handleDelete: () => void;
+  handleRename: () => void;
 }
 
-const MenuListComposition: FC<MenuListCompositionProps> = ({
-  handleDeleteBoard,
-  handleRenameClick,
-}) => {
+const MenuListComposition: FC<MenuListCompositionProps> = ({ handleDelete, handleRename }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const prevOpen = useRef(open);
-
-  useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current!.focus();
-    }
-
-    prevOpen.current = open;
-  }, [open]);
 
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
 
-  const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-
+  const handleClose = () => {
     setOpen(false);
   };
 
   return (
     <Stack direction="row" spacing={2} onClick={(e) => e.stopPropagation()}>
-      <div>
-        <IconButton
-          ref={anchorRef}
-          id="composition-button"
-          aria-controls={open ? 'composition-menu' : undefined}
-          aria-expanded={open ? 'true' : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Popper
-          open={open}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          placement="bottom-start"
-          transition
-          disablePortal
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-              }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList
-                    autoFocusItem={open}
-                    id="composition-menu"
-                    aria-labelledby="composition-button"
+      <IconButton ref={anchorRef} onClick={handleToggle}>
+        <MoreVertIcon />
+      </IconButton>
+      <Popper open={open} anchorEl={anchorRef.current} placement="auto" transition>
+        {({ TransitionProps }) => (
+          <Grow {...TransitionProps}>
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList autoFocusItem={open}>
+                  <MenuItem
+                    onClick={() => {
+                      handleRename();
+                    }}
                   >
-                    <MenuItem
-                      onClick={(e) => {
-                        handleClose(e);
-                        handleRenameClick();
-                      }}
-                    >
-                      Rename Board
-                    </MenuItem>
-                    <MenuItem onClick={handleDeleteBoard}>Delete Board</MenuItem>
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </div>
+                    Rename
+                  </MenuItem>
+                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </Stack>
   );
 };

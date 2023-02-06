@@ -1,6 +1,6 @@
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
-import { query, collection, where, documentId, getDocs } from 'firebase/firestore';
+import { query, collection, where, documentId, getDocs, orderBy } from 'firebase/firestore';
 import { useContext, useState, useEffect } from 'react';
 import { IColumnItem } from 'types/Column';
 
@@ -15,10 +15,12 @@ export const useColumns = (columnIds?: string[]) => {
       query(collection(firestore, Collections.Columns), where(documentId(), 'in', columnIds)),
     );
 
-    const docs = columnItems.docs.map((columnDoc) => ({
-      ...columnDoc.data(),
-      id: columnDoc.id,
-    })) as IColumnItem[];
+    const docs = (
+      columnItems.docs.map((columnDoc) => ({
+        ...columnDoc.data(),
+        id: columnDoc.id,
+      })) as IColumnItem[]
+    ).sort((a, b) => a.createdAt - b.createdAt);
 
     setColumns(docs);
 
@@ -28,6 +30,8 @@ export const useColumns = (columnIds?: string[]) => {
   useEffect(() => {
     if (columnIds && columnIds.length) {
       getColumns();
+    } else {
+      setColumns([]);
     }
   }, [columnIds]);
 

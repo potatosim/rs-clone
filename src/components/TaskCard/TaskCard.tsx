@@ -1,5 +1,6 @@
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import CardHeader from 'components/CardHeader';
 import React, { FC } from 'react';
 
 interface TaskCardProps {

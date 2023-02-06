@@ -1,18 +1,14 @@
 import styled from '@emotion/styled';
-import { Paper, Typography } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import { FC, useContext, useState } from 'react';
+import { Paper } from '@mui/material';
+import { FC, useContext } from 'react';
 import { Background } from 'types/Background';
-import MenuListComposition from 'components/MenuListComposition';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { Collections } from 'enum/Collection';
-import TextField from '@mui/material/TextField';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { BackgroundWrapper } from 'components/common/BackgroundWrapper';
+import CardHeader from 'components/CardHeader';
 
 interface BoardItemProps {
   id: string;
@@ -29,89 +25,28 @@ const CardWrapper = styled(Paper)`
   overflow: hidden;
 `;
 
-const CardHeader = styled(Paper)`
-  padding: 0.5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 0.5rem;
-  background-color: transparent;
-`;
-
 const BoardCard: FC<BoardItemProps> = ({ id, title, background }) => {
   const { firestore } = useContext(FirebaseContext);
-  const [newTitle, setNewTitle] = useState(title);
-  const [isChangeTitle, setIsChangeTitle] = useState(false);
   const navigate = useNavigate();
 
-  const handleDelete = async (docId: string) => {
-    await deleteDoc(doc(firestore, Collections.Boards, docId));
+  const handleDelete = async () => {
+    await deleteDoc(doc(firestore, Collections.Boards, id));
   };
 
-  const handleRename = () => {
-    setIsChangeTitle(true);
-  };
-
-  const handleCloseRename = () => {
-    setIsChangeTitle(false);
-    setNewTitle(title);
-  };
-
-  const handleUpdateTitle = async () => {
-    setIsChangeTitle(false);
-
+  const handleUpdateTitle = async (boardTitle: string) => {
     await updateDoc(doc(firestore, Collections.Boards, id), {
-      title: newTitle,
+      title: boardTitle,
     });
-  };
-
-  const isButtonDisabled = newTitle === title || !newTitle.trim().length;
-
-  const renderHeader = () => {
-    if (isChangeTitle) {
-      return (
-        <>
-          <TextField
-            size="small"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <IconButton disabled={isButtonDisabled} onClick={handleUpdateTitle}>
-                  <CheckCircleIcon color={isButtonDisabled ? 'disabled' : 'success'} />
-                </IconButton>
-              ),
-            }}
-          />
-          <IconButton onClick={handleCloseRename}>
-            <CancelIcon color="error" />
-          </IconButton>
-        </>
-      );
-    }
-    return (
-      <>
-        <Typography>{title}</Typography>
-        <MenuListComposition
-          handleRenameClick={handleRename}
-          handleDeleteBoard={() => handleDelete(id)}
-        />
-      </>
-    );
   };
 
   return (
     <CardWrapper elevation={12} onClick={() => navigate(AppRoutes.Board.replace(':boardId', id))}>
       <CardHeader
-        elevation={12}
-        onClick={(e) => {
-          if (isChangeTitle) {
-            e.stopPropagation();
-          }
-        }}
-      >
-        {renderHeader()}
-      </CardHeader>
+        padding="0.5rem 1rem"
+        cardTitle={title}
+        handleDelete={handleDelete}
+        handleUpdate={handleUpdateTitle}
+      />
       <BackgroundWrapper bg={background} />
     </CardWrapper>
   );
