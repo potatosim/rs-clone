@@ -18,8 +18,9 @@ const CreateColumnForm: FC<CreateColumnFormProps> = ({ isModalOpen, handleClose,
   const addColumn = useAddColumn(columnTitle, boardId);
 
   const handleCreateColumn = async () => {
-    await addColumn();
     handleClose();
+    setColumnTitle('');
+    await addColumn();
   };
 
   return (

@@ -60,6 +60,7 @@ const CreateBoardForm: FC<CreateBoardFormProps> = ({ isModalOpen, handleClose })
 
   const handleCreate = async () => {
     await handleAddBoard();
+    setTitle('');
     handleClose();
   };
 

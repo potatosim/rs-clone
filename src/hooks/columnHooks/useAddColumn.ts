@@ -9,6 +9,7 @@ export const useAddColumn = (title: string, boardId: string) => {
   const handleAddColumn = async () => {
     const column = await addDoc(collection(firestore, Collections.Columns), {
       title,
+      createdAt: Date.now(),
       tasks: [],
     });
 

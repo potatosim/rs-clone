@@ -35,7 +35,6 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({ isModalOpen, handleClose, col
         />
         <TextField
           value={taskDescription}
-          required
           label="Description"
           onChange={(e) => setTaskDescription(e.target.value)}
           size="small"

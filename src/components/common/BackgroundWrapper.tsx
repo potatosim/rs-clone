@@ -9,10 +9,11 @@ interface BackgroundWrapperProps {
 export const BackgroundWrapper = styled('div')<BackgroundWrapperProps>`
   width: 100%;
   height: 0;
-  padding-top: 40%;
+  padding-top: 46%;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  z-index: -1;
   ${({ fullSize }) =>
     fullSize &&
     `
