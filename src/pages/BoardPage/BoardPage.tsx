@@ -11,8 +11,10 @@ import { useState } from 'react';
 import { useColumns } from 'hooks/columnHooks/useColumns';
 import ModalLoader from 'components/common/ModalLoader';
 import { BackgroundWrapper } from 'components/common/BackgroundWrapper';
+import { DragDropContext, Droppable, DroppableProvidedProps } from 'react-beautiful-dnd';
+import { DnDPostfix } from 'enum/DnDPostfix';
 
-const ColumnsWrapper = styled('div')<{ columnsCount?: number }>`
+const ColumnsWrapper = styled('div')<{ columnsCount?: number } & DroppableProvidedProps>`
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -26,7 +28,7 @@ const ColumnsWrapper = styled('div')<{ columnsCount?: number }>`
 const BoardPage = () => {
   const { boardId } = useParams();
   const { board, boardLoading } = useBoard(boardId!);
-  const { columns, columnsLoading } = useColumns(board?.columns);
+  const { columns, columnsLoading, updateOrder } = useColumns(board?.columns);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -37,42 +39,52 @@ const BoardPage = () => {
   const handleClose = () => setIsOpen(false);
 
   return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          rowGap: '2rem',
-          height: '100vh',
-        }}
-      >
-        <Paper sx={{ display: 'flex', padding: '0.5rem', columnGap: '1rem' }}>
-          <Button onClick={() => navigate(AppRoutes.Boards)} variant="contained" size="small">
-            Back to the boards
-          </Button>
-          <Typography variant="h4" fontWeight="600" textTransform="capitalize">
-            {board?.title}
-          </Typography>
-        </Paper>
-        <ColumnsWrapper columnsCount={columns.length}>
-          {columns?.map(({ id }) => (
-            <BoardColumn boardId={boardId!} columnId={id} key={id} />
-          ))}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: '2rem',
+        height: '100vh',
+      }}
+    >
+      <Paper sx={{ display: 'flex', padding: '0.5rem', columnGap: '1rem' }}>
+        <Button onClick={() => navigate(AppRoutes.Boards)} variant="contained" size="small">
+          Back to the boards
+        </Button>
+        <Typography variant="h4" fontWeight="600" textTransform="capitalize">
+          {board?.title}
+        </Typography>
+      </Paper>
+      <DragDropContext onDragEnd={updateOrder}>
+        <Droppable direction="horizontal" droppableId={boardId + DnDPostfix.Drop}>
+          {({ droppableProps, innerRef, placeholder }) => (
+            <ColumnsWrapper ref={innerRef} {...droppableProps} columnsCount={columns.length}>
+              {columns?.map(({ id }, idx) => (
+                <BoardColumn order={idx} boardId={boardId!} columnId={id} key={id} />
+              ))}
+              {placeholder}
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                sx={{ minWidth: '200px', padding: '1rem' }}
+                onClick={handleOpen}
+              >
+                Add Column
+              </Button>
+            </ColumnsWrapper>
+          )}
+        </Droppable>
+      </DragDropContext>
 
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{ minWidth: '200px', padding: '1rem' }}
-            onClick={handleOpen}
-          >
-            Add Column
-          </Button>
-        </ColumnsWrapper>
-        <CreateColumnForm boardId={boardId!} handleClose={handleClose} isModalOpen={isOpen} />
-        {board && <BackgroundWrapper bg={board!.background} fullSize />}
-        <ModalLoader isOpen={isLoading} />
-      </Box>
-    </>
+      <CreateColumnForm
+        columnLength={columns.length}
+        boardId={boardId!}
+        handleClose={handleClose}
+        isModalOpen={isOpen}
+      />
+      {board && <BackgroundWrapper bg={board!.background} fullSize />}
+      <ModalLoader isOpen={isLoading} />
+    </Box>
   );
 };
 
