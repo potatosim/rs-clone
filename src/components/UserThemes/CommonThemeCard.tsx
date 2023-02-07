@@ -2,14 +2,11 @@ import { Box, Button, Card, Paper } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import React, { FC } from 'react';
+import { ITheme } from 'types/ITheme';
 
-// interface CardProps {
-//   name: 'string';
-//   primary: 'string';
-//   secondary: 'string';
-// }
 
-const ThemeCard = () => {
+
+const ThemeCard: FC<ITheme> = ({name, primary, secondary}) => {
   return (
     <Card raised={true} sx={{ p: '15px' }}>
       <Typography variant="h5" align="center">
@@ -26,9 +23,7 @@ const ThemeCard = () => {
       ></Paper>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', m: '20px auto 10px' }}>
         <ButtonGroup fullWidth={true}>
-          <Button variant="contained">Apply</Button>
-          <Button variant="contained">Edit</Button>
-          <Button variant="contained">Delete</Button>
+          <Button variant="contained">Add to My Themes</Button>
         </ButtonGroup>
       </Box>
     </Card>

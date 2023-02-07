@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useContext, useState } from 'react';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -19,6 +20,9 @@ import { collection, addDoc, getDocs } from 'firebase/firestore';
 import CurrentTheme from 'components/UserThemes/ThemeThumbnail';
 import ThemeCreator from 'components/UserThemes/ThemeCreator';
 import ThemeCard from 'components/UserThemes/ThemeCard';
+import { Link } from 'react-router-dom';
+import { AppRoutes } from 'enum/AppRoutes';
+import ThemesIcon from '@mui/icons-material/InsertPhoto';
 
 enum Colors {
   primary = '#f5a506',
@@ -49,7 +53,7 @@ const darkMode = createTheme({
   },
 });
 
-const TestPage = () => {
+const UserThemes = () => {
   const { firestore } = useContext(FirebaseContext);
   const [curTheme, setTheme] = useState(lightMode);
   const [isLightTheme, setIsLightTheme] = useState(true);
@@ -73,6 +77,11 @@ const TestPage = () => {
           <IconButton color="inherit" onClick={handleChangeTheme}>
             {isLightTheme ? <DarkModeIcon /> : <LightModeIcon />}
           </IconButton>
+          <Link to={AppRoutes.AllThemes}>
+            <IconButton color="default">
+              <ThemesIcon />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Box
@@ -140,4 +149,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default UserThemes;
