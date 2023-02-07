@@ -14,7 +14,6 @@ import ThemeThumbnail from './ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
 import { addDoc, collection } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { isNamespaceImport } from 'typescript';
 
 interface ThemeCreatorProps {
   setIsCreating: (value: boolean) => void;
@@ -28,6 +27,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
 
   const addTheme = async () => {
     try {
+      setIsCreating(false);
       const docTheme = await addDoc(collection(firestore, 'themes'), {
         name: name,
         primary: primary,

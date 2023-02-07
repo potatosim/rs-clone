@@ -3,7 +3,8 @@ import NotFoundPage from 'pages/NotFoundPage';
 import BoardPage from 'pages/BoardPage';
 import BoardsPage from 'pages/BoardsPage';
 import { AppRoutes } from 'enum/AppRoutes';
-import TestPage from 'pages/UserThemes';
+import AllThemes from 'pages/AllThemes';
+import UserThemes from 'pages/UserThemes';
 import { Route, Routes } from 'react-router-dom';
 import Layout from 'layout/Layout';
 import LoginPage from 'pages/LoginPage';
@@ -23,8 +24,8 @@ const AppRouter = () => {
           <Route path={AppRoutes.Boards} element={<BoardsPage />} />
           <Route path={AppRoutes.Board} element={<BoardPage />} />
           <Route path={AppRoutes.AccountPage} element={<AccountPage />} />
-          <Route path={AppRoutes.UserThemes} element={<TestPage />} />
-          <Route path={AppRoutes.AllThemes} element={<TestPage />} />
+          <Route path={AppRoutes.UserThemes} element={<UserThemes />} />
+          <Route path={AppRoutes.AllThemes} element={<AllThemes />} />
         </Route>
       </Route>
     </Routes>
