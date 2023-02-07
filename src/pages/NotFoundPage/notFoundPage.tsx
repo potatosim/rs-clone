@@ -1,10 +1,9 @@
 import ghostImg from 'static/images/ghost.png';
 // import style from './NotFoundPage.module.css';
 import { Box, Button, Typography } from '@mui/material';
-
-import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 
 const HoverEffect = keyframes`
   0% {
