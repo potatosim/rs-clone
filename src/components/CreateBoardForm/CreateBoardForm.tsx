@@ -39,6 +39,7 @@ interface CreateBoardFormProps {
 const CreateBoardForm: FC<CreateBoardFormProps> = ({ isModalOpen, handleClose }) => {
   const [title, setTitle] = useState<string>('');
   const [backgroundType, setBackgroundType] = useState<BackgroundType>('color');
+  // TODO add private functionality
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [file, setFile] = useState<FileList | null>(null);
   const colorRef = useRef<HTMLInputElement | null>(null);

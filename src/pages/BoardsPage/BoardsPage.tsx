@@ -18,7 +18,7 @@ const BoardsPage = () => {
     setIsModalOpen(false);
   };
 
-  if (loading) {
+  if (loading || !boards) {
     return <CircularProgress />;
   }
 
@@ -30,7 +30,7 @@ const BoardsPage = () => {
         gap: '1rem',
       }}
     >
-      {boards?.map(({ id, background, title }) => (
+      {boards.map(({ id, background, title }) => (
         <BoardCard key={id} background={background} title={title} id={id} />
       ))}
       <CreateBoardButton onClick={handleCreateBoard} />
