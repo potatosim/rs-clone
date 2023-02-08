@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   query,
+  updateDoc,
   where,
   writeBatch,
 } from 'firebase/firestore';
@@ -13,14 +14,16 @@ import { DnDTypes } from 'enum/DnDTypes';
 import { DropResult } from 'react-beautiful-dnd';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { ITaskItem } from 'types/Task';
-import { columnsConverter } from 'helpers/converters';
-import { getTasksArray } from 'helpers/getTasksArray';
+import { columnsConverter, tasksConverter } from 'helpers/converters';
 import { reorderArray } from 'helpers/reorderArray';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useContext } from 'react';
+import { deleteDocuments } from 'helpers/deleteDocuments';
+import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
 
-export const useColumns = (columnIds: string[], boardId: string) => {
+export const useColumns = (boardId: string) => {
   const { firestore } = useContext(FirebaseContext);
+  const deleteDocumentsFrom = deleteDocuments(firestore);
   const [columns, loading] = useCollectionData(
     query(
       collection(firestore, Collections.Columns).withConverter(columnsConverter),
@@ -73,7 +76,13 @@ export const useColumns = (columnIds: string[], boardId: string) => {
         const batch = writeBatch(firestore);
 
         if (currentColumn && currentColumn.tasks.length) {
-          const tasks = await getTasksArray(firestore, source.droppableId);
+          const tasks = await getDocumentsByMatchedKey({
+            firestore,
+            collectionName: Collections.Tasks,
+            converter: tasksConverter,
+            keyName: 'columnId',
+            targetId: currentColumn.id,
+          });
 
           const reorderedTasks = reorderArray(tasks, source.index, destination.index).map(
             (item, id) => ({ ...item, order: id }),
@@ -93,8 +102,21 @@ export const useColumns = (columnIds: string[], boardId: string) => {
         const destinationColumnRef = doc(firestore, Collections.Columns, destination.droppableId);
         const targetTaskRef = doc(firestore, Collections.Tasks, draggableId);
 
-        const sourceTasks = await getTasksArray(firestore, source.droppableId);
-        const destinationTasks = await getTasksArray(firestore, destination.droppableId);
+        const sourceTasks = await getDocumentsByMatchedKey({
+          firestore,
+          collectionName: Collections.Tasks,
+          converter: tasksConverter,
+          keyName: 'columnId',
+          targetId: source.droppableId,
+        });
+        const destinationTasks = await getDocumentsByMatchedKey({
+          firestore,
+          collectionName: Collections.Tasks,
+          converter: tasksConverter,
+          keyName: 'columnId',
+          targetId: destination.droppableId,
+        });
+
         const batch = writeBatch(firestore);
 
         sourceTasks
@@ -137,9 +159,45 @@ export const useColumns = (columnIds: string[], boardId: string) => {
     }
   };
 
+  const handleDeleteColumn = async (columnId: string) => {
+    if (columns) {
+      const targetColumn = columns.find((column) => column.id === columnId);
+
+      if (targetColumn) {
+        const batch = writeBatch(firestore);
+        batch.delete(doc(firestore, Collections.Columns, columnId));
+
+        batch.update(doc(firestore, Collections.Boards, boardId), {
+          columns: arrayRemove(columnId),
+        });
+
+        columns
+          .filter((column) => column.id !== columnId)
+          .map((column, id) => {
+            const columnRef = doc(firestore, Collections.Columns, column.id);
+            batch.update(columnRef, {
+              order: id,
+            });
+          });
+
+        deleteDocumentsFrom(batch, Collections.Tasks, targetColumn.tasks);
+
+        await batch.commit();
+      }
+    }
+  };
+
+  const handleRenameColumn = async (title: string, columnId: string) => {
+    await updateDoc(doc(firestore, Collections.Columns, columnId), {
+      title,
+    });
+  };
+
   return {
     columnsItems: columns,
     columnsLoading: loading,
     updateOrder,
+    handleDeleteColumn,
+    handleRenameColumn,
   };
 };

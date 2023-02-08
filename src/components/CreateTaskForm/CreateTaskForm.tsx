@@ -29,8 +29,9 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({
   });
 
   const handleCreateTask = async () => {
-    await addTask();
     handleClose();
+    await addTask();
+    setTaskTitle('');
   };
 
   return (

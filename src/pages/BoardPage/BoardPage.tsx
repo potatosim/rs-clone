@@ -10,9 +10,13 @@ const BoardPage = () => {
   const { boardId } = useParams();
   const { board, boardLoading } = useBoard(boardId!);
 
-  if (!board || boardLoading) {
+  if (boardLoading) {
     // TODO make this shit beautiful
     return <CircularProgress />;
+  }
+
+  if (!board) {
+    return <div>Not found</div>;
   }
 
   return <Board {...board} />;

@@ -7,7 +7,7 @@ import CreateBoardForm from 'components/CreateBoardForm';
 import { useBoards } from 'hooks/boardHooks/useBoards';
 
 const BoardsPage = () => {
-  const { boards, loading } = useBoards();
+  const { boards, loading, handleDeleteBoard, handleRenameBoard } = useBoards();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleCreateBoard = () => {
@@ -30,8 +30,13 @@ const BoardsPage = () => {
         gap: '1rem',
       }}
     >
-      {boards.map(({ id, background, title }) => (
-        <BoardCard key={id} background={background} title={title} id={id} />
+      {boards.map((board) => (
+        <BoardCard
+          key={board.id}
+          board={board}
+          handleDeleteBoard={handleDeleteBoard}
+          handleRenameBoard={handleRenameBoard}
+        />
       ))}
       <CreateBoardButton onClick={handleCreateBoard} />
       <CreateBoardForm handleClose={handleCloseModal} isModalOpen={isModalOpen} />
