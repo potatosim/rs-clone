@@ -11,7 +11,7 @@ const FooterWrapper = styled(Box)(() => ({
   justifyContent: 'center',
 }));
 
-const footer = () => {
+const Footer = () => {
   return (
     <FooterWrapper>
       <Toolbar>
@@ -34,4 +34,4 @@ const footer = () => {
   );
 };
 
-export default footer;
+export default Footer;

@@ -5,6 +5,7 @@ import Main from 'layout/Main';
 import { Outlet } from 'react-router-dom';
 import React from 'react';
 import styled from '@emotion/styled';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const LayoutWrapper = styled(Box)(() => ({
   width: '100%',
@@ -24,6 +25,7 @@ const TopContentWrapper = styled(Box)`
 const Layout = () => {
   return (
     <LayoutWrapper>
+      <CssBaseline />
       <TopContentWrapper>
         <Header />
         <Main>
