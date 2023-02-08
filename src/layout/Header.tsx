@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 const Header = () => {
   const [activePage, setActivePage] = useState(0);
-  // const classes = useStyles();
+
   return (
     <AppBar position="static">
       <Toolbar sx={{ position: 'relative' }}>

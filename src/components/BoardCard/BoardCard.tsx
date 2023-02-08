@@ -1,19 +1,16 @@
 import styled from '@emotion/styled';
 import { Paper } from '@mui/material';
-import { FC, useContext } from 'react';
-import { Background } from 'types/Background';
-import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { Collections } from 'enum/Collection';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { BackgroundWrapper } from 'components/common/BackgroundWrapper';
 import CardHeader from 'components/CardHeader';
+import { IBoardItem } from 'types/Board';
 
 interface BoardItemProps {
-  id: string;
-  title: string;
-  background: Background;
+  board: IBoardItem;
+  handleDeleteBoard: (boardId: string) => void;
+  handleRenameBoard: (title: string, boardId: string) => void;
 }
 
 const CardWrapper = styled(Paper)`
@@ -25,29 +22,21 @@ const CardWrapper = styled(Paper)`
   overflow: hidden;
 `;
 
-const BoardCard: FC<BoardItemProps> = ({ id, title, background }) => {
-  const { firestore } = useContext(FirebaseContext);
+const BoardCard: FC<BoardItemProps> = ({ board, handleDeleteBoard, handleRenameBoard }) => {
   const navigate = useNavigate();
 
-  const handleDelete = async () => {
-    await deleteDoc(doc(firestore, Collections.Boards, id));
-  };
-
-  const handleUpdateTitle = async (boardTitle: string) => {
-    await updateDoc(doc(firestore, Collections.Boards, id), {
-      title: boardTitle,
-    });
-  };
-
   return (
-    <CardWrapper elevation={12} onClick={() => navigate(AppRoutes.Board.replace(':boardId', id))}>
+    <CardWrapper
+      elevation={12}
+      onClick={() => navigate(AppRoutes.Board.replace(':boardId', board.id))}
+    >
       <CardHeader
         padding="0.5rem 1rem"
-        cardTitle={title}
-        handleDelete={handleDelete}
-        handleUpdate={handleUpdateTitle}
+        cardTitle={board.title}
+        handleDelete={() => handleDeleteBoard(board.id)}
+        handleUpdate={(title) => handleRenameBoard(title, board.id)}
       />
-      <BackgroundWrapper bg={background} />
+      <BackgroundWrapper bg={board.background} />
     </CardWrapper>
   );
 };

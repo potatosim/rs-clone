@@ -6,7 +6,6 @@ import styled from '@emotion/styled';
 
 const FooterWrapper = styled(Box)(() => ({
   width: '100%',
-  // background: 'gray',
   display: 'flex',
   justifyContent: 'center',
 }));
