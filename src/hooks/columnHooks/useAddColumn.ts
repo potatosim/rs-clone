@@ -11,6 +11,7 @@ export const useAddColumn = (title: string, boardId: string, length: number) => 
       title,
       order: length,
       tasks: [],
+      boardId,
     });
 
     await updateDoc(doc(firestore, Collections.Boards, boardId), {

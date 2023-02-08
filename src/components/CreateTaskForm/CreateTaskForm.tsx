@@ -10,12 +10,23 @@ interface CreateTaskFormProps {
   isModalOpen: boolean;
   handleClose: () => void;
   columnId: string;
+  taskLength: number;
 }
 
-const CreateTaskForm: FC<CreateTaskFormProps> = ({ isModalOpen, handleClose, columnId }) => {
+const CreateTaskForm: FC<CreateTaskFormProps> = ({
+  isModalOpen,
+  handleClose,
+  columnId,
+  taskLength,
+}) => {
   const [taskTitle, setTaskTitle] = useState<string>('');
   const [taskDescription, setTaskDescription] = useState<string>('');
-  const addTask = useAddTask(columnId, { description: taskDescription, title: taskTitle });
+  const addTask = useAddTask(columnId, {
+    description: taskDescription,
+    title: taskTitle,
+    order: taskLength,
+    columnId,
+  });
 
   const handleCreateTask = async () => {
     await addTask();
