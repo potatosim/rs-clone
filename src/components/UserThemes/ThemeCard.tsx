@@ -3,22 +3,16 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import React, { FC } from 'react';
 
-// interface CardProps {
-//   name: 'string';
-//   primary: 'string';
-//   secondary: 'string';
-// }
-
 const ThemeCard = () => {
   return (
     <Card raised={true} sx={{ p: '15px' }}>
       <Typography variant="h5" align="center">
-        Any name
+        New Theme
       </Typography>
       <Paper
         sx={{
           height: '150px',
-          background: 'linear-gradient(180deg, #3f51b5 50%, #f50057 50%)',
+          background: 'linear-gradient(180deg, #f5a506 50%, #8f1be3 50%)',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
