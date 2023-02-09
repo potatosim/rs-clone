@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
 
 import { Link } from 'react-router-dom';
-import ghostImg from 'static/images/ghost.png';
 import { keyframes } from '@emotion/react';
+import ghostImg from 'static/images/ghost.png';
 import styled from '@emotion/styled';
 
 const HoverEffect = keyframes`
