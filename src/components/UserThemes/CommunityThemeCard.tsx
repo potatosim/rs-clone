@@ -6,16 +6,16 @@ import { ITheme } from 'types/ITheme';
 
 
 
-const ThemeCard: FC<ITheme> = ({name, primary, secondary}) => {
+const CommunityThemeCard: FC<ITheme> = ({name, primary, secondary}) => {
   return (
     <Card raised={true} sx={{ p: '15px' }}>
       <Typography variant="h5" align="center">
-        Any name
+        {name}
       </Typography>
       <Paper
         sx={{
           height: '150px',
-          background: 'linear-gradient(180deg, #3f51b5 50%, #f50057 50%)',
+          background: `linear-gradient(180deg, ${primary} 50%, ${secondary} 50%)`,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -30,4 +30,4 @@ const ThemeCard: FC<ITheme> = ({name, primary, secondary}) => {
   );
 };
 
-export default ThemeCard;
+export default CommunityThemeCard;

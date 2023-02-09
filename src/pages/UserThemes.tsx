@@ -6,18 +6,16 @@ import {
   CssBaseline,
   Grid,
   IconButton,
-  Paper,
   Toolbar,
   Typography,
 } from '@mui/material';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
-import CurrentTheme from 'components/UserThemes/ThemeThumbnail';
 import ThemeCreator from 'components/UserThemes/ThemeCreator';
 import ThemeCard from 'components/UserThemes/ThemeCard';
 import { Link } from 'react-router-dom';
@@ -58,6 +56,9 @@ const UserThemes = () => {
   const [curTheme, setTheme] = useState(lightMode);
   const [isLightTheme, setIsLightTheme] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
+  const [users] = useCollectionData(collection(firestore, 'users'));
+
+  const availableThemes = users ? users[0].themes : {};
 
   const handleChangeTheme = () => {
     if (isLightTheme) {
@@ -85,62 +86,25 @@ const UserThemes = () => {
         </Toolbar>
       </AppBar>
       <Box
-        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', m: '0 20px 20px' }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          m: '0 20px 20px',
+          height: '200vh',
+        }}
       >
         <Typography variant="h3" sx={{ m: '1rem' }}>
-          Available themes
+          Available Themes
         </Typography>
-        {isCreating ? (
-          <ThemeCreator setIsCreating={setIsCreating} />
-        ) : (
-          <Button variant="contained" sx={{ m: '1rem' }} onClick={() => setIsCreating(true)}>
-            Create new theme
-          </Button>
-        )}
+        <Button variant="contained" sx={{ m: '1rem' }} onClick={() => setIsCreating(true)}>
+          Create new theme
+        </Button>
+        {isCreating && <ThemeCreator setIsCreating={setIsCreating} />}
         <Container maxWidth={false}>
           <Grid container spacing={2}>
             <Grid item xs={3}>
               <ThemeCard />
-            </Grid>
-            <Grid item xs={3}>
-              <Paper
-                sx={{
-                  height: '150px',
-                  background: 'linear-gradient(180deg, #d91818 50%, #12a71e 50%)',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Button variant="contained">Apply</Button>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper
-                sx={{
-                  height: '150px',
-                  background:
-                    'linear-gradient(180deg, rgba(237,204,32,1) 50%, rgba(138,208,22,1) 50%)',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Button variant="contained">Apply</Button>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper
-                sx={{
-                  height: '150px',
-                  background: 'linear-gradient(180deg, #a918d9 50%, #12a6a7 50%)',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Button variant="contained">Apply</Button>
-              </Paper>
             </Grid>
           </Grid>
         </Container>

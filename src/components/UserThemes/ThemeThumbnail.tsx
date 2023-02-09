@@ -14,15 +14,13 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary }) => {
       sx={{
         maxWidth: '600px',
         width: '100%',
-        background: '#9E9E9E',
-        borderRadius: '5px',
         p: '5px',
       }}
     >
-      <Typography variant="h6" sx={{ textAlign: 'center' }}>
+      <Typography variant="h5" sx={{ textAlign: 'center' }}>
         {name}
       </Typography>
-      <Box sx={{ border: '1px solid black', m: '0 15px 15px' }}>
+      <Box sx={{ border: '4px solid black', borderRadius: '5px', m: '0 15px 15px' }}>
         <Box
           sx={{
             display: 'flex',
@@ -33,9 +31,7 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary }) => {
           }}
         >
           <MenuIcon sx={{ m: '1rem' }} />
-          <Typography variant="h6">
-            Logo
-          </Typography>
+          <Typography variant="h6">Logo</Typography>
         </Box>
         <Box
           sx={{
