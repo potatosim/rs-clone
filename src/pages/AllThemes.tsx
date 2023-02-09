@@ -25,33 +25,25 @@ import {
 } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import CommunityThemeCard from 'components/UserThemes/CommunityThemeCard';
-import { ITheme } from 'types/ITheme';
+import { ITheme } from 'types/Theme';
 
-interface NewTheme extends ITheme {
-  id: string;
-}
-
-const themeConverter: FirestoreDataConverter<NewTheme> = {
-  toFirestore(theme: WithFieldValue<NewTheme>): DocumentData {
+const themeConverter: FirestoreDataConverter<ITheme> = {
+  toFirestore(theme: WithFieldValue<ITheme>): DocumentData {
     return { name: theme.name, primary: theme.primary, secondary: theme.secondary };
   },
-  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): NewTheme {
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): ITheme {
     const data = snapshot.data(options);
     console.log('data', data);
     return {
       ...data,
       id: snapshot.id,
-    } as NewTheme;
+    } as ITheme;
   },
 };
 
 const AllThemes = () => {
   const { firestore } = useContext(FirebaseContext);
-
-  useEffect(() => {}, []);
-
   const ref = collection(firestore, 'themes').withConverter(themeConverter);
-
   const [themes, loading, error] = useCollectionData(ref);
 
   return (
@@ -72,11 +64,9 @@ const AllThemes = () => {
         {themes?.length ? (
           <Grid container spacing={2}>
             {themes.reverse().map((theme) => (
-              <Grid item xs={3}>
+              <Grid key={theme.id} item xs={3}>
                 <CommunityThemeCard
-                  name={theme.name}
-                  primary={theme.primary}
-                  secondary={theme.secondary}
+                  {...theme}
                 />
               </Grid>
             ))}
