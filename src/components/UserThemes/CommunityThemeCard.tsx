@@ -2,11 +2,9 @@ import { Box, Button, Card, Paper } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import React, { FC } from 'react';
-import { ITheme } from 'types/ITheme';
+import { ITheme } from 'types/Theme';
 
-
-
-const CommunityThemeCard: FC<ITheme> = ({name, primary, secondary}) => {
+const CommunityThemeCard: FC<ITheme> = ({ name, primary, secondary }) => {
   return (
     <Card raised={true} sx={{ p: '15px' }}>
       <Typography variant="h5" align="center">
