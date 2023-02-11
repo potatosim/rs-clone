@@ -3,4 +3,5 @@ export enum Collections {
   Users = 'users',
   Columns = 'columns',
   Tasks = 'tasks',
+  Themes = 'themes',
 }
