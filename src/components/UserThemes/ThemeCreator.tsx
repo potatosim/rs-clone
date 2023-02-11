@@ -12,12 +12,52 @@ import {
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { IThemeUser } from 'types/ThemeUser';
+import { userConverter } from 'helpers/converters';
+import styled from '@emotion/styled';
+import { Collections } from 'enum/Collection';
 
 interface ThemeCreatorProps {
   setIsCreating: (value: boolean) => void;
 }
+
+const ModalWrapper = styled(Box)`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background: rgba(158, 158, 158, 0.7);
+`;
+
+const ModalContentWrapper = styled(Paper)`
+  position: fixed;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  max-width: 1100px;
+  width: 100%;
+  height: 75vh;
+  margin: 25px;
+  border: 10px solid grey;
+`;
+
+const ThumbnailWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  width: 100%;
+  flex-grow: 10;
+`;
 
 const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const { firestore } = useContext(FirebaseContext);
@@ -25,48 +65,28 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const [primary, setPrimary] = useState<string>('#9E9E9E');
   const [secondary, setSecondary] = useState<string>('#9E9E9E');
 
+  const [user, loading] = useDocumentData<IThemeUser>(
+    doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
+  );
+
+  //handlers helpers hooks difference - куда закинуть addTheme
   const addTheme = async () => {
-    try {
+    if (user) {
       setIsCreating(false);
-      const docTheme = await addDoc(collection(firestore, 'themes'), {
+      const temp = await addDoc(collection(firestore, 'themes'), {
         name: name,
         primary: primary,
         secondary: secondary,
       });
-    } catch (error) {
-      console.log('Error adding document: ', error);
+      await updateDoc(doc(firestore, Collections.Users, user.id), {
+        availableThemes: arrayUnion(temp.id),
+      });
     }
   };
 
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: '1',
-        top: '0',
-        left: '0',
-        background: 'rgba(158, 158, 158, 0.7)',
-      }}
-    >
-      <Paper
-        elevation={24}
-        sx={{
-          position: 'fixed',
-          display: 'flex',
-          alignItems: 'start',
-          justifyContent: 'space-between',
-          maxWidth: '1100px',
-          width: '100%',
-          height: '75vh',
-          m: '25px',
-          border: '10px solid grey',
-        }}
-      >
+    <ModalWrapper>
+      <ModalContentWrapper elevation={24}>
         <Box sx={{ maxWidth: '500px', width: '100%', flexShrink: '10' }}>
           <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
@@ -115,17 +135,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
           <Divider sx={{ backgroundColor: 'black' }} />
         </Box>
         <Divider orientation="vertical" sx={{ backgroundColor: 'grey', width: '4px' }} />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            maxWidth: '600px',
-            width: '100%',
-            flexGrow: '10',
-          }}
-        >
+        <ThumbnailWrapper>
           <ThemeThumbnail name={name} primary={primary} secondary={secondary} />
           <Box sx={{ mt: '1rem' }}>
             <Button
@@ -143,9 +153,9 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               Cancel
             </Button>
           </Box>
-        </Box>
-      </Paper>
-    </Box>
+        </ThumbnailWrapper>
+      </ModalContentWrapper>
+    </ModalWrapper>
   );
 };
 
