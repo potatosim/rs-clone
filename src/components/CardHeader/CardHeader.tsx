@@ -1,9 +1,9 @@
-import { TextField, IconButton, Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import MenuListComposition from 'components/MenuListComposition';
-import React, { useState } from 'react';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import styled from '@emotion/styled';
+import { useState } from 'react';
+
+import { BoardCardHeader } from 'components/common/BoardHeaderWrapper';
+import RenameTextField from 'components/RenameTextField/RenameTextField';
 
 interface CardHeaderProps {
   cardTitle: string;
@@ -12,57 +12,30 @@ interface CardHeaderProps {
   padding?: string;
 }
 
-const BoardCardHeader = styled(Box)<{ padding?: string }>`
-  max-width: 100%;
-  padding: ${({ padding }) => padding || ''};
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 0.5rem;
-  background-color: transparent;
-`;
-
 const CardHeader = ({ cardTitle, handleDelete, handleUpdate, padding }: CardHeaderProps) => {
   const [isChangeTitle, setIsChangeTitle] = useState(false);
 
-  const [title, setTitle] = useState(cardTitle);
-
-  const handleRename = () => {
+  const handleOpenRename = () => {
     setIsChangeTitle(true);
   };
 
-  const handleCloseRename = () => {
+  const handleClose = () => {
     setIsChangeTitle(false);
   };
 
-  const isButtonDisabled = cardTitle === title || !title.trim().length;
+  const handleSubmit = (value: string) => {
+    setIsChangeTitle(false);
+    handleUpdate(value);
+  };
 
   if (isChangeTitle) {
     return (
-      <BoardCardHeader padding={padding} onClick={(e) => e.stopPropagation()}>
-        <TextField
-          label="Title"
-          size="small"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <IconButton
-                disabled={isButtonDisabled}
-                onClick={() => {
-                  setIsChangeTitle(false);
-                  handleUpdate(title);
-                }}
-              >
-                <CheckCircleIcon color={isButtonDisabled ? 'disabled' : 'success'} />
-              </IconButton>
-            ),
-          }}
-        />
-        <IconButton onClick={handleCloseRename}>
-          <CancelIcon color="error" />
-        </IconButton>
-      </BoardCardHeader>
+      <RenameTextField
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        padding={padding}
+        initialTitle={cardTitle}
+      />
     );
   }
 
@@ -78,7 +51,7 @@ const CardHeader = ({ cardTitle, handleDelete, handleUpdate, padding }: CardHead
       >
         {cardTitle}
       </Typography>
-      <MenuListComposition handleDelete={handleDelete} handleRename={handleRename} />
+      <MenuListComposition handleDelete={handleDelete} handleRename={handleOpenRename} />
     </BoardCardHeader>
   );
 };

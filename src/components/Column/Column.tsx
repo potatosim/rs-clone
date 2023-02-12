@@ -23,7 +23,7 @@ interface BoardColumnProps {
 
 const ColumnWrapper = styled(Paper)`
   padding: 1rem;
-  width: 200px;
+  width: 270px;
   display: flex;
   flex-direction: column;
   background-color: lightgray;

@@ -31,7 +31,13 @@ const MenuListComposition: FC<MenuListCompositionProps> = ({ handleDelete, handl
       <IconButton ref={anchorRef} onClick={handleToggle}>
         <MoreVertIcon />
       </IconButton>
-      <Popper open={open} anchorEl={anchorRef.current} placement="auto" transition>
+      <Popper
+        sx={{ zIndex: 10000 }}
+        open={open}
+        anchorEl={anchorRef.current}
+        placement="auto"
+        transition
+      >
         {({ TransitionProps }) => (
           <Grow {...TransitionProps}>
             <Paper>

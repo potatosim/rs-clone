@@ -1,5 +1,6 @@
-import { Modal, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import React from 'react';
+import { ModalWrapper } from './ModalWrapper';
 
 interface ModalLoaderProps {
   isOpen: boolean;
@@ -7,9 +8,9 @@ interface ModalLoaderProps {
 
 const ModalLoader = ({ isOpen }: ModalLoaderProps) => {
   return (
-    <Modal open={isOpen} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <ModalWrapper open={isOpen}>
       <CircularProgress size={100} sx={{ outline: 'none' }} />
-    </Modal>
+    </ModalWrapper>
   );
 };
 

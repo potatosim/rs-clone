@@ -101,6 +101,8 @@ export const useColumns = (boardId: string) => {
         const sourceColumnRef = doc(firestore, Collections.Columns, source.droppableId);
         const destinationColumnRef = doc(firestore, Collections.Columns, destination.droppableId);
         const targetTaskRef = doc(firestore, Collections.Tasks, draggableId);
+        const prevColumn = columns.find((col) => col.id === source.droppableId);
+        const newColumn = columns.find((col) => col.id === destination.droppableId);
 
         const sourceTasks = await getDocumentsByMatchedKey({
           firestore,
@@ -148,6 +150,13 @@ export const useColumns = (boardId: string) => {
         batch.update(targetTaskRef, {
           columnId: destination.droppableId,
           order: destination.index,
+          history: arrayUnion({
+            initiator: 'User',
+            action: 'statusChanged',
+            from: prevColumn?.title,
+            to: newColumn?.title,
+            time: new Date().toLocaleString(),
+          }),
         });
 
         batch.update(destinationColumnRef, {

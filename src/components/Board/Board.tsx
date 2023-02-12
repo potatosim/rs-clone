@@ -15,15 +15,18 @@ import styled from '@emotion/styled';
 import { useColumns } from 'hooks/columnHooks/useColumns';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import useQueryParam from 'hooks/useQueryParam';
+import { Queries } from 'enum/Queries';
+import TaskItem from 'components/TaskItem';
 
 const BoardWrapper = styled(Box)`
+  position: relative;
+  width: 100%;
   flex: 1 1 auto;
   align-self: flex-start;
   display: flex;
   flex-direction: column;
-  width: 80%;
   overflow: hidden;
-  padding-left: 2rem;
   row-gap: 2rem;
 `;
 
@@ -43,6 +46,7 @@ const ScrollableWrapper = styled('div')<{ columnsCount?: number }>`
 
 const ColumnsWrapper = styled('div')`
   display: flex;
+  padding: 2rem;
   align-items: flex-start;
   justify-content: flex-start;
   column-gap: 1rem;
@@ -52,12 +56,14 @@ const ColumnsWrapper = styled('div')`
 const Board = ({ background, columns, title, id }: IBoardItem) => {
   const { columnsItems, columnsLoading, updateOrder, handleDeleteColumn, handleRenameColumn } =
     useColumns(id);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCreateColumnOpen, setIsCreateColumnOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleOpen = () => setIsOpen(true);
+  const taskQuery = useQueryParam(Queries.Task);
 
-  const handleClose = () => setIsOpen(false);
+  const handleOpen = () => setIsCreateColumnOpen(true);
+
+  const handleClose = () => setIsCreateColumnOpen(false);
 
   if (!columnsItems) {
     return null;
@@ -104,10 +110,11 @@ const Board = ({ background, columns, title, id }: IBoardItem) => {
         columnLength={columns.length}
         boardId={id}
         handleClose={handleClose}
-        isModalOpen={isOpen}
+        isModalOpen={isCreateColumnOpen}
       />
       <BackgroundWrapper bg={background} fullSize />
       <ModalLoader isOpen={columnsLoading} />
+      <TaskItem columns={columnsItems} taskId={taskQuery!} isTaskOpen={!!taskQuery} />
     </BoardWrapper>
   );
 };
