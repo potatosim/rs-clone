@@ -63,6 +63,14 @@ const UserThemes = () => {
     }
   };
 
+  //TODO:
+  // Themes sorting
+  // 2 base themes
+  // add new theme template
+  // dark and light modes
+  // refactor code and components
+  // add more params for ThemeCreator and ThemeEditor
+
   return (
     <ThemeProvider theme={curTheme}>
       <CssBaseline />

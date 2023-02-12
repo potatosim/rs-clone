@@ -12,16 +12,17 @@ import {
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
-import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { IThemeUser } from 'types/ThemeUser';
 import { userConverter } from 'helpers/converters';
 import styled from '@emotion/styled';
 import { Collections } from 'enum/Collection';
+import { ITheme } from 'types/Theme';
 
-interface ThemeCreatorProps {
-  setIsCreating: (value: boolean) => void;
+interface ThemeCreatorProps extends ITheme {
+  setIsEditing(value: boolean): void;
 }
 
 const ModalWrapper = styled(Box)`
@@ -59,27 +60,23 @@ const ThumbnailWrapper = styled(Box)`
   flex-grow: 10;
 `;
 
-const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
+const ThemeCreator: FC<ThemeCreatorProps> = ({ id, name, primary, secondary, setIsEditing }) => {
   const { firestore } = useContext(FirebaseContext);
-  const [name, setName] = useState<string>('New Theme');
-  const [primary, setPrimary] = useState<string>('#9E9E9E');
-  const [secondary, setSecondary] = useState<string>('#9E9E9E');
+  const [newName, setNewName] = useState<string>(name);
+  const [newPrimary, setNewPrimary] = useState<string>(primary);
+  const [newSecondary, setNewSecondary] = useState<string>(secondary);
 
   const [user, loading] = useDocumentData<IThemeUser>(
     doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
   );
 
-  //handlers helpers hooks difference - куда закинуть addTheme
-  const addTheme = async () => {
+  const editTheme = async () => {
     if (user) {
-      setIsCreating(false);
-      const temp = await addDoc(collection(firestore, 'themes'), {
-        name: name,
-        primary: primary,
-        secondary: secondary,
-      });
-      updateDoc(doc(firestore, Collections.Users, user.id), {
-        availableThemes: arrayUnion(temp.id),
+      setIsEditing(false);
+      updateDoc(doc(firestore, Collections.Themes, id), {
+        name: newName,
+        primary: newPrimary,
+        secondary: newSecondary,
       });
     }
   };
@@ -96,8 +93,8 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               <TextField
                 label="Name"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
                 sx={{ width: '250px', mb: '20px' }}
               />
             </AccordionDetails>
@@ -111,8 +108,8 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               <TextField
                 label="primary"
                 type="color"
-                value={primary}
-                onChange={(e) => setPrimary(e.target.value)}
+                value={newPrimary}
+                onChange={(e) => setNewPrimary(e.target.value)}
                 sx={{ width: '250px', mb: '20px' }}
               />
             </AccordionDetails>
@@ -126,8 +123,8 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               <TextField
                 label="secondary"
                 type="color"
-                value={secondary}
-                onChange={(e) => setSecondary(e.target.value)}
+                value={newSecondary}
+                onChange={(e) => setNewSecondary(e.target.value)}
                 sx={{ width: '250px' }}
               />
             </AccordionDetails>
@@ -136,20 +133,16 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
         </Box>
         <Divider orientation="vertical" sx={{ backgroundColor: 'grey', width: '4px' }} />
         <ThumbnailWrapper>
-          <ThemeThumbnail name={name} primary={primary} secondary={secondary} />
+          <ThemeThumbnail name={newName} primary={newPrimary} secondary={newSecondary} />
           <Box sx={{ mt: '1rem' }}>
             <Button
               variant="contained"
               sx={{ width: '100px', mr: '1rem' }}
-              onClick={() => addTheme()}
+              onClick={() => editTheme()}
             >
               Create
             </Button>
-            <Button
-              variant="contained"
-              sx={{ width: '100px' }}
-              onClick={() => setIsCreating(false)}
-            >
+            <Button variant="contained" sx={{ width: '100px' }} onClick={() => setIsEditing(false)}>
               Cancel
             </Button>
           </Box>
