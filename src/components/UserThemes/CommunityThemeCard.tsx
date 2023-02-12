@@ -18,7 +18,7 @@ const CommunityThemeCard: FC<ITheme> = ({ id, name, primary, secondary }) => {
 
   const availableThemes = user?.availableThemes!;
 
-  const handleAddTheme = async () => {
+  const handlerAddTheme = async () => {
     if (!availableThemes.some((theme) => theme === id) && user) {
       updateDoc(doc(firestore, Collections.Users, user.id), {
         availableThemes: arrayUnion(id),
@@ -47,7 +47,7 @@ const CommunityThemeCard: FC<ITheme> = ({ id, name, primary, secondary }) => {
       ></Paper>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', m: '20px auto 10px' }}>
         <ButtonGroup fullWidth={true}>
-          <Button variant="contained" onClick={handleAddTheme}>
+          <Button variant="contained" onClick={handlerAddTheme}>
             Add
           </Button>
           <Button variant="contained" onClick={completelyDeleteTheme}>
