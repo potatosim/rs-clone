@@ -10,7 +10,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 const Header = () => {
   const [activePage, setActivePage] = useState(0);
   const auth = React.useContext(FirebaseContext).auth;
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   return (
     <AppBar position="static">
@@ -40,18 +40,16 @@ const Header = () => {
         </Tabs>
         <ButtonGroup variant="text" color="inherit" sx={{ marginLeft: 'auto' }}>
           <>
-            {user?.photoURL ? (
+            {user ? (
               <>
-                <Avatar src={user.photoURL} />
+                <Avatar src={user.photoURL!} />
                 <Button onClick={() => auth.signOut()}>Logout</Button>
               </>
             ) : (
               <>
-                {/* <Button component={Link} to={AppRoutes.SignUpPage}>
-                  Sign Up
-                </Button> */}
+                <Avatar />
                 <Button component={Link} to={AppRoutes.LoginPage}>
-                  SignUp
+                  Login
                 </Button>
               </>
             )}
