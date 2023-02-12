@@ -1,10 +1,8 @@
+import Board from 'components/Board';
 import { CircularProgress } from '@mui/material';
-import { useParams } from 'react-router-dom';
-
 import React from 'react';
 import { useBoard } from 'hooks/boardHooks/useBoard';
-
-import Board from 'components/Board';
+import { useParams } from 'react-router-dom';
 
 const BoardPage = () => {
   const { boardId } = useParams();

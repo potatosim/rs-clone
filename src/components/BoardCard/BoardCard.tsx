@@ -15,8 +15,7 @@ interface BoardItemProps {
 
 const CardWrapper = styled(Paper)`
   min-height: 6rem;
-  width: 15%;
-  min-width: 270px;
+  width: 270px;
   cursor: pointer;
   border-radius: 0.5rem;
   overflow: hidden;

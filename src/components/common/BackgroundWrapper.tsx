@@ -8,8 +8,8 @@ interface BackgroundWrapperProps {
 
 export const BackgroundWrapper = styled('div')<BackgroundWrapperProps>`
   width: 100%;
-  height: 0;
-  padding-top: 46%;
+  height: ${({ fullSize }) => !fullSize && '46%'};
+  padding-top: ${({ fullSize }) => !fullSize && '46%'};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
