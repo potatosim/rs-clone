@@ -2,19 +2,12 @@ import { Box, Button, Card, Paper } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { Collections } from 'enum/Collection';
-import { arrayRemove, doc, updateDoc } from 'firebase/firestore';
+import { handlerDeleteUserTheme } from 'handlers/handlerDeleteUserTheme';
 import { FC, useContext } from 'react';
 import { ITheme } from 'types/Theme';
 
 const ThemeCard: FC<ITheme> = ({ id, name, primary, secondary }) => {
   const { firestore } = useContext(FirebaseContext);
-
-  const handlerDeleteTheme = () => {
-    updateDoc(doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA'), {
-      availableThemes: arrayRemove(id),
-    });
-  };
 
   return (
     <Card raised={true} sx={{ p: '15px' }}>
@@ -34,7 +27,13 @@ const ThemeCard: FC<ITheme> = ({ id, name, primary, secondary }) => {
         <ButtonGroup fullWidth={true}>
           <Button variant="contained">Apply</Button>
           <Button variant="contained">Edit</Button>
-          <Button variant="contained" onClick={handlerDeleteTheme}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              console.log('start');
+              handlerDeleteUserTheme(firestore, id);
+            }}
+          >
             Delete
           </Button>
         </ButtonGroup>

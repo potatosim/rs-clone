@@ -1,9 +1,8 @@
 import { Box, Button, Container, CssBaseline, Grid, IconButton, Typography } from '@mui/material';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import ThemeCreator from 'components/UserThemes/ThemeCreator';
 import ThemeCard from 'components/UserThemes/ThemeCard';
 import { Link } from 'react-router-dom';
@@ -49,7 +48,6 @@ const darkMode = createTheme({
 });
 
 const UserThemes = () => {
-  const { firestore } = useContext(FirebaseContext);
   const [curTheme, setTheme] = useState(lightMode);
   const [isLightTheme, setIsLightTheme] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
@@ -86,7 +84,7 @@ const UserThemes = () => {
         {isCreating && <ThemeCreator setIsCreating={setIsCreating} />}
         <Container maxWidth={false}>
           <Grid container spacing={2}>
-            {userThemes?.reverse().map((theme) => {
+            {userThemes?.map((theme) => {
               return (
                 <Grid key={theme.id} item xs={3}>
                   <ThemeCard {...theme} />

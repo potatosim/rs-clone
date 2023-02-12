@@ -32,7 +32,7 @@ const CommunityThemes = () => {
       <Container maxWidth={false}>
         {allThemes?.length ? (
           <Grid container spacing={2}>
-            {allThemes.reverse().map((theme) => (
+            {allThemes.map((theme) => (
               <Grid key={theme.id} item xs={3}>
                 <CommunityThemeCard {...theme} />
               </Grid>
