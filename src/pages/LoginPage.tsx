@@ -74,7 +74,7 @@ const LoginPage = () => {
         </Box>
         <Typography sx={{ marginTop: '15px' }}>
           Do not have an account? <br />
-          <Link to={AppRoutes.SignUpPage}> SinUp for free!</Link>
+          <Link to={AppRoutes.SignUpPage}> SignUp for free!</Link>
         </Typography>
       </Grid>
     </Grid>

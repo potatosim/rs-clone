@@ -26,15 +26,12 @@ const Header = () => {
           {user ? (
             <>
               <Tab label="Home" component={Link} to={AppRoutes.Home}></Tab>
-              <Tab label="Something else"></Tab>
-              <Tab label="About" component={Link} to="#"></Tab>
-              <Tab label="Borders" component={Link} to={AppRoutes.Boards}></Tab>
+
+              <Tab label="Boards" component={Link} to={AppRoutes.Boards}></Tab>
             </>
           ) : (
             <>
               <Tab label="Home" component={Link} to={AppRoutes.Home}></Tab>
-              <Tab label="Something else"></Tab>
-              <Tab label="About"></Tab>
             </>
           )}
         </Tabs>
