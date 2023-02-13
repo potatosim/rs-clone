@@ -49,7 +49,7 @@ const CreateBoardForm: FC<CreateBoardFormProps> = ({ isModalOpen, handleClose })
   };
 
   return (
-    <ModalWrapper open={isModalOpen} onClose={handleClose}>
+    <ModalWrapper keepMounted={false} open={isModalOpen} onClose={handleClose}>
       <FormWrapper>
         <TextField
           value={title}

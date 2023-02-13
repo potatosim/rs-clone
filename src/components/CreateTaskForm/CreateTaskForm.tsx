@@ -1,10 +1,15 @@
+import { FC, useState } from 'react';
+
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import { FormWrapper } from 'components/common/FormWrapper';
 import { ModalWrapper } from 'components/common/ModalWrapper';
+import { Priorities } from 'enum/Priorities';
+import PrioritySelect from 'components/PrioritySelect';
+import SizeSelect from 'components/SizeSelect';
+import { Sizes } from 'enum/Sizes';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useAddTask } from 'hooks/taskHooks/useAddTask';
-import React, { FC, useState } from 'react';
 
 interface CreateTaskFormProps {
   isModalOpen: boolean;
@@ -21,16 +26,23 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({
 }) => {
   const [taskTitle, setTaskTitle] = useState<string>('');
   const [taskDescription, setTaskDescription] = useState<string>('');
+  const [priority, setPriority] = useState<Priorities>(Priorities.Medium);
+  const [size, setSize] = useState<Sizes>(Sizes.Medium);
+
   const addTask = useAddTask(columnId, {
     description: taskDescription,
     title: taskTitle,
     order: taskLength,
+    priority,
+    size,
     columnId,
   });
 
   const handleCreateTask = async () => {
     handleClose();
     await addTask();
+    setPriority(Priorities.Medium);
+    setSize(Sizes.Medium);
     setTaskTitle('');
   };
 
@@ -51,7 +63,18 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({
           onChange={(e) => setTaskDescription(e.target.value)}
           size="small"
         />
-
+        <PrioritySelect
+          currentPriority={priority}
+          onPriorityChange={(e) => {
+            setPriority(e.target.value as Priorities);
+          }}
+        />
+        <SizeSelect
+          currentSize={size}
+          onSizeChange={(e) => {
+            setSize(e.target.value as Sizes);
+          }}
+        />
         <Button
           disabled={!taskTitle.trim().length}
           variant="outlined"

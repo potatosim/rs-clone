@@ -1,16 +1,7 @@
-import { useDocument, useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { Collections } from 'enum/Collection';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import {
-  arrayRemove,
-  doc,
-  updateDoc,
-  writeBatch,
-  arrayUnion,
-  getDoc,
-  DocumentReference,
-  DocumentData,
-} from 'firebase/firestore';
+import { arrayRemove, doc, updateDoc, writeBatch, arrayUnion } from 'firebase/firestore';
 import { useContext } from 'react';
 import { ITaskItem } from 'types/Task';
 import { tasksConverter } from 'helpers/converters';
@@ -128,6 +119,48 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     });
   };
 
+  const handleAddComment = async (message: string) => {
+    if (task) {
+      await updateDoc(doc(firestore, Collections.Tasks, task.id), {
+        comments: arrayUnion({
+          author: 'User',
+          message: message,
+          createdAt: new Date().toLocaleString(),
+        }),
+      });
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (task) {
+      const targetColumnTasks = await getDocumentsByMatchedKey({
+        firestore,
+        collectionName: Collections.Tasks,
+        converter: tasksConverter,
+        keyName: 'columnId',
+        targetId: task.columnId,
+      });
+      const batch = writeBatch(firestore);
+
+      batch.delete(doc(firestore, Collections.Tasks, task.id));
+
+      batch.update(doc(firestore, Collections.Columns, task.columnId), {
+        columns: arrayRemove(task.columnId),
+      });
+
+      const updatedColumn = targetColumnTasks.filter((taskItem) => taskItem.id !== task.id);
+
+      updatedColumn.map((taskItem, id) => {
+        const taskRef = doc(firestore, Collections.Tasks, taskItem.id);
+        batch.update(taskRef, {
+          order: id,
+        });
+      });
+
+      await batch.commit();
+    }
+  };
+
   return {
     task,
     loading,
@@ -135,5 +168,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     handleChangeTaskColumn,
     handleChangePriority,
     handleChangeSize,
+    handleDeleteTask,
+    handleAddComment,
   };
 };

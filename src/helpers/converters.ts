@@ -8,6 +8,7 @@ import {
 import { IBoardItem } from 'types/Board';
 import { IColumnItem } from 'types/Column';
 import { ITaskItem } from 'types/Task';
+import { IUserItem } from 'types/User';
 
 export const boardsConverter: FirestoreDataConverter<IBoardItem> = {
   toFirestore(board: WithFieldValue<IBoardItem>): DocumentData {
@@ -36,5 +37,15 @@ export const tasksConverter: FirestoreDataConverter<ITaskItem> = {
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): ITaskItem {
     const data = snapshot.data(options);
     return { ...data, id: snapshot.id } as ITaskItem;
+  },
+};
+
+export const usersConverter: FirestoreDataConverter<IUserItem> = {
+  toFirestore(board: WithFieldValue<IUserItem>): DocumentData {
+    return board;
+  },
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): IUserItem {
+    const data = snapshot.data(options);
+    return { ...data, id: snapshot.id } as IUserItem;
   },
 };

@@ -1,6 +1,5 @@
 import {
   Card,
-  Skeleton,
   CardContent,
   TextareaAutosize,
   Box,
@@ -8,6 +7,8 @@ import {
   SelectChangeEvent,
   Tabs,
   Tab,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
@@ -18,7 +19,7 @@ import { FC, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import TaskHeader from 'components/TaskHeader';
-import Selector, { OptionItem } from 'components/common/CustomSelect';
+import { OptionItem } from 'components/common/CustomSelect';
 import CustomSelect from 'components/common/CustomSelect';
 import { IColumnItem } from 'types/Column';
 import { ITaskItem } from 'types/Task';
@@ -27,6 +28,8 @@ import SizeSelect from 'components/SizeSelect';
 import History from 'components/History';
 import TabPanel from 'components/TabPanel/TabPanel';
 import { TaskTabs } from 'enum/TaskTabs';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import CommentsTab from 'components/CommentsTab';
 
 interface TaskItemProps {
   taskId: string;
@@ -52,6 +55,9 @@ const StyledCardContentOptions = styled(CardContent)`
   display: flex;
   row-gap: 1rem;
   flex-direction: column;
+`;
+
+const StyledBox = styled(Box)`
   grid-area: 2 / 4 / 7 / 5;
 `;
 
@@ -84,6 +90,8 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns }) => {
     handleChangeTaskColumn,
     handleChangePriority,
     handleChangeSize,
+    handleDeleteTask,
+    handleAddComment,
   } = useTask(taskId, columns);
   const [activeTab, setActiveTab] = useState<TaskTabs>(TaskTabs.History);
 
@@ -98,6 +106,11 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns }) => {
 
   const handleChangeTab = (event: React.SyntheticEvent<Element, Event>, value: TaskTabs) => {
     setActiveTab(value);
+  };
+
+  const handleDelete = async () => {
+    close();
+    await handleDeleteTask();
   };
 
   return (
@@ -118,63 +131,66 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns }) => {
             defaultValue={task.description}
             style={{ width: '80%', minHeight: 100 }}
           />
-          <Tabs
-            // sx={{ marginLeft: 'auto' }}
-            // textColor="inherit"
-            // indicatorColor="primary"
-            value={activeTab}
-            onChange={handleChangeTab}
-          >
+          <Tabs value={activeTab} onChange={handleChangeTab}>
             <Tab value={TaskTabs.History} label={TaskTabs.History}></Tab>
             <Tab value={TaskTabs.Comments} label={TaskTabs.Comments}></Tab>
           </Tabs>
           <TabPanel value={activeTab} index={TaskTabs.History}>
             <History history={task.history} />
           </TabPanel>
-          <TabPanel index={TaskTabs.Comments} value={activeTab}></TabPanel>
+          <TabPanel index={TaskTabs.Comments} value={activeTab}>
+            <CommentsTab comments={task.comments} handleAddComment={handleAddComment} />
+          </TabPanel>
         </StyledCardContent>
-        <StyledCardContentOptions>
-          <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-            <Typography>Assignees:</Typography>
-            {}
-          </Box>
+        <StyledBox>
+          <StyledCardContentOptions>
+            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
+              <Typography>Assignees:</Typography>
+              {}
+            </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-            <Typography>Status:</Typography>
-            <CustomSelect
-              currentOption={getCurrentColumnOption(columns, task)}
-              onChange={(e: SelectChangeEvent) => {
-                handleChangeTaskColumn(e.target.value);
-              }}
-              options={getColumnsOptions(columns)}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-            <Typography>Priority:</Typography>
-            <PrioritySelect
-              currentPriority={task.priority}
-              onPriorityChange={(e: SelectChangeEvent) => {
-                handleChangePriority(e.target.value, task.id);
-              }}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-            <Typography>Size:</Typography>
-            <SizeSelect
-              currentSize={task.size}
-              onSizeChange={(e: SelectChangeEvent) => {
-                handleChangeSize(e.target.value, task.id);
-              }}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-            <Typography>Created by:</Typography>
-            <Avatar
-              alt="unknown"
-              src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Funknown-person-flat-icon-vector-15222119&psig=AOvVaw3x4hkSxZMLep5UvxU9L7Jh&ust=1676220987138000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCLDozPX3jf0CFQAAAAAdAAAAABAE"
-            ></Avatar>
-          </Box>
-        </StyledCardContentOptions>
+            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
+              <Typography>Status:</Typography>
+              <CustomSelect
+                currentOption={getCurrentColumnOption(columns, task)}
+                onChange={(e: SelectChangeEvent) => {
+                  handleChangeTaskColumn(e.target.value);
+                }}
+                options={getColumnsOptions(columns)}
+              />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
+              <Typography>Priority:</Typography>
+              <PrioritySelect
+                currentPriority={task.priority}
+                onPriorityChange={(e: SelectChangeEvent) => {
+                  handleChangePriority(e.target.value, task.id);
+                }}
+              />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
+              <Typography>Size:</Typography>
+              <SizeSelect
+                currentSize={task.size}
+                onSizeChange={(e: SelectChangeEvent) => {
+                  handleChangeSize(e.target.value, task.id);
+                }}
+              />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
+              <Typography>Created by:</Typography>
+              <Avatar
+                alt="unknown"
+                src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Funknown-person-flat-icon-vector-15222119&psig=AOvVaw3x4hkSxZMLep5UvxU9L7Jh&ust=1676220987138000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCLDozPX3jf0CFQAAAAAdAAAAABAE"
+              ></Avatar>
+            </Box>
+          </StyledCardContentOptions>
+          <Tooltip title="Delete task">
+            <IconButton onClick={handleDelete}>
+              <DeleteForeverIcon />
+            </IconButton>
+          </Tooltip>
+        </StyledBox>
       </StyledCard>
     </ModalWrapper>
   );
