@@ -3,11 +3,21 @@ import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Box, TextField, Typography, Button } from '@mui/material';
 import { AuthWrapper } from 'components/common/AuthWrapper';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from 'react-router-dom';
+import { AppRoutes } from 'enum/AppRoutes';
+
 const SignUpPage = () => {
   const auth = React.useContext(FirebaseContext).auth;
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (user) navigate(AppRoutes.Boards);
+  }, [user]);
 
   return (
     <AuthWrapper
