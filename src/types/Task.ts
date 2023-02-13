@@ -1,3 +1,6 @@
+import { Priorities } from 'enum/Priorities';
+import { Sizes } from 'enum/Sizes';
+import { CommentItem } from './CommentItem';
 import { HistoryItem } from './HistoryItem';
 
 export interface ITaskItem {
@@ -6,7 +9,8 @@ export interface ITaskItem {
   description: string;
   order: number;
   columnId: string;
-  priority: 'Urgent' | 'High' | 'Medium' | 'Low';
-  size: 'X-Large' | 'Large' | 'Medium' | 'Small' | 'Tiny';
+  priority: Priorities;
+  size: Sizes;
   history: HistoryItem[];
+  comments: CommentItem[];
 }

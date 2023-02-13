@@ -6,45 +6,86 @@ interface HistoryProps {
   history: HistoryItem[];
 }
 
+interface HistoryItemElProps {
+  title: React.ReactElement;
+  date: string;
+}
+
+const HistoryItemEl = ({ title, date }: HistoryItemElProps) => {
+  return (
+    <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
+      <Box
+        sx={{ borderRadius: '50%', overflow: 'hidden', bgcolor: 'red', width: 36, height: 36 }}
+      />
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Typography>{title}</Typography>
+        <Typography variant="caption">{date.split(',').reverse().join(',')}</Typography>
+      </Box>
+    </Box>
+  );
+};
+
 const getStringByAction = (historyItem: HistoryItem) => {
   switch (historyItem.action) {
     case 'created':
       return (
-        <>
-          <strong>{historyItem.initiator}</strong> just create a task
-        </>
+        <HistoryItemEl
+          title={
+            <>
+              <strong>{historyItem.initiator}</strong> just create a task
+            </>
+          }
+          date={historyItem.time}
+        />
       );
     case 'statusChanged':
       return (
-        <>
-          <strong>{historyItem.initiator}</strong>
-          changed task status from <strong>{historyItem.from}</strong> to
-          <strong>{historyItem.to}</strong>
-        </>
+        <HistoryItemEl
+          title={
+            <>
+              <strong>{historyItem.initiator}</strong> changed task status from{' '}
+              <strong>{historyItem.from}</strong> to
+              <strong>{historyItem.to}</strong>
+            </>
+          }
+          date={historyItem.time}
+        />
       );
     case 'titleChanged':
       return (
-        <>
-          <strong>{historyItem.initiator}</strong>
-          changed task title from <strong>{historyItem.from}</strong> to{' '}
-          <strong>{historyItem.to}</strong>
-        </>
+        <HistoryItemEl
+          title={
+            <>
+              <strong>{historyItem.initiator}</strong> changed task title from{' '}
+              <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
+            </>
+          }
+          date={historyItem.time}
+        />
       );
     case 'priorityChanged':
       return (
-        <>
-          <strong>{historyItem.initiator}</strong>
-          changed task priority from <strong>{historyItem.from}</strong> to{' '}
-          <strong>{historyItem.to}</strong>
-        </>
+        <HistoryItemEl
+          title={
+            <>
+              <strong>{historyItem.initiator}</strong> changed task priority from
+              <strong> {historyItem.from} </strong>to<strong> {historyItem.to} </strong>
+            </>
+          }
+          date={historyItem.time}
+        />
       );
     case 'sizeChanged':
       return (
-        <>
-          <strong>{historyItem.initiator}</strong>
-          changed task size from <strong>{historyItem.from}</strong> to{' '}
-          <strong>{historyItem.to}</strong>
-        </>
+        <HistoryItemEl
+          title={
+            <>
+              <strong>{historyItem.initiator}</strong> changed task size from{' '}
+              <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
+            </>
+          }
+          date={historyItem.time}
+        />
       );
     default:
       return '' as never;
@@ -53,19 +94,14 @@ const getStringByAction = (historyItem: HistoryItem) => {
 
 const History: FC<HistoryProps> = ({ history }) => {
   return (
-    <Box>
+    <Box sx={{ display: 'flex', rowGap: '0.5rem', flexDirection: 'column', mt: 2 }}>
       {history.reverse().map((historyItem) => (
         <Box
           key={historyItem.time + historyItem.action}
           display="flex"
           justifyContent="space-between"
         >
-          <Typography display="flex" columnGap="4px" key={historyItem.time + 1}>
-            {getStringByAction(historyItem)}
-          </Typography>
-          <Typography key={historyItem.time + 2} variant="caption">
-            {historyItem.time.split(',').reverse().join(',')}
-          </Typography>
+          {getStringByAction(historyItem)}
         </Box>
       ))}
     </Box>

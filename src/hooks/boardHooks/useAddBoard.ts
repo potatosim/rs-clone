@@ -8,13 +8,11 @@ import { IBoardItem } from 'types/Board';
 
 export const useAddBoard = ({
   title,
-  // isPrivate,
   backgroundType,
   colorRef,
   fileUrl,
 }: {
   title: string;
-  // isPrivate: boolean;
   backgroundType: BackgroundType;
   colorRef: MutableRefObject<HTMLInputElement | null>;
   fileUrl: string;
@@ -27,7 +25,6 @@ export const useAddBoard = ({
       title,
       allowedUsers: [],
       columns: [],
-      // private: isPrivate,
       background: {
         type: backgroundType,
         source: '#ffffff',
