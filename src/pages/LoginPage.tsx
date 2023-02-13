@@ -57,11 +57,7 @@ const LoginPage = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button
-            variant="contained"
-            // value=" Continue"
-            onClick={() => signInWithEmailAndPassword(email, password)}
-          >
+          <Button variant="contained" onClick={() => signInWithEmailAndPassword(email, password)}>
             Enter
           </Button>
         </Box>

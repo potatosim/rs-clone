@@ -11,7 +11,6 @@ import AccountPage from 'pages/AccountPage';
 import RequireAuth from 'components/RequireAuth';
 
 const AppRouter = () => {
-  RequireAuth();
   return (
     <Routes>
       <Route path={AppRoutes.Home} element={<Layout />}>
