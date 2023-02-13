@@ -1,31 +1,28 @@
-import React from 'react';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import {
-  useSignInWithGoogle,
-  useSignInWithEmailAndPassword,
-  useAuthState,
-} from 'react-firebase-hooks/auth';
 import { Box, TextField } from '@mui/material';
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+
+import { AppRoutes } from 'enum/AppRoutes';
+import Button from '@mui/material/Button';
+import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import GoogleIcon from '@mui/icons-material/Google';
+import Grid from '@mui/material/Grid';
+import { Link } from 'react-router-dom';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import { AppRoutes } from 'enum/AppRoutes';
-import GoogleIcon from '@mui/icons-material/Google';
-import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const auth = React.useContext(FirebaseContext).auth;
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, user] = useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle] = useSignInWithGoogle(auth);
 
-  const [user] = useAuthState(auth);
-
   React.useEffect(() => {
-    if (user) navigate(AppRoutes.Boards);
+    if (user) {
+      navigate(AppRoutes.Boards);
+    }
   }, [user]);
 
   return (

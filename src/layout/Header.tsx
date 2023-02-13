@@ -23,17 +23,8 @@ const Header = () => {
           value={activePage}
           onChange={(e, val) => setActivePage(val)}
         >
-          {user ? (
-            <>
-              <Tab label="Home" component={Link} to={AppRoutes.Home}></Tab>
-
-              <Tab label="Boards" component={Link} to={AppRoutes.Boards}></Tab>
-            </>
-          ) : (
-            <>
-              <Tab label="Home" component={Link} to={AppRoutes.Home}></Tab>
-            </>
-          )}
+          <Tab label="Home" component={Link} to={AppRoutes.Home} />
+          {user && <Tab label="Boards" component={Link} to={AppRoutes.Boards} />}
         </Tabs>
         <ButtonGroup variant="text" color="inherit" sx={{ marginLeft: 'auto' }}>
           <>
