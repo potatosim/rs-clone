@@ -24,13 +24,7 @@ const SignUpPage = () => {
       component="form"
       sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}
     >
-      <Box
-        sx={
-          {
-            // background: 'linear-gradient(to bottom, #1B779A, #AAD41E)',
-          }
-        }
-      >
+      <Box>
         <h1> Hello, Wellcome!</h1>
       </Box>
       <Typography>Create your free account </Typography>
