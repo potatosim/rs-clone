@@ -1,34 +1,17 @@
-import { Button, FormLabel, Tab, Tabs, TextField } from '@mui/material';
-import React, { ChangeEvent, FC, useRef, useState } from 'react';
+import { Button, Tab, Tabs, TextField } from '@mui/material';
+import React, { FC, useRef, useState } from 'react';
 
 import { BackgroundType } from 'types/Background';
 import TabPanel from 'components/TabPanel/TabPanel';
-import UploadIcon from '@mui/icons-material/Upload';
 import styled from '@emotion/styled';
 import { useAddBoard } from 'hooks/boardHooks/useAddBoard';
 import { ModalWrapper } from 'components/common/ModalWrapper';
 import { FormWrapper } from 'components/common/FormWrapper';
+import UploadButton from 'components/UploadButton/UploadButton';
 
 const StyledTab = styled(Tab)`
   font-weight: 600;
   font-size: 1rem;
-`;
-
-const UploadButton = styled(Button)`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const UploadLabel = styled(FormLabel)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  cursor: pointer;
-  color: inherit;
 `;
 
 interface CreateBoardFormProps {
@@ -41,14 +24,14 @@ const CreateBoardForm: FC<CreateBoardFormProps> = ({ isModalOpen, handleClose })
   const [backgroundType, setBackgroundType] = useState<BackgroundType>('color');
   // TODO add private functionality
   // const [isPrivate, setIsPrivate] = useState<boolean>(false);
-  const [file, setFile] = useState<FileList | null>(null);
+  const [fileUrl, setFileUrl] = useState<string>('');
   const colorRef = useRef<HTMLInputElement | null>(null);
 
   const handleAddBoard = useAddBoard({
     title,
     backgroundType,
     colorRef,
-    file,
+    fileUrl,
     // isPrivate,
   });
 
@@ -90,16 +73,7 @@ const CreateBoardForm: FC<CreateBoardFormProps> = ({ isModalOpen, handleClose })
           />
         </TabPanel>
         <TabPanel index="image" value={backgroundType}>
-          <UploadButton variant="contained" startIcon={<UploadIcon />}>
-            Upload
-            <UploadLabel>
-              <TextField
-                type="file"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setFile(e.target.files)}
-                sx={{ display: 'none' }}
-              />
-            </UploadLabel>
-          </UploadButton>
+          <UploadButton getFileUrl={setFileUrl} />
         </TabPanel>
         <Button
           disabled={!title.trim().length}

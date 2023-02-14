@@ -34,12 +34,9 @@ const Header = () => {
                 <Button onClick={() => auth.signOut()}>Logout</Button>
               </>
             ) : (
-              <>
-                <Avatar />
-                <Button component={Link} to={AppRoutes.LoginPage}>
-                  Login
-                </Button>
-              </>
+              <Button component={Link} to={AppRoutes.LoginPage}>
+                Login
+              </Button>
             )}
           </>
         </ButtonGroup>
