@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { AppBar, Button, ButtonGroup, Toolbar, Typography, Tabs, Tab } from '@mui/material';
 import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
@@ -9,7 +9,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Header = () => {
   const [activePage, setActivePage] = useState(0);
-  const auth = React.useContext(FirebaseContext).auth;
+  const { auth } = useContext(FirebaseContext);
   const [user] = useAuthState(auth);
 
   return (
