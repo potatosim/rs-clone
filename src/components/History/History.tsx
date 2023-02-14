@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { HistoryItem } from 'types/HistoryItem';
 
@@ -9,13 +9,15 @@ interface HistoryProps {
 interface HistoryItemElProps {
   title: React.ReactElement;
   date: string;
+  avatar: string;
 }
 
-const HistoryItemEl = ({ title, date }: HistoryItemElProps) => {
+const HistoryItemEl = ({ title, date, avatar }: HistoryItemElProps) => {
   return (
     <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
-      <Box
-        sx={{ borderRadius: '50%', overflow: 'hidden', bgcolor: 'red', width: 36, height: 36 }}
+      <Avatar
+        src={avatar}
+        // sx={{ borderRadius: '50%', overflow: 'hidden', bgcolor: 'red', width: 36, height: 36 }}
       />
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Typography>{title}</Typography>
@@ -32,18 +34,20 @@ const getStringByAction = (historyItem: HistoryItem) => {
         <HistoryItemEl
           title={
             <>
-              <strong>{historyItem.initiator}</strong> just create a task
+              <strong>{historyItem.initiator.login}</strong> just create a task
             </>
           }
           date={historyItem.time}
+          avatar={historyItem.initiator.avatar}
         />
       );
     case 'statusChanged':
       return (
         <HistoryItemEl
+          avatar={historyItem.initiator.avatar}
           title={
             <>
-              <strong>{historyItem.initiator}</strong> changed task status from{' '}
+              <strong>{historyItem.initiator.login}</strong> changed task status from{' '}
               <strong>{historyItem.from}</strong> to
               <strong>{historyItem.to}</strong>
             </>
@@ -54,9 +58,10 @@ const getStringByAction = (historyItem: HistoryItem) => {
     case 'titleChanged':
       return (
         <HistoryItemEl
+          avatar={historyItem.initiator.avatar}
           title={
             <>
-              <strong>{historyItem.initiator}</strong> changed task title from{' '}
+              <strong>{historyItem.initiator.login}</strong> changed task title from{' '}
               <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
             </>
           }
@@ -66,9 +71,10 @@ const getStringByAction = (historyItem: HistoryItem) => {
     case 'priorityChanged':
       return (
         <HistoryItemEl
+          avatar={historyItem.initiator.avatar}
           title={
             <>
-              <strong>{historyItem.initiator}</strong> changed task priority from
+              <strong>{historyItem.initiator.login}</strong> changed task priority from
               <strong> {historyItem.from} </strong>to<strong> {historyItem.to} </strong>
             </>
           }
@@ -78,9 +84,10 @@ const getStringByAction = (historyItem: HistoryItem) => {
     case 'sizeChanged':
       return (
         <HistoryItemEl
+          avatar={historyItem.initiator.avatar}
           title={
             <>
-              <strong>{historyItem.initiator}</strong> changed task size from{' '}
+              <strong>{historyItem.initiator.login}</strong> changed task size from{' '}
               <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
             </>
           }
