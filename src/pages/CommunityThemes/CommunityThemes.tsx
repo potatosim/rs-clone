@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ThemesIcon from '@mui/icons-material/InsertPhoto';
 import CommunityThemeCard from 'components/UserThemes/CommunityThemeCard';
 import styled from '@emotion/styled';
-import { useGetAllThemes } from 'hooks/themesHooks/useGetAllThemes';
+import { useGetPublicThemes } from 'hooks/themesHooks/useGetPublicThemes';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -14,7 +14,7 @@ const PageContentWrapper = styled(Box)`
 `;
 
 const CommunityThemes = () => {
-  const { allThemes, allThemesLoader } = useGetAllThemes();
+  const { publicThemes, publicThemesLoader } = useGetPublicThemes();
 
   return (
     <PageContentWrapper>
@@ -27,9 +27,9 @@ const CommunityThemes = () => {
         Community Themes
       </Typography>
       <Container maxWidth={false}>
-        {allThemes?.length ? (
+        {publicThemes?.length ? (
           <Grid container spacing={2}>
-            {allThemes.map((theme) => (
+            {publicThemes.map((theme) => (
               <Grid key={theme.id} item xs={3}>
                 <CommunityThemeCard {...theme} />
               </Grid>

@@ -8,6 +8,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Divider,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
@@ -64,19 +66,22 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const [name, setName] = useState<string>('New Theme');
   const [primary, setPrimary] = useState<string>('#9E9E9E');
   const [secondary, setSecondary] = useState<string>('#9E9E9E');
+  const [checked, setChecked] = useState<boolean>(false);
 
   const [user, loading] = useDocumentData<IThemeUser>(
     doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
   );
 
-  //handlers helpers hooks difference - куда закинуть addTheme
   const addTheme = async () => {
     if (user) {
       setIsCreating(false);
       const temp = await addDoc(collection(firestore, 'themes'), {
+        // TODO: add variable for creator
+        creator: 'dtkL6o320t70FceVT0QA',
         name: name,
         primary: primary,
         secondary: secondary,
+        isPublic: checked,
       });
       updateDoc(doc(firestore, Collections.Users, user.id), {
         availableThemes: arrayUnion(temp.id),
@@ -129,6 +134,25 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
                 value={secondary}
                 onChange={(e) => setSecondary(e.target.value)}
                 sx={{ width: '250px' }}
+              />
+            </AccordionDetails>
+          </Accordion>
+          <Divider sx={{ backgroundColor: 'black' }} />
+          <Accordion square disableGutters={true}>
+            <AccordionSummary expandIcon={<ArrowIcon />}>
+              <Typography variant="h6">Privacy</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <FormControlLabel
+                control={<Checkbox checked={checked} />}
+                onChange={() => {
+                  if (checked) {
+                    setChecked(false);
+                  } else {
+                    setChecked(true);
+                  }
+                }}
+                label="Add to community themes"
               />
             </AccordionDetails>
           </Accordion>

@@ -8,6 +8,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Divider,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
@@ -60,11 +62,19 @@ const ThumbnailWrapper = styled(Box)`
   flex-grow: 10;
 `;
 
-const ThemeCreator: FC<ThemeCreatorProps> = ({ id, name, primary, secondary, setIsEditing }) => {
+const ThemeCreator: FC<ThemeCreatorProps> = ({
+  id,
+  name,
+  primary,
+  secondary,
+  isPublic,
+  setIsEditing,
+}) => {
   const { firestore } = useContext(FirebaseContext);
   const [newName, setNewName] = useState<string>(name);
   const [newPrimary, setNewPrimary] = useState<string>(primary);
   const [newSecondary, setNewSecondary] = useState<string>(secondary);
+  const [checked, setChecked] = useState<boolean>(isPublic);
 
   const [user, loading] = useDocumentData<IThemeUser>(
     doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
@@ -74,9 +84,12 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ id, name, primary, secondary, set
     if (user) {
       setIsEditing(false);
       updateDoc(doc(firestore, Collections.Themes, id), {
+        // TODO: add variable for creator
+        creator: 'dtkL6o320t70FceVT0QA',
         name: newName,
         primary: newPrimary,
         secondary: newSecondary,
+        isPublic: checked,
       });
     }
   };
@@ -130,6 +143,25 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ id, name, primary, secondary, set
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
+          <Accordion square disableGutters={true}>
+            <AccordionSummary expandIcon={<ArrowIcon />}>
+              <Typography variant="h6">Privacy</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <FormControlLabel
+                control={<Checkbox checked={checked} />}
+                onChange={() => {
+                  if (checked) {
+                    setChecked(false);
+                  } else {
+                    setChecked(true);
+                  }
+                }}
+                label="Add to community themes"
+              />
+            </AccordionDetails>
+          </Accordion>
+          <Divider sx={{ backgroundColor: 'black' }} />
         </Box>
         <Divider orientation="vertical" sx={{ backgroundColor: 'grey', width: '4px' }} />
         <ThumbnailWrapper>
@@ -140,7 +172,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ id, name, primary, secondary, set
               sx={{ width: '100px', mr: '1rem' }}
               onClick={() => editTheme()}
             >
-              Create
+              Confirm
             </Button>
             <Button variant="contained" sx={{ width: '100px' }} onClick={() => setIsEditing(false)}>
               Cancel
