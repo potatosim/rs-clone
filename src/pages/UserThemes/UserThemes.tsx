@@ -10,6 +10,8 @@ import { AppRoutes } from 'enum/AppRoutes';
 import ThemesIcon from '@mui/icons-material/InsertPhoto';
 import styled from '@emotion/styled';
 import { useGetUserThemes } from 'hooks/themesHooks/useGetUserThemes';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -64,12 +66,14 @@ const UserThemes = () => {
   };
 
   //TODO:
+  // add button to link
   // Themes sorting
   // 2 base themes
-  // add new theme template
+  // add new theme template - CreateBoardButton component
   // dark and light modes
   // refactor code and components
   // add more params for ThemeCreator and ThemeEditor
+  // add loaders
 
   return (
     <ThemeProvider theme={curTheme}>
@@ -102,6 +106,7 @@ const UserThemes = () => {
           </Grid>
         </Container>
       </PageContentWrapper>
+      
     </ThemeProvider>
   );
 };

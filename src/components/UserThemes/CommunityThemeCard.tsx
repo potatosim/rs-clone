@@ -1,10 +1,8 @@
 import { Box, Button, Card, Paper } from '@mui/material';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
-import { arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { handlerDeleteUserTheme } from 'handlers/handlerDeleteUserTheme';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { userConverter } from 'helpers/converters';
 import { FC, useContext } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
@@ -26,11 +24,6 @@ const CommunityThemeCard: FC<ITheme> = ({ id, name, primary, secondary }) => {
     }
   };
 
-  const completelyDeleteTheme = () => {
-    deleteDoc(doc(firestore, Collections.Themes, id));
-    handlerDeleteUserTheme(firestore, id);
-  };
-
   return (
     <Card raised={true} sx={{ p: '15px' }}>
       <Typography variant="h5" align="center">
@@ -46,14 +39,13 @@ const CommunityThemeCard: FC<ITheme> = ({ id, name, primary, secondary }) => {
         }}
       ></Paper>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', m: '20px auto 10px' }}>
-        <ButtonGroup fullWidth={true}>
-          <Button variant="contained" onClick={handlerAddTheme}>
-            Add
-          </Button>
-          <Button variant="contained" onClick={completelyDeleteTheme}>
-            Delete
-          </Button>
-        </ButtonGroup>
+        <Button
+          variant="contained"
+          onClick={handlerAddTheme}
+          sx={{ width: '100%', maxWidth: '100px' }}
+        >
+          Add
+        </Button>
       </Box>
     </Card>
   );
