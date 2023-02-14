@@ -36,7 +36,7 @@ const RequireAuth = () => {
     } else {
       getUserRecord();
     }
-  }, [user]);
+  }, [user, loading]);
 
   if (loading || !userRecord) {
     return <CircularProgress />;
