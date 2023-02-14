@@ -8,9 +8,11 @@ import { tasksConverter } from 'helpers/converters';
 import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
 import { HistoryItem } from 'types/HistoryItem';
 import { IColumnItem } from 'types/Column';
+import { UserContext } from 'components/RequireAuth';
 
 export const useTask = (taskId: string, columns: IColumnItem[]) => {
   const { firestore } = useContext(FirebaseContext);
+  const { user } = useContext(UserContext);
 
   const [task, loading] = useDocumentData<ITaskItem>(
     doc(firestore, Collections.Tasks, taskId).withConverter(tasksConverter),
@@ -23,7 +25,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
         {
           title: taskTitle,
           history: arrayUnion({
-            initiator: 'User',
+            initiator: user,
             action: 'titleChanged',
             from: task.title,
             to: taskTitle,
@@ -80,7 +82,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
       batch.update(targetTask, {
         order: newColumnTasks.length,
         history: arrayUnion({
-          initiator: 'User',
+          initiator: user,
           action: 'statusChanged',
           from: prevColumn?.title,
           to: newColumn?.title,
@@ -97,7 +99,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     await updateDoc(doc(firestore, Collections.Tasks, id), {
       priority,
       history: arrayUnion({
-        initiator: 'User',
+        initiator: user,
         action: 'priorityChanged',
         from: task?.priority,
         to: priority,
@@ -110,7 +112,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     await updateDoc(doc(firestore, Collections.Tasks, id), {
       size,
       history: arrayUnion({
-        initiator: 'User',
+        initiator: user,
         action: 'sizeChanged',
         from: task?.size,
         to: size,
@@ -123,7 +125,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     if (task) {
       await updateDoc(doc(firestore, Collections.Tasks, task.id), {
         comments: arrayUnion({
-          author: 'User',
+          author: user,
           message: message,
           createdAt: new Date().toLocaleString(),
         }),
