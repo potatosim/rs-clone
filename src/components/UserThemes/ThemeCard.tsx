@@ -9,6 +9,8 @@ import { FC, useContext, useState } from 'react';
 import { ITheme } from 'types/Theme';
 import ThemeEditor from './ThemeEditor';
 import { toast, ToastContainer } from 'react-toastify';
+import { ThemeContext } from 'components/ThemeChanger/ThemeChanger';
+import 'react-toastify/dist/ReactToastify.css';
 
 const user: string = 'dtkL6o320t70FceVT0QA';
 
