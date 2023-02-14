@@ -1,51 +1,64 @@
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Box, TextField, Typography, Button } from '@mui/material';
-import { AuthWrapper } from 'components/common/AuthWrapper';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { useContext, useEffect, useState } from 'react';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { Collections } from 'enum/Collection';
 import ModalLoader from 'components/common/ModalLoader';
+import Paper from '@mui/material/Paper/Paper';
+import PasswordInput from 'components/PasswordInput/PasswordInput';
+import UploadButton from 'components/UploadButton/UploadButton';
 
-// enum FirebaseErrors {
-//   Password = 'auth/weak-password',
-//   Email = 'auth/email-already-in-use',
-// }
+enum FirebaseErrors {
+  Password = 'auth/weak-password',
+  Email = 'auth/email-already-in-use',
+}
+
+enum RegisterSteps {
+  EmailPassword = 'EmailPassword',
+  UserInfo = 'UserInfo',
+}
 
 const SignUpPage = () => {
   const { auth, firestore } = useContext(FirebaseContext);
+  const [createUserWithEmailAndPassword, createdUser, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+  const [updateProfile] = useUpdateProfile(auth);
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState('');
   const [loginError, setLoginError] = useState(false);
-  const [createUserWithEmailAndPassword, createdUser, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
-  const navigate = useNavigate();
+  const [avatar, setAvatar] = useState('');
+  const [registerStep, setRegisterStep] = useState<RegisterSteps>(RegisterSteps.EmailPassword);
 
-  const handleCreateUserRecord = async () => {
-    if (createdUser) {
-      const { user } = createdUser;
-      await setDoc(doc(firestore, Collections.Users, user.uid), {
-        avatar: '',
-        boards: [],
-        themes: [],
-        login: login.toLowerCase(),
-      });
-      navigate(AppRoutes.Boards);
-    }
-  };
+  const isButtonDisabled = loginError || !login || !email || !password;
+  const isEmailError = error?.code === FirebaseErrors.Email;
+  const isPasswordError = error?.code === FirebaseErrors.Password;
 
   useEffect(() => {
     handleCreateUserRecord();
   }, [createdUser]);
 
-  useEffect(() => {
-    if (error) {
-      // TODO add error handling
+  const handleCreateUserRecord = async () => {
+    if (createdUser) {
+      await updateProfile({
+        photoURL: avatar,
+        displayName: login,
+      });
+      const { user } = createdUser;
+      await setDoc(doc(firestore, Collections.Users, user.uid), {
+        boards: [],
+        themes: [],
+        avatar,
+        login: login.toLowerCase(),
+      });
+
+      navigate(AppRoutes.Boards);
     }
-  }, [error]);
+  };
 
   const handleCreateUser = async () => {
     await createUserWithEmailAndPassword(email, password);
@@ -61,50 +74,69 @@ const SignUpPage = () => {
     }
   };
 
-  const isButtonDisabled = loginError || !login || !email || !password;
+  const renderStep = () => {
+    switch (registerStep) {
+      case RegisterSteps.EmailPassword:
+        return (
+          <>
+            <TextField
+              required
+              size="small"
+              value={email}
+              label="E-mail address"
+              error={isEmailError}
+              helperText={isEmailError && 'Email is already taken'}
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <PasswordInput
+              error={isPasswordError}
+              errorMessage="Password is too weak"
+              value={password}
+              setValue={setPassword}
+            />
+            <Button variant="contained" onClick={() => setRegisterStep(RegisterSteps.UserInfo)}>
+              Next
+            </Button>
+          </>
+        );
+      case RegisterSteps.UserInfo:
+        return (
+          <>
+            <TextField
+              label="Login"
+              required
+              value={login}
+              size="small"
+              onChange={(e) => {
+                if (loginError) {
+                  setLoginError(false);
+                }
+                setLogin(e.target.value.trim());
+              }}
+              error={loginError}
+              helperText={loginError && 'Login is already busy'}
+              onBlur={handleCheckLogin}
+            />
+            <UploadButton getFileUrl={setAvatar} />
+            <Button onClick={() => setRegisterStep(RegisterSteps.EmailPassword)}>Back</Button>
+            <Button disabled={isButtonDisabled} variant="contained" onClick={handleCreateUser}>
+              Register
+            </Button>
+          </>
+        );
+    }
+  };
 
   return (
-    <AuthWrapper
-      component="form"
-      sx={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}
-    >
+    <Paper sx={{ p: 4, display: 'flex', flexDirection: 'column', rowGap: '2rem' }} elevation={12}>
       <Box>
         <Typography variant="h4"> Hello, Welcome!</Typography>
       </Box>
       <Typography>Create your free account </Typography>
-      <TextField
-        required
-        value={email}
-        label="E-mail address"
-        type="email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <TextField
-        label="Login"
-        required
-        value={login}
-        onChange={(e) => {
-          if (loginError) {
-            setLoginError(false);
-          }
-          setLogin(e.target.value.trim());
-        }}
-        error={loginError}
-        helperText={loginError && 'Login is already busy'}
-        onBlur={handleCheckLogin}
-      />
-      <TextField
-        required
-        value={password}
-        label="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <Button disabled={isButtonDisabled} variant="contained" onClick={handleCreateUser}>
-        Register
-      </Button>
+      {renderStep()}
       <ModalLoader isOpen={loading} />
-    </AuthWrapper>
+    </Paper>
   );
 };
 
