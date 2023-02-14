@@ -1,9 +1,9 @@
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
-import { doc } from 'firebase/firestore';
+import { collection, doc, documentId, query, where } from 'firebase/firestore';
 import { userConverter } from 'helpers/converters';
 import { useContext } from 'react';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
 import { useGetAllThemes } from './useGetAllThemes';
 
 export const useGetUserThemes = () => {
@@ -18,5 +18,5 @@ export const useGetUserThemes = () => {
 
   const userThemes = allThemes?.filter((theme) => availableThemes.some((id) => id === theme.id));
 
-  return { userThemes, userLoading };
+  return { userThemes, userLoading: false };
 };
