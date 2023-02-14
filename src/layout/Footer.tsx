@@ -1,8 +1,9 @@
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { Box, ImageListItem, Toolbar } from '@mui/material';
+import { Fab, Box, ButtonBase, ImageListItem, Toolbar } from '@mui/material';
 import Link from '@mui/material/Link';
 import RsLogo from 'static/images/rss.svg';
 import styled from '@emotion/styled';
+import SlideFromContainer from 'components/PopUpGitHub';
 
 const FooterWrapper = styled(Box)(() => ({
   width: '100%',
@@ -18,6 +19,17 @@ const Footer = () => {
           <img src={RsLogo} />
         </ImageListItem>
         <Box sx={{ textAlign: 'center' }}>
+          <ButtonBase
+            centerRipple
+            sx={{
+              transform: 'none',
+              transition: 'transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+            }}
+          >
+            <Fab>
+              <GitHubIcon></GitHubIcon>
+            </Fab>
+          </ButtonBase>
           <Link href="https://github.com/leon-kn.png" target="_blank" color="inherit">
             <GitHubIcon></GitHubIcon>
           </Link>
@@ -28,6 +40,7 @@ const Footer = () => {
             <GitHubIcon></GitHubIcon>
           </Link>
         </Box>
+        <SlideFromContainer></SlideFromContainer>
       </Toolbar>
     </FooterWrapper>
   );

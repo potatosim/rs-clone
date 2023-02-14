@@ -6,11 +6,16 @@ import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import UserMenu from 'components/UserMenu';
 
 const Header = () => {
   const [activePage, setActivePage] = useState(0);
   const { auth } = useContext(FirebaseContext);
   const [user] = useAuthState(auth);
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setActivePage(newValue);
+  };
 
   return (
     <AppBar position="static">
@@ -18,10 +23,10 @@ const Header = () => {
         <Typography>RS-Clone</Typography>
         <Tabs
           sx={{ marginLeft: 'auto' }}
-          textColor="inherit"
-          indicatorColor="primary"
           value={activePage}
-          onChange={(e, val) => setActivePage(val)}
+          textColor="secondary"
+          indicatorColor="secondary"
+          onChange={handleChange}
         >
           <Tab label="Home" component={Link} to={AppRoutes.Home} />
           {user && <Tab label="Boards" component={Link} to={AppRoutes.Boards} />}
@@ -30,8 +35,8 @@ const Header = () => {
           <>
             {user ? (
               <>
-                <Avatar src={user.photoURL!} />
-                <Button onClick={() => auth.signOut()}>Logout</Button>
+                <UserMenu />
+                {/* <Button onClick={() => auth.signOut()}>Logout</Button> */}
               </>
             ) : (
               <Button component={Link} to={AppRoutes.LoginPage}>
