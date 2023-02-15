@@ -34,7 +34,7 @@ const BoardHeader = styled(Paper)`
   display: flex;
   padding: 0.5rem 1rem;
   align-items: center;
-  column-gap: 3rem;
+  justify-content: space-between;
 `;
 
 const ScrollableWrapper = styled('div')<{ columnsCount?: number }>`
@@ -72,8 +72,8 @@ const Board = ({ background, columns, title, id }: IBoardItem) => {
   return (
     <BoardWrapper>
       <BoardHeader elevation={12}>
-        <Button onClick={() => navigate(AppRoutes.Boards)} variant="contained" size="small">
-          Back to the boards
+        <Button onClick={() => navigate(AppRoutes.Boards)} variant="contained">
+          Back to my boards
         </Button>
         <Typography variant="h4" fontWeight="600" textTransform="capitalize">
           {title}
@@ -114,7 +114,7 @@ const Board = ({ background, columns, title, id }: IBoardItem) => {
       />
       <BackgroundWrapper bg={background} fullSize />
       <ModalLoader isOpen={columnsLoading} />
-      <TaskItem columns={columnsItems} taskId={taskQuery!} isTaskOpen={!!taskQuery} />
+      <TaskItem boardId={id} columns={columnsItems} taskId={taskQuery!} isTaskOpen={!!taskQuery} />
     </BoardWrapper>
   );
 };

@@ -8,6 +8,7 @@ import { useAddBoard } from 'hooks/boardHooks/useAddBoard';
 import { ModalWrapper } from 'components/common/ModalWrapper';
 import { FormWrapper } from 'components/common/FormWrapper';
 import UploadButton from 'components/UploadButton/UploadButton';
+import BoardUserSelect from 'components/BoardUserSelect';
 
 const StyledTab = styled(Tab)`
   font-weight: 600;
@@ -22,17 +23,16 @@ interface CreateBoardFormProps {
 const CreateBoardForm: FC<CreateBoardFormProps> = ({ isModalOpen, handleClose }) => {
   const [title, setTitle] = useState<string>('');
   const [backgroundType, setBackgroundType] = useState<BackgroundType>('color');
-  // TODO add private functionality
-  // const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [fileUrl, setFileUrl] = useState<string>('');
   const colorRef = useRef<HTMLInputElement | null>(null);
+  const [userIds, setUserIds] = useState<string[]>([]);
 
   const handleAddBoard = useAddBoard({
     title,
     backgroundType,
     colorRef,
     fileUrl,
-    // isPrivate,
+    userIds,
   });
 
   const handleChangeBackgroundType = (
@@ -75,6 +75,7 @@ const CreateBoardForm: FC<CreateBoardFormProps> = ({ isModalOpen, handleClose })
         <TabPanel index="image" value={backgroundType}>
           <UploadButton getFileUrl={setFileUrl} />
         </TabPanel>
+        <BoardUserSelect userIds={userIds} setUserIds={setUserIds} />
         <Button
           disabled={!title.trim().length}
           variant="outlined"

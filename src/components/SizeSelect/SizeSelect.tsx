@@ -1,4 +1,12 @@
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material';
 import { OptionItem } from 'components/common/CustomSelect';
 
 import { FC } from 'react';
@@ -56,7 +64,14 @@ interface SelectProps {
 const SizeSelect: FC<SelectProps> = ({ currentSize, onSizeChange }) => {
   return (
     <FormControl size="small">
-      <Select value={currentSize || 'Size'} onChange={onSizeChange}>
+      <InputLabel id="size-select-label">Size</InputLabel>
+      <Select
+        labelId="size-select-label"
+        id="size-select"
+        label="Size"
+        value={currentSize || 'Size'}
+        onChange={onSizeChange}
+      >
         {sizes.map(({ title, value }) => (
           <MenuItem value={value} key={value}>
             {title}

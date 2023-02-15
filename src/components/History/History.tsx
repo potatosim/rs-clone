@@ -48,8 +48,7 @@ const getStringByAction = (historyItem: HistoryItem) => {
           title={
             <>
               <strong>{historyItem.initiator.login}</strong> changed task status from{' '}
-              <strong>{historyItem.from}</strong> to
-              <strong>{historyItem.to}</strong>
+              <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
             </>
           }
           date={historyItem.time}
@@ -74,7 +73,7 @@ const getStringByAction = (historyItem: HistoryItem) => {
           avatar={historyItem.initiator.avatar}
           title={
             <>
-              <strong>{historyItem.initiator.login}</strong> changed task priority from
+              <strong>{historyItem.initiator.login}</strong> changed task priority from{' '}
               <strong> {historyItem.from} </strong>to<strong> {historyItem.to} </strong>
             </>
           }
@@ -89,6 +88,19 @@ const getStringByAction = (historyItem: HistoryItem) => {
             <>
               <strong>{historyItem.initiator.login}</strong> changed task size from{' '}
               <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
+            </>
+          }
+          date={historyItem.time}
+        />
+      );
+    case 'assigneeChanged':
+      return (
+        <HistoryItemEl
+          avatar={historyItem.initiator.avatar}
+          title={
+            <>
+              <strong>{historyItem.initiator.login}</strong> changed the assignee to{' '}
+              <strong>{historyItem.to}</strong>
             </>
           }
           date={historyItem.time}

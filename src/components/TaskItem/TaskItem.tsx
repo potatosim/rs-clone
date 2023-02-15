@@ -3,7 +3,6 @@ import {
   CardContent,
   TextareaAutosize,
   Box,
-  Avatar,
   SelectChangeEvent,
   Tabs,
   Tab,
@@ -30,11 +29,13 @@ import TabPanel from 'components/TabPanel/TabPanel';
 import { TaskTabs } from 'enum/TaskTabs';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CommentsTab from 'components/CommentsTab';
+import AssigneeSelect from 'components/AssigneeSelect';
 
 interface TaskItemProps {
   taskId: string;
   isTaskOpen: boolean;
   columns: IColumnItem[];
+  boardId: string;
 }
 
 const StyledCard = styled(Card)`
@@ -81,7 +82,7 @@ const TaskItem: FC<TaskItemProps> = (props) => {
   return <Task {...props} />;
 };
 
-const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns }) => {
+const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
   const [query, setQuery] = useSearchParams();
   const {
     task,
@@ -125,7 +126,7 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns }) => {
 
         <StyledCardContent>
           <Typography fontWeight={600}>Description:</Typography>
-          {/* <Typography variant="body1">{task.description}</Typography> */}
+
           <TextareaAutosize
             placeholder="No description provided"
             defaultValue={task.description}
@@ -144,46 +145,29 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns }) => {
         </StyledCardContent>
         <StyledBox>
           <StyledCardContentOptions>
-            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-              <Typography>Assignees:</Typography>
-              {}
-            </Box>
+            <AssigneeSelect taskId={task.id} currentUser={task.assignee} boardId={boardId} />
 
-            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-              <Typography>Status:</Typography>
-              <CustomSelect
-                currentOption={getCurrentColumnOption(columns, task)}
-                onChange={(e: SelectChangeEvent) => {
-                  handleChangeTaskColumn(e.target.value);
-                }}
-                options={getColumnsOptions(columns)}
-              />
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-              <Typography>Priority:</Typography>
-              <PrioritySelect
-                currentPriority={task.priority}
-                onPriorityChange={(e: SelectChangeEvent) => {
-                  handleChangePriority(e.target.value, task.id);
-                }}
-              />
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-              <Typography>Size:</Typography>
-              <SizeSelect
-                currentSize={task.size}
-                onSizeChange={(e: SelectChangeEvent) => {
-                  handleChangeSize(e.target.value, task.id);
-                }}
-              />
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-              <Typography>Created by:</Typography>
-              <Avatar
-                alt="unknown"
-                src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Funknown-person-flat-icon-vector-15222119&psig=AOvVaw3x4hkSxZMLep5UvxU9L7Jh&ust=1676220987138000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCLDozPX3jf0CFQAAAAAdAAAAABAE"
-              ></Avatar>
-            </Box>
+            <CustomSelect
+              currentOption={getCurrentColumnOption(columns, task)}
+              onChange={(e: SelectChangeEvent) => {
+                handleChangeTaskColumn(e.target.value);
+              }}
+              options={getColumnsOptions(columns)}
+            />
+
+            <PrioritySelect
+              currentPriority={task.priority}
+              onPriorityChange={(e: SelectChangeEvent) => {
+                handleChangePriority(e.target.value, task.id);
+              }}
+            />
+
+            <SizeSelect
+              currentSize={task.size}
+              onSizeChange={(e: SelectChangeEvent) => {
+                handleChangeSize(e.target.value, task.id);
+              }}
+            />
           </StyledCardContentOptions>
           <Tooltip title="Delete task">
             <IconButton onClick={handleDelete}>
