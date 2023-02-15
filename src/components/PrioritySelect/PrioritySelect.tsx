@@ -1,4 +1,12 @@
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material';
 import { OptionItem } from 'components/common/CustomSelect';
 
 import { FC } from 'react';
@@ -51,7 +59,14 @@ interface SelectProps {
 const PrioritySelect: FC<SelectProps> = ({ currentPriority, onPriorityChange }) => {
   return (
     <FormControl size="small">
-      <Select value={currentPriority || 'Priority'} onChange={onPriorityChange}>
+      <InputLabel id="priority-select-label">Priority</InputLabel>
+      <Select
+        labelId="priority-select-label"
+        id="priority-select"
+        label="Priority"
+        value={currentPriority || 'Priority'}
+        onChange={onPriorityChange}
+      >
         {priorities.map(({ title, value }) => (
           <MenuItem value={value} key={value}>
             {title}

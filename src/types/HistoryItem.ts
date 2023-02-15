@@ -5,7 +5,8 @@ export type HistoryItem =
   | HistoryStatusChanged
   | HistoryPriorityChanged
   | HistorySizeChanged
-  | HistoryTitleChanged;
+  | HistoryTitleChanged
+  | HistoryAssigneeChanged;
 
 export type HistoryCreated = {
   initiator: IUserItem;
@@ -34,4 +35,8 @@ type HistorySizeChanged = {
 
 type HistoryTitleChanged = {
   action: 'titleChanged';
+} & UpdateHistoryItem;
+
+type HistoryAssigneeChanged = {
+  action: 'assigneeChanged';
 } & UpdateHistoryItem;

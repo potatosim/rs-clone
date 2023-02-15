@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { FC } from 'react';
 
 export interface OptionItem {
@@ -15,7 +15,14 @@ interface SelectProps {
 const CustomSelect: FC<SelectProps> = ({ options, currentOption, onChange }) => {
   return (
     <FormControl size="small">
-      <Select value={currentOption.value} onChange={onChange}>
+      <InputLabel id="status-select-label">Status</InputLabel>
+      <Select
+        labelId="status-select-label"
+        id="status-select"
+        label="Status"
+        value={currentOption.value}
+        onChange={onChange}
+      >
         {options.map(({ title, value }) => (
           <MenuItem value={value} key={value}>
             {title}

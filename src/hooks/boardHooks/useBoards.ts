@@ -1,6 +1,7 @@
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { UserContext } from 'components/RequireAuth';
 import { Collections } from 'enum/Collection';
-import { collection, doc, updateDoc, writeBatch } from 'firebase/firestore';
+import { collection, doc, query, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { boardsConverter, columnsConverter } from 'helpers/converters';
 import { deleteDocuments } from 'helpers/deleteDocuments';
 import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
@@ -10,8 +11,12 @@ import { IBoardItem } from 'types/Board';
 
 export const useBoards = () => {
   const { firestore } = useContext(FirebaseContext);
+  const { user } = useContext(UserContext);
   const [boards, loading] = useCollectionData<IBoardItem>(
-    collection(firestore, Collections.Boards).withConverter(boardsConverter),
+    query(
+      collection(firestore, Collections.Boards).withConverter(boardsConverter),
+      where('allowedUsers', 'array-contains', user.id),
+    ),
   );
 
   const deleteDocumentsFrom = deleteDocuments(firestore);
