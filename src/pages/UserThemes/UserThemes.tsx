@@ -20,14 +20,13 @@ const UserThemes = () => {
   const { userThemes } = useGetUserThemes();
 
   //TODO:
-  // add button to link
+  // add button for link to AllThemes
   // Themes sorting
   // 2 base themes
   // add new theme template - CreateBoardButton component
   // dark and light modes
   // refactor code and components
   // add more params for ThemeCreator and ThemeEditor
-  // add loaders
 
   return (
     <PageContentWrapper>

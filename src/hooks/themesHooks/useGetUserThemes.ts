@@ -8,7 +8,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 export const useGetUserThemes = () => {
   const { firestore } = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
-  console.log(user.id);
   const [userThemes] = useCollectionData(
     query(
       collection(firestore, 'themes').withConverter(themeConverter),
