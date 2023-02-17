@@ -8,7 +8,7 @@ import { ITheme } from 'types/Theme';
 
 export const useGetAllThemes = () => {
   const { firestore } = useContext(FirebaseContext);
-
+  
   const [allThemes, allThemesLoader] = useCollectionData<ITheme>(
     collection(firestore, Collections.Themes).withConverter(themeConverter),
   );

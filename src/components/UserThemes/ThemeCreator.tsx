@@ -16,11 +16,9 @@ import ThemeThumbnail from './ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { IThemeUser } from 'types/ThemeUser';
-import { userConverter } from 'helpers/converters';
 import styled from '@emotion/styled';
 import { Collections } from 'enum/Collection';
+import { UserContext } from 'components/RequireAuth';
 
 interface ThemeCreatorProps {
   setIsCreating: (value: boolean) => void;
@@ -67,24 +65,18 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const [primary, setPrimary] = useState<string>('#9E9E9E');
   const [secondary, setSecondary] = useState<string>('#9E9E9E');
   const [checked, setChecked] = useState<boolean>(false);
-
-  const [user, loading] = useDocumentData<IThemeUser>(
-    doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
-  );
+  const { user } = useContext(UserContext);
 
   const addTheme = async () => {
     if (user) {
       setIsCreating(false);
-      const temp = await addDoc(collection(firestore, 'themes'), {
-        // TODO: add variable for creator
-        creator: 'dtkL6o320t70FceVT0QA',
+      const newTheme = await addDoc(collection(firestore, 'themes'), {
+        creator: user.id,
         name: name,
         primary: primary,
         secondary: secondary,
         isPublic: checked,
-      });
-      updateDoc(doc(firestore, Collections.Users, user.id), {
-        availableThemes: arrayUnion(temp.id),
+        holders: [user.id],
       });
     }
   };

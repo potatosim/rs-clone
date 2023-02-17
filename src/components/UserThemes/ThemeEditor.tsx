@@ -16,12 +16,10 @@ import ThemeThumbnail from './ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
 import { doc, updateDoc } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { IThemeUser } from 'types/ThemeUser';
-import { userConverter } from 'helpers/converters';
 import styled from '@emotion/styled';
 import { Collections } from 'enum/Collection';
 import { ITheme } from 'types/Theme';
+import { UserContext } from 'components/RequireAuth';
 
 interface ThemeCreatorProps extends ITheme {
   setIsEditing(value: boolean): void;
@@ -75,17 +73,12 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
   const [newPrimary, setNewPrimary] = useState<string>(primary);
   const [newSecondary, setNewSecondary] = useState<string>(secondary);
   const [checked, setChecked] = useState<boolean>(isPublic);
-
-  const [user, loading] = useDocumentData<IThemeUser>(
-    doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
-  );
+  const { user } = useContext(UserContext);
 
   const editTheme = async () => {
     if (user) {
       setIsEditing(false);
       updateDoc(doc(firestore, Collections.Themes, id), {
-        // TODO: add variable for creator
-        creator: 'dtkL6o320t70FceVT0QA',
         name: newName,
         primary: newPrimary,
         secondary: newSecondary,
