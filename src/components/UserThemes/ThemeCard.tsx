@@ -3,7 +3,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { deleteFromHolders } from 'helpers/deleteFromHolders';
 import { FC, useContext, useState } from 'react';
 import { ITheme } from 'types/Theme';
@@ -11,6 +11,8 @@ import ThemeEditor from './ThemeEditor';
 import { UserContext } from 'components/RequireAuth';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { usersConverter } from 'helpers/converters';
+import { IUserItem } from 'types/User';
 
 const ThemeCard: FC<ITheme> = (props) => {
   const { firestore } = useContext(FirebaseContext);
@@ -33,7 +35,16 @@ const ThemeCard: FC<ITheme> = (props) => {
       ></Paper>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', m: '20px auto 10px' }}>
         <ButtonGroup fullWidth={true}>
-          <Button variant="contained">Apply</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              updateDoc<IUserItem>(doc(firestore, Collections.Users, user.id).withConverter(usersConverter), {
+                currentTheme: props.id, 
+              });
+            }}
+          >
+            Apply
+          </Button>
           <Button
             variant="contained"
             onClick={() => {
