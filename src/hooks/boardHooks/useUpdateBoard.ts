@@ -5,7 +5,9 @@ import { Collections } from 'enum/Collection';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { IBoardItem } from 'types/Board';
 import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
-import { tasksConverter } from 'helpers/converters';
+import { boardsConverter, tasksConverter, usersConverter } from 'helpers/converters';
+import { IUserItem } from 'types/User';
+import { ITaskItem } from 'types/Task';
 
 export const useUpdateBoard = () => {
   const { firestore } = useContext(FirebaseContext);
@@ -28,26 +30,32 @@ export const useUpdateBoard = () => {
       (userId) => !oldBoard.allowedUsers.includes(userId),
     );
 
-    batch.update(doc(firestore, Collections.Boards, oldBoard.id), newBoard);
+    batch.update<IBoardItem>(
+      doc(firestore, Collections.Boards, oldBoard.id).withConverter(boardsConverter),
+      newBoard,
+    );
 
     boardTasks.map((taskItem) => {
-      if (taskItem.assignee && usersToRemove.includes(taskItem.assignee.id)) {
-        batch.update(doc(firestore, Collections.Tasks, taskItem.id), {
-          assignee: null,
-        });
+      if (taskItem.assignee && usersToRemove.includes(taskItem.assignee)) {
+        batch.update<ITaskItem>(
+          doc(firestore, Collections.Tasks, taskItem.id).withConverter(tasksConverter),
+          {
+            assignee: null,
+          },
+        );
       }
     });
 
     usersToRemove.map((allowedUser) => {
-      const userRef = doc(firestore, Collections.Users, allowedUser);
-      batch.update(userRef, {
+      const userRef = doc(firestore, Collections.Users, allowedUser).withConverter(usersConverter);
+      batch.update<IUserItem>(userRef, {
         boards: arrayRemove(oldBoard.id),
       });
     });
 
     usersToUnion.map((allowedUser) => {
-      const userRef = doc(firestore, Collections.Users, allowedUser);
-      batch.update(userRef, {
+      const userRef = doc(firestore, Collections.Users, allowedUser).withConverter(usersConverter);
+      batch.update<IUserItem>(userRef, {
         boards: arrayUnion(oldBoard.id),
       });
     });

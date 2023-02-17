@@ -1,8 +1,7 @@
 import { Priorities } from 'enum/Priorities';
 import { Sizes } from 'enum/Sizes';
-import { CommentItem } from './CommentItem';
+import { ICommentItem } from './CommentItem';
 import { HistoryItem } from './HistoryItem';
-import { IUserItem } from './User';
 
 export interface ITaskItem {
   id: string;
@@ -14,6 +13,6 @@ export interface ITaskItem {
   priority: Priorities;
   size: Sizes;
   history: HistoryItem[];
-  comments: CommentItem[];
-  assignee: IUserItem | null;
+  comments: ICommentItem[];
+  assignee: string | null;
 }

@@ -14,13 +14,13 @@ import { Collections } from 'enum/Collection';
 import { arrayUnion, collection, doc, query, updateDoc, where } from 'firebase/firestore';
 import { tasksConverter, usersConverter } from 'helpers/converters';
 import React, { FC, useContext } from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
 import { ITaskItem } from 'types/Task';
 import { IUserItem } from 'types/User';
 
 interface AssigneeSelectProps {
   boardId: string;
-  currentUser: IUserItem | null;
+  currentUser: string | null;
   taskId: string;
 }
 
@@ -35,6 +35,10 @@ const AssigneeSelect: FC<AssigneeSelectProps> = ({ boardId, currentUser, taskId 
     ),
   );
 
+  const [assignee] = useDocumentData<IUserItem>(
+    doc(firestore, Collections.Users, currentUser || 'id').withConverter(usersConverter),
+  );
+
   const handleChangeAssignee = async (assigneeId: string) => {
     if (users) {
       const selectedUser = users.find((us) => us.id === assigneeId);
@@ -42,11 +46,11 @@ const AssigneeSelect: FC<AssigneeSelectProps> = ({ boardId, currentUser, taskId 
         await updateDoc<ITaskItem>(
           doc(firestore, Collections.Tasks, taskId).withConverter(tasksConverter),
           {
-            assignee: selectedUser,
+            assignee: selectedUser.id,
             history: arrayUnion({
-              initiator: user,
+              initiator: user.id,
               action: 'assigneeChanged',
-              from: currentUser?.login || 'Unassigned',
+              from: assignee?.login || 'Unassigned',
               to: selectedUser.login,
               time: new Date().toLocaleString(),
             }),
@@ -67,7 +71,7 @@ const AssigneeSelect: FC<AssigneeSelectProps> = ({ boardId, currentUser, taskId 
         labelId="assignee-select-label"
         id="assignee-select"
         label="Assignee"
-        value={currentUser?.id || ''}
+        value={assignee?.id || ''}
         onChange={(e: SelectChangeEvent) => {
           handleChangeAssignee(e.target.value);
         }}

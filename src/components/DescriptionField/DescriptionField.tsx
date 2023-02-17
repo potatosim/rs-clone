@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import Box from '@mui/material/Box/Box';
 import Typography from '@mui/material/Typography';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Textarea } from '@mui/joy';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
@@ -14,6 +14,12 @@ const DescriptionField: FC<DescriptionFieldProps> = ({ taskDescription, onSubmit
   const [description, setDescription] = useState<string>(
     taskDescription || 'No description provided',
   );
+
+  useEffect(() => {
+    if (taskDescription !== description) {
+      setDescription(taskDescription);
+    }
+  }, [taskDescription]);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const renderDescription = () => {

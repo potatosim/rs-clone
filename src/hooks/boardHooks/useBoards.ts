@@ -10,12 +10,13 @@ import {
   where,
   writeBatch,
 } from 'firebase/firestore';
-import { boardsConverter, columnsConverter } from 'helpers/converters';
+import { boardsConverter, columnsConverter, usersConverter } from 'helpers/converters';
 import { deleteDocuments } from 'helpers/deleteDocuments';
 import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
 import { useContext } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { IBoardItem } from 'types/Board';
+import { IUserItem } from 'types/User';
 
 export const useBoards = () => {
   const { firestore } = useContext(FirebaseContext);
@@ -48,8 +49,8 @@ export const useBoards = () => {
         columns.map((column) => deleteDocumentsFrom(batch, Collections.Tasks, column.tasks));
         deleteDocumentsFrom(batch, Collections.Columns, targetBoard.columns);
         targetBoard.allowedUsers.map((userId) => {
-          const userRef = doc(firestore, Collections.Users, userId);
-          batch.update(userRef, {
+          const userRef = doc(firestore, Collections.Users, userId).withConverter(usersConverter);
+          batch.update<IUserItem>(userRef, {
             boards: arrayRemove(targetBoard.id),
           });
         });
@@ -62,9 +63,12 @@ export const useBoards = () => {
   };
 
   const handleRenameBoard = async (boardTitle: string, boardId: string) => {
-    await updateDoc(doc(firestore, Collections.Boards, boardId), {
-      title: boardTitle,
-    });
+    await updateDoc<IBoardItem>(
+      doc(firestore, Collections.Boards, boardId).withConverter(boardsConverter),
+      {
+        title: boardTitle,
+      },
+    );
   };
 
   return {

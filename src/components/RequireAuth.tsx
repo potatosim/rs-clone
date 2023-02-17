@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import { IUserItem } from 'types/User';
 import { doc, getDoc } from 'firebase/firestore';
 import { Collections } from 'enum/Collection';
+import { usersConverter } from 'helpers/converters';
 
 interface IUserContext {
   user: IUserItem;
@@ -24,9 +25,11 @@ const RequireAuth = () => {
 
   const getUserRecord = async () => {
     if (user) {
-      const record = await getDoc(doc(firestore, Collections.Users, user.uid));
+      const record = await getDoc<IUserItem>(
+        doc(firestore, Collections.Users, user.uid).withConverter(usersConverter),
+      );
 
-      setUserRecord({ ...record.data(), id: user.uid } as IUserItem);
+      setUserRecord({ ...record.data() } as IUserItem);
     }
   };
 

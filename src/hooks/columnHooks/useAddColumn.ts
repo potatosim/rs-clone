@@ -1,7 +1,9 @@
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
+import { boardsConverter } from 'helpers/converters';
 import { useContext } from 'react';
+import { IBoardItem } from 'types/Board';
 
 export const useAddColumn = (title: string, boardId: string, length: number) => {
   const { firestore } = useContext(FirebaseContext);
@@ -14,9 +16,12 @@ export const useAddColumn = (title: string, boardId: string, length: number) => 
       boardId,
     });
 
-    await updateDoc(doc(firestore, Collections.Boards, boardId), {
-      columns: arrayUnion(column.id),
-    });
+    await updateDoc<IBoardItem>(
+      doc(firestore, Collections.Boards, boardId).withConverter(boardsConverter),
+      {
+        columns: arrayUnion(column.id),
+      },
+    );
   };
 
   return handleAddColumn;
