@@ -1,22 +1,19 @@
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { Collections } from 'enum/Collection';
-import { collection, doc, documentId, query, where } from 'firebase/firestore';
-import { userConverter } from 'helpers/converters';
+import { UserContext } from 'components/RequireAuth';
+import { collection, query, where } from 'firebase/firestore';
+import { themeConverter } from 'helpers/converters';
 import { useContext } from 'react';
-import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
-import { useGetAllThemes } from './useGetAllThemes';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 export const useGetUserThemes = () => {
   const { firestore } = useContext(FirebaseContext);
-  const { allThemes } = useGetAllThemes();
-
-  const [user, userLoading] = useDocumentData(
-    doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
+  const { user } = useContext(UserContext);
+  console.log(user.id);
+  const [userThemes] = useCollectionData(
+    query(
+      collection(firestore, 'themes').withConverter(themeConverter),
+      where('holders', 'array-contains-any', [user.id]),
+    ),
   );
-
-  const availableThemes = user?.availableThemes!;
-
-  const userThemes = allThemes?.filter((theme) => availableThemes.some((id) => id === theme.id));
-
-  return { userThemes, userLoading: false };
+  return { userThemes };
 };

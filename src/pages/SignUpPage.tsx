@@ -51,9 +51,9 @@ const SignUpPage = () => {
       const { user } = createdUser;
       await setDoc(doc(firestore, Collections.Users, user.uid), {
         boards: [],
-        themes: [],
         avatar,
         login: login.toLowerCase(),
+        currentTheme: '',
       });
 
       navigate(AppRoutes.Boards);

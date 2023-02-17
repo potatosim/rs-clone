@@ -1,7 +1,8 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { createContext, FC, ReactElement, ReactNode, useState } from 'react';
-
-export const ThemeContext = createContext({});
+import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { createChangedTheme } from 'helpers/createChangedTheme';
+import { useGetAllThemes } from 'hooks/themesHooks/useGetAllThemes';
+import { FC, ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 
 interface ThemeProviderProps {
   children: ReactNode | ReactElement;
@@ -25,9 +26,21 @@ const lightMode = createTheme({
 });
 
 const ThemeChanger: FC<ThemeProviderProps> = ({ children }) => {
-  
+  const { firestore, auth } = useContext(FirebaseContext);
+  const [currentTheme, setCurrentTheme] = useState(lightMode);
 
-  return <ThemeProvider theme={lightMode}>{children}</ThemeProvider>;
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        const obj = createChangedTheme(firestore, user.uid).then((data) =>
+          setCurrentTheme(data),
+        );
+      }
+      console.log(user?.uid);
+    });
+  }, []);
+
+  return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
 };
 
 export default ThemeChanger;

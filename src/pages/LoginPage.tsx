@@ -39,8 +39,8 @@ const LoginPage = () => {
         await setDoc(doc(firestore, Collections.Users, googleAccount.user.uid), {
           avatar: googleAccount.user.photoURL,
           boards: [],
-          themes: [],
           login: googleAccount.user.displayName,
+          currentTheme: '',
         });
       }
       navigate(AppRoutes.Boards);

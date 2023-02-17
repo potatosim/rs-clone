@@ -5,4 +5,5 @@ export interface ITheme {
   primary: 'string';
   secondary: 'string';
   isPublic: boolean;
+  holders: string[];
 }

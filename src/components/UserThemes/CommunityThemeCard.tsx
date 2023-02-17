@@ -1,25 +1,20 @@
 import { Box, Button, Card, Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { UserContext } from 'components/RequireAuth';
 import { Collections } from 'enum/Collection';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import { userConverter } from 'helpers/converters';
 import { FC, useContext } from 'react';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { ITheme } from 'types/Theme';
 
-const CommunityThemeCard: FC<ITheme> = ({ id, name, primary, secondary }) => {
+const CommunityThemeCard: FC<ITheme> = ({ id, name, primary, secondary, holders }) => {
   const { firestore } = useContext(FirebaseContext);
-  const [user, userLoading] = useDocumentData(
-    doc(firestore, Collections.Users, 'dtkL6o320t70FceVT0QA').withConverter(userConverter),
-  );
-
-  const availableThemes = user?.availableThemes!;
+  const { user } = useContext(UserContext);
 
   const handlerAddTheme = async () => {
-    if (!availableThemes.some((theme) => theme === id) && user) {
-      updateDoc(doc(firestore, Collections.Users, user.id), {
-        availableThemes: arrayUnion(id),
+    if (user && holders.every((uid) => uid !== user.id)) {
+      updateDoc(doc(firestore, Collections.Themes, id), {
+        holders: arrayUnion(user.id),
       });
     }
   };

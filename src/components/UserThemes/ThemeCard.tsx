@@ -4,25 +4,18 @@ import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { deleteUserTheme } from 'helpers/deleteUserTheme';
+import { deleteFromHolders } from 'helpers/deleteFromHolders';
 import { FC, useContext, useState } from 'react';
 import { ITheme } from 'types/Theme';
 import ThemeEditor from './ThemeEditor';
+import { UserContext } from 'components/RequireAuth';
 import { toast, ToastContainer } from 'react-toastify';
-import { ThemeContext } from 'components/ThemeChanger/ThemeChanger';
 import 'react-toastify/dist/ReactToastify.css';
-
-const user: string = 'dtkL6o320t70FceVT0QA';
 
 const ThemeCard: FC<ITheme> = (props) => {
   const { firestore } = useContext(FirebaseContext);
   const [isEditing, setIsEditing] = useState(false);
-
-  // TODO: add Delete for a regular user and for the creator
-  const deleteTheme = () => {
-    deleteDoc(doc(firestore, Collections.Themes, props.id));
-    deleteUserTheme(firestore, props.id);
-  };
+  const { user } = useContext(UserContext);
 
   return (
     <Card raised={true} sx={{ p: '15px' }}>
@@ -44,7 +37,7 @@ const ThemeCard: FC<ITheme> = (props) => {
           <Button
             variant="contained"
             onClick={() => {
-              if (user === props.creator) {
+              if (user.id === props.creator) {
                 setIsEditing(true);
               } else {
                 toast.warn('You cannot edit the themes of another user');
@@ -57,10 +50,10 @@ const ThemeCard: FC<ITheme> = (props) => {
           <Button
             variant="contained"
             onClick={() => {
-              if (user === props.creator) {
-                deleteTheme();
+              if (user.id === props.creator) {
+                deleteDoc(doc(firestore, Collections.Themes, props.id));
               } else {
-                deleteUserTheme(firestore, props.id);
+                deleteFromHolders(firestore, props.id, user.id);
               }
             }}
           >
