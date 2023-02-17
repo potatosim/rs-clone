@@ -1,22 +1,18 @@
 import { Box, TextField } from '@mui/material';
-import {
-  useAuthState,
-  useSignInWithEmailAndPassword,
-  useSignInWithGoogle,
-} from 'react-firebase-hooks/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useContext, useState } from 'react';
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 
 import { AppRoutes } from 'enum/AppRoutes';
 import Button from '@mui/material/Button';
+import { Collections } from 'enum/Collection';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import GoogleIcon from '@mui/icons-material/Google';
 import Grid from '@mui/material/Grid';
+import { IUserItem } from 'types/User';
 import { Link } from 'react-router-dom';
-import React, { useContext, useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { Collections } from 'enum/Collection';
-import { IUserItem } from 'types/User';
 import { usersConverter } from 'helpers/converters';
 
 const LoginPage = () => {
@@ -26,13 +22,11 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle] = useSignInWithGoogle(auth);
-  const [user] = useAuthState(auth);
 
-  useEffect(() => {
-    if (user) {
-      navigate(AppRoutes.Boards);
-    }
-  }, [user]);
+  const handleLogin = async () => {
+    await signInWithEmailAndPassword(email, password);
+    navigate(AppRoutes.Boards);
+  };
 
   const handleSignInWithGoogle = async () => {
     const googleAccount = await signInWithGoogle();
@@ -49,6 +43,7 @@ const LoginPage = () => {
           login: googleAccount.user.displayName,
         });
       }
+      navigate(AppRoutes.Boards);
     }
   };
 
@@ -80,7 +75,7 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <Button variant="contained" onClick={() => signInWithEmailAndPassword(email, password)}>
+          <Button variant="contained" onClick={handleLogin}>
             Enter
           </Button>
         </Box>
