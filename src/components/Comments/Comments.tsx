@@ -25,7 +25,18 @@ export const CommentItem = ({ author, createdAt, message }: ICommentItem) => {
   const { avatar } = user;
 
   return (
-    <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        columnGap: '1rem',
+        alignItems: 'center',
+        border: '1px solid lightgrey',
+        borderRadius: '5px',
+        padding: '0.5rem',
+        width: '70%',
+        alignSelf: 'flex-start',
+      }}
+    >
       <Avatar src={avatar} />
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Typography>{message}</Typography>
@@ -40,7 +51,7 @@ const Comments: FC<CommentProps> = ({ comments }) => {
     return (
       <Box
         sx={{
-          padding: '1rem',
+          padding: '1rem 0',
           display: 'flex',
           rowGap: '1rem',
           flexDirection: 'column',
@@ -58,7 +69,7 @@ const Comments: FC<CommentProps> = ({ comments }) => {
     );
   }
   return (
-    <Box padding="1rem">
+    <Box padding="1rem 0">
       <Typography>No comments yet</Typography>
     </Box>
   );

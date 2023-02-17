@@ -1,8 +1,9 @@
-import { Textarea } from '@mui/joy';
-import { Box, Button, FormControl } from '@mui/material';
+import { Box, TextareaAutosize, Tooltip } from '@mui/material';
+import IconButton from '@mui/material/IconButton/IconButton';
 import Comments from 'components/Comments';
 import { CommentProps } from 'components/Comments/Comments';
 import React, { FC, useState } from 'react';
+import SendIcon from '@mui/icons-material/Send';
 
 interface CommentsTabProps extends CommentProps {
   handleAddComment: (message: string) => void;
@@ -17,36 +18,34 @@ const CommentsTab: FC<CommentsTabProps> = ({ comments, handleAddComment }) => {
   };
   return (
     <Box padding="1rem">
-      <FormControl fullWidth>
-        <Textarea
+      <Box display="flex" alignItems="center" columnGap="1rem">
+        <TextareaAutosize
+          style={{
+            resize: 'none',
+            padding: '0.5rem',
+            borderRadius: '5px',
+            height: '50px',
+            width: '90%',
+            fontSize: '1rem',
+            outline: 'none',
+          }}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Enter some text..."
-          maxRows={1}
-          endDecorator={
-            <Box
-              sx={{
-                display: 'flex',
-                borderTop: '1px solid',
-                borderColor: 'divider',
-                flex: 'auto',
-              }}
-            >
-              <Button
-                sx={{ ml: 'auto', mt: '1rem' }}
-                disabled={!text.trim().length}
-                variant="contained"
-                onClick={handleComment}
-              >
-                Send
-              </Button>
-            </Box>
-          }
-          sx={{
-            width: '100%',
-          }}
+          maxRows={2}
         />
-      </FormControl>
+
+        <Tooltip title="Send a comment">
+          <IconButton
+            color="info"
+            disabled={!text.trim().length}
+            size="large"
+            onClick={handleComment}
+          >
+            <SendIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Comments comments={comments} />
     </Box>
   );
