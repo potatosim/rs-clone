@@ -1,8 +1,7 @@
-import { Button } from '@mui/material';
+import { Button, TextareaAutosize } from '@mui/material';
 import Box from '@mui/material/Box/Box';
 import Typography from '@mui/material/Typography';
 import { FC, useEffect, useState } from 'react';
-import { Textarea } from '@mui/joy';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 interface DescriptionFieldProps {
@@ -16,7 +15,7 @@ const DescriptionField: FC<DescriptionFieldProps> = ({ taskDescription, onSubmit
   );
 
   useEffect(() => {
-    if (taskDescription !== description) {
+    if (taskDescription && taskDescription !== description) {
       setDescription(taskDescription);
     }
   }, [taskDescription]);
@@ -25,9 +24,10 @@ const DescriptionField: FC<DescriptionFieldProps> = ({ taskDescription, onSubmit
   const renderDescription = () => {
     return isEditMode ? (
       <Box sx={{ padding: '1rem 0', display: 'flex', flexDirection: 'column', rowGap: '1rem' }}>
-        <Textarea
+        <TextareaAutosize
+          style={{ resize: 'none', height: '50px', borderRadius: '5px' }}
           value={description}
-          maxRows={2}
+          maxRows={3}
           onChange={(e) => setDescription(e.target.value)}
         />
         <ButtonGroup sx={{ alignSelf: 'flex-end' }} variant="text">
