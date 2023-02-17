@@ -5,6 +5,8 @@ import { Collections } from 'enum/Collection';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { IBoardItem } from 'types/Board';
 import { UserContext } from 'components/RequireAuth';
+import { IUserItem } from 'types/User';
+import { usersConverter } from 'helpers/converters';
 
 export const useAddBoard = () => {
   const { firestore } = useContext(FirebaseContext);
@@ -17,8 +19,8 @@ export const useAddBoard = () => {
 
     const addedBoard = await addDoc(collection(firestore, Collections.Boards), boardBody);
     allowedUsers.map((allowedUser) => {
-      const userRef = doc(firestore, Collections.Users, allowedUser);
-      batch.update(userRef, {
+      const userRef = doc(firestore, Collections.Users, allowedUser).withConverter(usersConverter);
+      batch.update<IUserItem>(userRef, {
         boards: arrayUnion(addedBoard.id),
       });
     });

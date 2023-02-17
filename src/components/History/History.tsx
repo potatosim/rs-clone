@@ -1,15 +1,15 @@
 import { Avatar, Box, styled, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { Collections } from 'enum/Collection';
+import { doc } from 'firebase/firestore';
+import { usersConverter } from 'helpers/converters';
+import React, { FC, useContext } from 'react';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { HistoryItem } from 'types/HistoryItem';
+import { IUserItem } from 'types/User';
 
 interface HistoryProps {
   history: HistoryItem[];
-}
-
-interface HistoryItemElProps {
-  title: React.ReactElement;
-  date: string;
-  avatar: string;
 }
 
 export const HistoryWrapper = styled(Box)`
@@ -26,108 +26,78 @@ export const HistoryWrapper = styled(Box)`
   }
 `;
 
-export const HistoryItemEl = ({ title, date, avatar }: HistoryItemElProps) => {
+export const HistoryItemEl = (historyItem: HistoryItem) => {
+  const { firestore } = useContext(FirebaseContext);
+  const [user, loading] = useDocumentData<IUserItem>(
+    doc(firestore, Collections.Users, historyItem.initiator).withConverter(usersConverter),
+  );
+
+  if (!user || loading) {
+    return null;
+  }
+
+  const { avatar } = user;
+
+  const title = getTitleByAction(historyItem, user);
+
   return (
     <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
       <Avatar src={avatar} />
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Typography>{title}</Typography>
-        <Typography variant="caption">{date.split(',').reverse().join(',')}</Typography>
+        <Typography variant="caption">{historyItem.time.split(',').reverse().join(',')}</Typography>
       </Box>
     </Box>
   );
 };
 
-const getStringByAction = (historyItem: HistoryItem) => {
+const getTitleByAction = (historyItem: HistoryItem, user: IUserItem) => {
   switch (historyItem.action) {
     case 'created':
       return (
-        <HistoryItemEl
-          title={
-            <>
-              <strong>{historyItem.initiator.login}</strong> created a task
-            </>
-          }
-          date={historyItem.time}
-          avatar={historyItem.initiator.avatar}
-        />
+        <>
+          <strong>{user.login}</strong> created a task
+        </>
       );
     case 'statusChanged':
       return (
-        <HistoryItemEl
-          avatar={historyItem.initiator.avatar}
-          title={
-            <>
-              <strong>{historyItem.initiator.login}</strong> changed task status from{' '}
-              <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
-            </>
-          }
-          date={historyItem.time}
-        />
+        <>
+          <strong>{user.login}</strong> changed task status from <strong>{historyItem.from}</strong>{' '}
+          to <strong>{historyItem.to}</strong>
+        </>
       );
     case 'titleChanged':
       return (
-        <HistoryItemEl
-          avatar={historyItem.initiator.avatar}
-          title={
-            <>
-              <strong>{historyItem.initiator.login}</strong> changed task title from{' '}
-              <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
-            </>
-          }
-          date={historyItem.time}
-        />
+        <>
+          <strong>{user.login}</strong> changed task title from <strong>{historyItem.from}</strong>{' '}
+          to <strong>{historyItem.to}</strong>
+        </>
       );
     case 'descriptionChanged':
       return (
-        <HistoryItemEl
-          avatar={historyItem.initiator.avatar}
-          title={
-            <>
-              <strong>{historyItem.initiator.login}</strong> changed task description
-            </>
-          }
-          date={historyItem.time}
-        />
+        <>
+          <strong>{user.login}</strong> changed task description
+        </>
       );
     case 'priorityChanged':
       return (
-        <HistoryItemEl
-          avatar={historyItem.initiator.avatar}
-          title={
-            <>
-              <strong>{historyItem.initiator.login}</strong> changed task priority from{' '}
-              <strong> {historyItem.from} </strong>to<strong> {historyItem.to} </strong>
-            </>
-          }
-          date={historyItem.time}
-        />
+        <>
+          <strong>{user.login}</strong> changed task priority from{' '}
+          <strong> {historyItem.from} </strong>to<strong> {historyItem.to} </strong>
+        </>
       );
     case 'sizeChanged':
       return (
-        <HistoryItemEl
-          avatar={historyItem.initiator.avatar}
-          title={
-            <>
-              <strong>{historyItem.initiator.login}</strong> changed task size from{' '}
-              <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
-            </>
-          }
-          date={historyItem.time}
-        />
+        <>
+          <strong>{user.login}</strong> changed task size from <strong>{historyItem.from}</strong>{' '}
+          to <strong>{historyItem.to}</strong>
+        </>
       );
     case 'assigneeChanged':
       return (
-        <HistoryItemEl
-          avatar={historyItem.initiator.avatar}
-          title={
-            <>
-              <strong>{historyItem.initiator.login}</strong> changed the assignee to{' '}
-              <strong>{historyItem.to}</strong>
-            </>
-          }
-          date={historyItem.time}
-        />
+        <>
+          <strong>{user.login}</strong> changed the assignee to <strong>{historyItem.to}</strong>
+        </>
       );
     default:
       return '' as never;
@@ -143,7 +113,7 @@ const History: FC<HistoryProps> = ({ history }) => {
           display="flex"
           justifyContent="space-between"
         >
-          {getStringByAction(historyItem)}
+          <HistoryItemEl {...historyItem} />
         </Box>
       ))}
     </HistoryWrapper>

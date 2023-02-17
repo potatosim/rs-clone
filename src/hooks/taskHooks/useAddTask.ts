@@ -2,9 +2,10 @@ import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { UserContext } from 'components/RequireAuth';
 import { Collections } from 'enum/Collection';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
-import { tasksConverter } from 'helpers/converters';
+import { columnsConverter, tasksConverter } from 'helpers/converters';
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import { IColumnItem } from 'types/Column';
 import { ITaskItem } from 'types/Task';
 
 export const useAddTask = (
@@ -24,7 +25,7 @@ export const useAddTask = (
         history: [
           {
             action: 'created',
-            initiator: user,
+            initiator: user.id,
             time: new Date().toLocaleString(),
           },
         ],
@@ -33,9 +34,12 @@ export const useAddTask = (
       },
     );
 
-    await updateDoc(doc(firestore, Collections.Columns, columnId), {
-      tasks: arrayUnion(addedTask.id),
-    });
+    await updateDoc<IColumnItem>(
+      doc(firestore, Collections.Columns, columnId).withConverter(columnsConverter),
+      {
+        tasks: arrayUnion(addedTask.id),
+      },
+    );
   };
 
   return handleAddTask;

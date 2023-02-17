@@ -1,7 +1,5 @@
-import { IUserItem } from './User';
-
-export type CommentItem = {
-  author: IUserItem;
+export interface ICommentItem {
+  author: string;
   message: string;
   createdAt: string;
-};
+}

@@ -96,8 +96,13 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
     setQuery(query);
   };
 
-  if (!task || loading) {
+  if (loading) {
     return <CircularProgress />;
+  }
+
+  if (!task) {
+    close();
+    return null;
   }
 
   const handleChangeTab = (event: React.SyntheticEvent<Element, Event>, value: TaskTabs) => {
@@ -156,14 +161,14 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
             <PrioritySelect
               currentPriority={task.priority}
               onPriorityChange={(e: SelectChangeEvent) => {
-                handleChangePriority(e.target.value, task.id);
+                handleChangePriority(e.target.value as ITaskItem['priority'], task.id);
               }}
             />
 
             <SizeSelect
               currentSize={task.size}
               onSizeChange={(e: SelectChangeEvent) => {
-                handleChangeSize(e.target.value, task.id);
+                handleChangeSize(e.target.value as ITaskItem['size'], task.id);
               }}
             />
             <Button onClick={handleDelete} variant="contained" startIcon={<DeleteForeverIcon />}>

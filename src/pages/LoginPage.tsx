@@ -16,6 +16,8 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { Collections } from 'enum/Collection';
+import { IUserItem } from 'types/User';
+import { usersConverter } from 'helpers/converters';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -35,7 +37,9 @@ const LoginPage = () => {
   const handleSignInWithGoogle = async () => {
     const googleAccount = await signInWithGoogle();
     if (googleAccount) {
-      const userGoogle = await getDoc(doc(firestore, Collections.Users, googleAccount.user.uid));
+      const userGoogle = await getDoc<IUserItem>(
+        doc(firestore, Collections.Users, googleAccount.user.uid).withConverter(usersConverter),
+      );
 
       if (!userGoogle.data()) {
         await setDoc(doc(firestore, Collections.Users, googleAccount.user.uid), {

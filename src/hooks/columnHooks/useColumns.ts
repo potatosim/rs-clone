@@ -14,15 +14,19 @@ import { DnDTypes } from 'enum/DnDTypes';
 import { DropResult } from 'react-beautiful-dnd';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { ITaskItem } from 'types/Task';
-import { columnsConverter, tasksConverter } from 'helpers/converters';
+import { boardsConverter, columnsConverter, tasksConverter } from 'helpers/converters';
 import { reorderArray } from 'helpers/reorderArray';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useContext } from 'react';
 import { deleteDocuments } from 'helpers/deleteDocuments';
 import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
+import { IColumnItem } from 'types/Column';
+import { UserContext } from 'components/RequireAuth';
+import { IBoardItem } from 'types/Board';
 
 export const useColumns = (boardId: string) => {
   const { firestore } = useContext(FirebaseContext);
+  const { user } = useContext(UserContext);
   const deleteDocumentsFrom = deleteDocuments(firestore);
   const [columns, loading] = useCollectionData(
     query(
@@ -50,8 +54,10 @@ export const useColumns = (boardId: string) => {
       );
 
       reorderedColumns.map((column, id) => {
-        const columnRef = doc(firestore, Collections.Columns, column.id);
-        batch.update(columnRef, {
+        const columnRef = doc(firestore, Collections.Columns, column.id).withConverter(
+          columnsConverter,
+        );
+        batch.update<IColumnItem>(columnRef, {
           order: id,
         });
       });
@@ -89,8 +95,10 @@ export const useColumns = (boardId: string) => {
           );
 
           reorderedTasks.map((task, id) => {
-            const taskRef = doc(firestore, Collections.Tasks, task.id);
-            batch.update(taskRef, {
+            const taskRef = doc(firestore, Collections.Tasks, task.id).withConverter(
+              tasksConverter,
+            );
+            batch.update<ITaskItem>(taskRef, {
               order: id,
             });
           });
@@ -98,9 +106,19 @@ export const useColumns = (boardId: string) => {
           await batch.commit();
         }
       } else {
-        const sourceColumnRef = doc(firestore, Collections.Columns, source.droppableId);
-        const destinationColumnRef = doc(firestore, Collections.Columns, destination.droppableId);
-        const targetTaskRef = doc(firestore, Collections.Tasks, draggableId);
+        const sourceColumnRef = doc(
+          firestore,
+          Collections.Columns,
+          source.droppableId,
+        ).withConverter(columnsConverter);
+        const destinationColumnRef = doc(
+          firestore,
+          Collections.Columns,
+          destination.droppableId,
+        ).withConverter(columnsConverter);
+        const targetTaskRef = doc(firestore, Collections.Tasks, draggableId).withConverter(
+          tasksConverter,
+        );
         const prevColumn = columns.find((col) => col.id === source.droppableId);
         const newColumn = columns.find((col) => col.id === destination.droppableId);
 
@@ -124,13 +142,15 @@ export const useColumns = (boardId: string) => {
         sourceTasks
           .filter((task) => task.id !== draggableId)
           .map((task, id) => {
-            const taskRef = doc(firestore, Collections.Tasks, task.id);
-            batch.update(taskRef, {
+            const taskRef = doc(firestore, Collections.Tasks, task.id).withConverter(
+              tasksConverter,
+            );
+            batch.update<ITaskItem>(taskRef, {
               order: id,
             });
           });
 
-        batch.update(sourceColumnRef, {
+        batch.update<IColumnItem>(sourceColumnRef, {
           tasks: arrayRemove(draggableId),
         });
 
@@ -141,17 +161,17 @@ export const useColumns = (boardId: string) => {
         } as ITaskItem);
 
         destinationTasks.map((task, id) => {
-          const taskRef = doc(firestore, Collections.Tasks, task.id);
-          batch.update(taskRef, {
+          const taskRef = doc(firestore, Collections.Tasks, task.id).withConverter(tasksConverter);
+          batch.update<ITaskItem>(taskRef, {
             order: id,
           });
         });
 
-        batch.update(targetTaskRef, {
+        batch.update<ITaskItem>(targetTaskRef, {
           columnId: destination.droppableId,
           order: destination.index,
           history: arrayUnion({
-            initiator: 'User',
+            initiator: user.id,
             action: 'statusChanged',
             from: prevColumn?.title,
             to: newColumn?.title,
@@ -159,7 +179,7 @@ export const useColumns = (boardId: string) => {
           }),
         });
 
-        batch.update(destinationColumnRef, {
+        batch.update<IColumnItem>(destinationColumnRef, {
           tasks: arrayUnion(draggableId),
         });
 
@@ -176,15 +196,20 @@ export const useColumns = (boardId: string) => {
         const batch = writeBatch(firestore);
         batch.delete(doc(firestore, Collections.Columns, columnId));
 
-        batch.update(doc(firestore, Collections.Boards, boardId), {
-          columns: arrayRemove(columnId),
-        });
+        batch.update<IBoardItem>(
+          doc(firestore, Collections.Boards, boardId).withConverter(boardsConverter),
+          {
+            columns: arrayRemove(columnId),
+          },
+        );
 
         columns
           .filter((column) => column.id !== columnId)
           .map((column, id) => {
-            const columnRef = doc(firestore, Collections.Columns, column.id);
-            batch.update(columnRef, {
+            const columnRef = doc(firestore, Collections.Columns, column.id).withConverter(
+              columnsConverter,
+            );
+            batch.update<IColumnItem>(columnRef, {
               order: id,
             });
           });
@@ -197,9 +222,12 @@ export const useColumns = (boardId: string) => {
   };
 
   const handleRenameColumn = async (title: string, columnId: string) => {
-    await updateDoc(doc(firestore, Collections.Columns, columnId), {
-      title,
-    });
+    await updateDoc<IColumnItem>(
+      doc(firestore, Collections.Columns, columnId).withConverter(columnsConverter),
+      {
+        title,
+      },
+    );
   };
 
   return {

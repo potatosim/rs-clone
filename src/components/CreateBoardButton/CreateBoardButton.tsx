@@ -21,7 +21,10 @@ const CreateBoardButton = () => {
   };
 
   return (
-    <Paper sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} elevation={12}>
+    <Paper
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '180px' }}
+      elevation={12}
+    >
       <ListItemButton
         onClick={handleCreateBoard}
         sx={{ maxWidth: '270px', borderRadius: '4px', height: '100%' }}

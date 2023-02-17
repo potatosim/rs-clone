@@ -1,5 +1,3 @@
-import { IUserItem } from './User';
-
 export type HistoryItem =
   | HistoryCreated
   | HistoryStatusChanged
@@ -10,13 +8,13 @@ export type HistoryItem =
   | HistoryDescriptionChanged;
 
 type HistoryCreated = {
-  initiator: IUserItem;
+  initiator: string;
   action: 'created';
   time: string;
 };
 
 type UpdateHistoryItem = {
-  initiator: IUserItem;
+  initiator: string;
   time: string;
   from: string;
   to: string;

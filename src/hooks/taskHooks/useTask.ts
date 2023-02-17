@@ -4,7 +4,7 @@ import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { arrayRemove, doc, updateDoc, writeBatch, arrayUnion } from 'firebase/firestore';
 import { useContext } from 'react';
 import { ITaskItem } from 'types/Task';
-import { tasksConverter } from 'helpers/converters';
+import { columnsConverter, tasksConverter } from 'helpers/converters';
 import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
 import { HistoryItem } from 'types/HistoryItem';
 import { IColumnItem } from 'types/Column';
@@ -20,14 +20,17 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
 
   const handleUpdateDescription = async (taskDescription: string) => {
     if (task) {
-      await updateDoc(doc(firestore, Collections.Tasks, task.id), {
-        description: taskDescription,
-        history: arrayUnion({
-          initiator: user,
-          action: 'descriptionChanged',
-          time: new Date().toLocaleString(),
-        }),
-      });
+      await updateDoc<ITaskItem>(
+        doc(firestore, Collections.Tasks, task.id).withConverter(tasksConverter),
+        {
+          description: taskDescription,
+          history: arrayUnion({
+            initiator: user.id,
+            action: 'descriptionChanged',
+            time: new Date().toLocaleString(),
+          } as HistoryItem),
+        },
+      );
     }
   };
 
@@ -38,7 +41,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
         {
           title: taskTitle,
           history: arrayUnion({
-            initiator: user,
+            initiator: user.id,
             action: 'titleChanged',
             from: task.title,
             to: taskTitle,
@@ -51,9 +54,13 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
 
   const handleChangeTaskColumn = async (columnId: string) => {
     if (task) {
-      const targetTask = doc(firestore, Collections.Tasks, task.id);
-      const previousColumnRef = doc(firestore, Collections.Columns, task.columnId);
-      const newColumnRef = doc(firestore, Collections.Columns, columnId);
+      const targetTask = doc(firestore, Collections.Tasks, task.id).withConverter(tasksConverter);
+      const previousColumnRef = doc(firestore, Collections.Columns, task.columnId).withConverter(
+        columnsConverter,
+      );
+      const newColumnRef = doc(firestore, Collections.Columns, columnId).withConverter(
+        columnsConverter,
+      );
       const prevColumn = columns.find((col) => col.id === task.columnId);
       const newColumn = columns.find((col) => col.id === columnId);
 
@@ -75,32 +82,34 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
 
       const batch = writeBatch(firestore);
 
-      batch.update(previousColumnRef, {
+      batch.update<IColumnItem>(previousColumnRef, {
         tasks: arrayRemove(task.id),
       });
 
-      batch.update(newColumnRef, {
+      batch.update<IColumnItem>(newColumnRef, {
         tasks: arrayUnion(task.id),
       });
 
       const updatedPrevious = previousColumnTasks.filter((taskItem) => taskItem.id !== task.id);
 
       updatedPrevious.map((taskItem, id) => {
-        const taskRef = doc(firestore, Collections.Tasks, taskItem.id);
-        batch.update(taskRef, {
+        const taskRef = doc(firestore, Collections.Tasks, taskItem.id).withConverter(
+          tasksConverter,
+        );
+        batch.update<ITaskItem>(taskRef, {
           order: id,
         });
       });
 
-      batch.update(targetTask, {
+      batch.update<ITaskItem>(targetTask, {
         order: newColumnTasks.length,
         history: arrayUnion({
-          initiator: user,
+          initiator: user.id,
           action: 'statusChanged',
           from: prevColumn?.title,
           to: newColumn?.title,
           time: new Date().toLocaleString(),
-        }),
+        } as HistoryItem),
         columnId,
       });
 
@@ -108,41 +117,50 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     }
   };
 
-  const handleChangePriority = async (priority: string, id: string) => {
-    await updateDoc(doc(firestore, Collections.Tasks, id), {
-      priority,
-      history: arrayUnion({
-        initiator: user,
-        action: 'priorityChanged',
-        from: task?.priority,
-        to: priority,
-        time: new Date().toLocaleString(),
-      }),
-    });
+  const handleChangePriority = async (priority: ITaskItem['priority'], id: string) => {
+    await updateDoc<ITaskItem>(
+      doc(firestore, Collections.Tasks, id).withConverter(tasksConverter),
+      {
+        priority,
+        history: arrayUnion({
+          initiator: user.id,
+          action: 'priorityChanged',
+          from: task?.priority,
+          to: priority,
+          time: new Date().toLocaleString(),
+        } as HistoryItem),
+      },
+    );
   };
 
-  const handleChangeSize = async (size: string, id: string) => {
-    await updateDoc(doc(firestore, Collections.Tasks, id), {
-      size,
-      history: arrayUnion({
-        initiator: user,
-        action: 'sizeChanged',
-        from: task?.size,
-        to: size,
-        time: new Date().toLocaleString(),
-      }),
-    });
+  const handleChangeSize = async (size: ITaskItem['size'], id: string) => {
+    await updateDoc<ITaskItem>(
+      doc(firestore, Collections.Tasks, id).withConverter(tasksConverter),
+      {
+        size,
+        history: arrayUnion({
+          initiator: user.id,
+          action: 'sizeChanged',
+          from: task?.size,
+          to: size,
+          time: new Date().toLocaleString(),
+        } as HistoryItem),
+      },
+    );
   };
 
   const handleAddComment = async (message: string) => {
     if (task) {
-      await updateDoc(doc(firestore, Collections.Tasks, task.id), {
-        comments: arrayUnion({
-          author: user,
-          message: message,
-          createdAt: new Date().toLocaleString(),
-        }),
-      });
+      await updateDoc<ITaskItem>(
+        doc(firestore, Collections.Tasks, task.id).withConverter(tasksConverter),
+        {
+          comments: arrayUnion({
+            author: user.id,
+            message: message,
+            createdAt: new Date().toLocaleString(),
+          }),
+        },
+      );
     }
   };
 
@@ -159,15 +177,20 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
 
       batch.delete(doc(firestore, Collections.Tasks, task.id));
 
-      batch.update(doc(firestore, Collections.Columns, task.columnId), {
-        columns: arrayRemove(task.columnId),
-      });
+      batch.update<IColumnItem>(
+        doc(firestore, Collections.Columns, task.columnId).withConverter(columnsConverter),
+        {
+          tasks: arrayRemove(task.id),
+        },
+      );
 
       const updatedColumn = targetColumnTasks.filter((taskItem) => taskItem.id !== task.id);
 
       updatedColumn.map((taskItem, id) => {
-        const taskRef = doc(firestore, Collections.Tasks, taskItem.id);
-        batch.update(taskRef, {
+        const taskRef = doc(firestore, Collections.Tasks, taskItem.id).withConverter(
+          tasksConverter,
+        );
+        batch.update<ITaskItem>(taskRef, {
           order: id,
         });
       });

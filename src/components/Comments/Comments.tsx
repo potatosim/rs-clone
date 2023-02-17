@@ -1,11 +1,39 @@
-import { Box, Typography } from '@mui/material';
-import { HistoryItemEl } from 'components/History/History';
-import React, { FC } from 'react';
-import { CommentItem } from 'types/CommentItem';
+import { Avatar, Box, Typography } from '@mui/material';
+import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { Collections } from 'enum/Collection';
+import { doc } from 'firebase/firestore';
+import { usersConverter } from 'helpers/converters';
+import { FC, useContext } from 'react';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { ICommentItem } from 'types/CommentItem';
+import { IUserItem } from 'types/User';
 
 export interface CommentProps {
-  comments: CommentItem[];
+  comments: ICommentItem[];
 }
+
+export const CommentItem = ({ author, createdAt, message }: ICommentItem) => {
+  const { firestore } = useContext(FirebaseContext);
+  const [user, loading] = useDocumentData<IUserItem>(
+    doc(firestore, Collections.Users, author).withConverter(usersConverter),
+  );
+
+  if (!user || loading) {
+    return null;
+  }
+
+  const { avatar } = user;
+
+  return (
+    <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
+      <Avatar src={avatar} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Typography>{message}</Typography>
+        <Typography variant="caption">{createdAt.split(',').reverse().join(',')}</Typography>
+      </Box>
+    </Box>
+  );
+};
 
 const Comments: FC<CommentProps> = ({ comments }) => {
   if (comments.length) {
@@ -24,11 +52,7 @@ const Comments: FC<CommentProps> = ({ comments }) => {
         }}
       >
         {comments.map((comment) => (
-          <HistoryItemEl
-            avatar={comment.author.avatar}
-            date={comment.createdAt}
-            title={<strong style={{ overflowWrap: 'break-word' }}>{comment.message}</strong>}
-          />
+          <CommentItem key={comment.createdAt + comment.author} {...comment} />
         ))}
       </Box>
     );
