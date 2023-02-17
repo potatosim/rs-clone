@@ -1,12 +1,13 @@
 import './firebase';
 
 import { Auth, getAuth } from 'firebase/auth';
-import { doc, Firestore, getDoc, getFirestore } from 'firebase/firestore';
+import { doc, Firestore, getFirestore } from 'firebase/firestore';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
-import { FC, ReactElement, ReactNode, createContext, useState, useEffect } from 'react';
+import { FC, ReactElement, ReactNode, createContext } from 'react';
 import { IUserItem } from 'types/User';
 import { Collections } from 'enum/Collection';
 import { usersConverter } from 'helpers/converters';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 
 const auth = getAuth();
 const firestore = getFirestore();
@@ -31,29 +32,14 @@ interface FirebaseProviderProps {
 }
 
 const FirebaseProvider: FC<FirebaseProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<IUserItem | null>(null);
+  const [user] = useDocumentData<IUserItem>(
+    doc(firestore, Collections.Users, auth?.currentUser?.uid || 'userId').withConverter(
+      usersConverter,
+    ),
+  );
 
-  const getUser = async () => {
-    if (auth.currentUser) {
-      const usrDoc = await getDoc<IUserItem>(
-        doc(firestore, Collections.Users, auth.currentUser.uid).withConverter(usersConverter),
-      );
-      const usr = await usrDoc.data();
-      if (usr) {
-        setUser(usr);
-      }
-    } else {
-      setUser(null);
-    }
-  };
-
-  useEffect(() => {
-    auth.onAuthStateChanged(() => {
-      getUser();
-    });
-  }, []);
   return (
-    <FirebaseContext.Provider value={{ auth, firestore, storage, user }}>
+    <FirebaseContext.Provider value={{ auth, firestore, storage, user: user || null }}>
       {children}
     </FirebaseContext.Provider>
   );
