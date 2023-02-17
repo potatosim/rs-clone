@@ -1,7 +1,15 @@
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { UserContext } from 'components/RequireAuth';
 import { Collections } from 'enum/Collection';
-import { collection, doc, query, updateDoc, where, writeBatch } from 'firebase/firestore';
+import {
+  arrayRemove,
+  collection,
+  doc,
+  query,
+  updateDoc,
+  where,
+  writeBatch,
+} from 'firebase/firestore';
 import { boardsConverter, columnsConverter } from 'helpers/converters';
 import { deleteDocuments } from 'helpers/deleteDocuments';
 import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
@@ -39,6 +47,12 @@ export const useBoards = () => {
 
         columns.map((column) => deleteDocumentsFrom(batch, Collections.Tasks, column.tasks));
         deleteDocumentsFrom(batch, Collections.Columns, targetBoard.columns);
+        targetBoard.allowedUsers.map((userId) => {
+          const userRef = doc(firestore, Collections.Users, userId);
+          batch.update(userRef, {
+            boards: arrayRemove(targetBoard.id),
+          });
+        });
 
         batch.delete(boardRef);
 

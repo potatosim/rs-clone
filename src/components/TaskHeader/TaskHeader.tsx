@@ -7,7 +7,7 @@ import RenameTextField from 'components/RenameTextField/RenameTextField';
 
 const StyledCardHeader = styled(Box)`
   grid-area: 1 / 1 / 2 / 5;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid lightgray;
   min-height: 76px;
   display: flex;
   justify-content: space-between;

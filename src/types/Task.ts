@@ -10,6 +10,7 @@ export interface ITaskItem {
   description: string;
   order: number;
   columnId: string;
+  boardId: string;
   priority: Priorities;
   size: Sizes;
   history: HistoryItem[];

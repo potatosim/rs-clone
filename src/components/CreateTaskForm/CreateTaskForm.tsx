@@ -10,6 +10,7 @@ import { Sizes } from 'enum/Sizes';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useAddTask } from 'hooks/taskHooks/useAddTask';
+import { Box } from '@mui/material';
 
 interface CreateTaskFormProps {
   isModalOpen: boolean;
@@ -56,30 +57,37 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({
           label="Title of the task"
           onChange={(e) => setTaskTitle(e.target.value)}
           size="small"
+          fullWidth
         />
         <TextField
           value={taskDescription}
           label="Description"
           onChange={(e) => setTaskDescription(e.target.value)}
           size="small"
+          fullWidth
         />
-        <PrioritySelect
-          currentPriority={priority}
-          onPriorityChange={(e) => {
-            setPriority(e.target.value as Priorities);
-          }}
-        />
-        <SizeSelect
-          currentSize={size}
-          onSizeChange={(e) => {
-            setSize(e.target.value as Sizes);
-          }}
-        />
+        <Box
+          sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', rowGap: '1rem' }}
+        >
+          <PrioritySelect
+            currentPriority={priority}
+            onPriorityChange={(e) => {
+              setPriority(e.target.value as Priorities);
+            }}
+          />
+          <SizeSelect
+            currentSize={size}
+            onSizeChange={(e) => {
+              setSize(e.target.value as Sizes);
+            }}
+          />
+        </Box>
         <Button
           disabled={!taskTitle.trim().length}
-          variant="outlined"
+          variant="contained"
           type="submit"
           onClick={handleCreateTask}
+          fullWidth
         >
           Add
         </Button>

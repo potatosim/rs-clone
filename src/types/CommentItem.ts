@@ -1,5 +1,7 @@
+import { IUserItem } from './User';
+
 export type CommentItem = {
-  author: string;
+  author: IUserItem;
   message: string;
   createdAt: string;
 };

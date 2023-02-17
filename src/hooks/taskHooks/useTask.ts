@@ -18,6 +18,19 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     doc(firestore, Collections.Tasks, taskId).withConverter(tasksConverter),
   );
 
+  const handleUpdateDescription = async (taskDescription: string) => {
+    if (task) {
+      await updateDoc(doc(firestore, Collections.Tasks, task.id), {
+        description: taskDescription,
+        history: arrayUnion({
+          initiator: user,
+          action: 'descriptionChanged',
+          time: new Date().toLocaleString(),
+        }),
+      });
+    }
+  };
+
   const handleUpdateTaskTitle = async (taskTitle: string, id: string) => {
     if (task) {
       await updateDoc<ITaskItem>(
@@ -167,6 +180,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
     task,
     loading,
     handleUpdateTaskTitle,
+    handleUpdateDescription,
     handleChangeTaskColumn,
     handleChangePriority,
     handleChangeSize,

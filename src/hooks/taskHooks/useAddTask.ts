@@ -4,12 +4,14 @@ import { Collections } from 'enum/Collection';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
 import { tasksConverter } from 'helpers/converters';
 import { useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { ITaskItem } from 'types/Task';
 
 export const useAddTask = (
   columnId: string,
-  task: Omit<ITaskItem, 'id' | 'history' | 'comments' | 'assignee'>,
+  task: Omit<ITaskItem, 'id' | 'history' | 'comments' | 'assignee' | 'boardId'>,
 ) => {
+  const { boardId } = useParams();
   const { firestore } = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
 
@@ -27,6 +29,7 @@ export const useAddTask = (
           },
         ],
         comments: [],
+        boardId: boardId!,
       },
     );
 

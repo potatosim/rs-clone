@@ -7,6 +7,10 @@ interface ModalLoaderProps {
 }
 
 const ModalLoader = ({ isOpen }: ModalLoaderProps) => {
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <ModalWrapper open={isOpen}>
       <CircularProgress size={100} sx={{ outline: 'none' }} />

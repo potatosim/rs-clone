@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, ButtonGroup, Paper, Typography } from '@mui/material';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -18,6 +18,7 @@ import { useState } from 'react';
 import useQueryParam from 'hooks/useQueryParam';
 import { Queries } from 'enum/Queries';
 import TaskItem from 'components/TaskItem';
+import EditBoardButton from './EditBoardButton';
 
 const BoardWrapper = styled(Box)`
   position: relative;
@@ -53,7 +54,8 @@ const ColumnsWrapper = styled('div')`
   width: max-content;
 `;
 
-const Board = ({ background, columns, title, id }: IBoardItem) => {
+const Board = (board: IBoardItem) => {
+  const { background, columns, title, id } = board;
   const { columnsItems, columnsLoading, updateOrder, handleDeleteColumn, handleRenameColumn } =
     useColumns(id);
   const [isCreateColumnOpen, setIsCreateColumnOpen] = useState(false);
@@ -75,17 +77,21 @@ const Board = ({ background, columns, title, id }: IBoardItem) => {
         <Button onClick={() => navigate(AppRoutes.Boards)} variant="contained">
           Back to my boards
         </Button>
+
         <Typography variant="h4" fontWeight="600" textTransform="capitalize">
           {title}
         </Typography>
-        <Button
-          sx={{ minWidth: 150 }}
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleOpen}
-        >
-          Add Column
-        </Button>
+        <ButtonGroup>
+          <EditBoardButton board={board} />
+          <Button
+            sx={{ minWidth: 150 }}
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleOpen}
+          >
+            Add Column
+          </Button>
+        </ButtonGroup>
       </BoardHeader>
       <ScrollableWrapper columnsCount={columns.length}>
         <DragDropContext onDragEnd={updateOrder}>
@@ -106,15 +112,19 @@ const Board = ({ background, columns, title, id }: IBoardItem) => {
           </Droppable>
         </DragDropContext>
       </ScrollableWrapper>
-      <CreateColumnForm
-        columnLength={columns.length}
-        boardId={id}
-        handleClose={handleClose}
-        isModalOpen={isCreateColumnOpen}
-      />
+      {isCreateColumnOpen && (
+        <CreateColumnForm
+          columnLength={columns.length}
+          boardId={id}
+          handleClose={handleClose}
+          isModalOpen={isCreateColumnOpen}
+        />
+      )}
       <BackgroundWrapper bg={background} fullSize />
       <ModalLoader isOpen={columnsLoading} />
-      <TaskItem boardId={id} columns={columnsItems} taskId={taskQuery!} isTaskOpen={!!taskQuery} />
+      {!!taskQuery && (
+        <TaskItem boardId={id} columns={columnsItems} taskId={taskQuery} isTaskOpen={!!taskQuery} />
+      )}
     </BoardWrapper>
   );
 };
