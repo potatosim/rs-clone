@@ -6,7 +6,7 @@ interface IconWrapperProps {
 }
 
 const IconWrapper: FC<IconWrapperProps> = ({ children }) => {
-  return <Box sx={{ padding: '0 0 0 10px' }}>{children}</Box>;
+  return <Box sx={{}}>{children}</Box>;
 };
 
 export default IconWrapper;

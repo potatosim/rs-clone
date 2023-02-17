@@ -1,14 +1,4 @@
-import {
-  Card,
-  CardContent,
-  TextareaAutosize,
-  Box,
-  SelectChangeEvent,
-  Tabs,
-  Tab,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
+import { Card, CardContent, Box, SelectChangeEvent, Tabs, Tab, Button } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import { ModalWrapper } from 'components/common/ModalWrapper';
@@ -30,6 +20,8 @@ import { TaskTabs } from 'enum/TaskTabs';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CommentsTab from 'components/CommentsTab';
 import AssigneeSelect from 'components/AssigneeSelect';
+import DescriptionField from 'components/DescriptionField';
+import Divider from '@mui/material/Divider';
 
 interface TaskItemProps {
   taskId: string;
@@ -39,7 +31,8 @@ interface TaskItemProps {
 }
 
 const StyledCard = styled(Card)`
-  width: 60%;
+  width: 70%;
+  height: 650px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 1fr);
@@ -49,12 +42,13 @@ const StyledCard = styled(Card)`
 
 const StyledCardContent = styled(CardContent)`
   grid-area: 2 / 1 / 7 / 4;
-  border-right: 2px double black;
+  border-right: 2px double lightgrey;
 `;
 
 const StyledCardContentOptions = styled(CardContent)`
   display: flex;
-  row-gap: 1rem;
+  padding: 2rem;
+  row-gap: 2rem;
   flex-direction: column;
 `;
 
@@ -88,6 +82,7 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
     task,
     loading,
     handleUpdateTaskTitle,
+    handleUpdateDescription,
     handleChangeTaskColumn,
     handleChangePriority,
     handleChangeSize,
@@ -127,11 +122,14 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
         <StyledCardContent>
           <Typography fontWeight={600}>Description:</Typography>
 
-          <TextareaAutosize
-            placeholder="No description provided"
-            defaultValue={task.description}
-            style={{ width: '80%', minHeight: 100 }}
+          <DescriptionField
+            taskDescription={task.description}
+            onSubmit={(e) => {
+              handleUpdateDescription(e);
+            }}
           />
+          <Divider />
+
           <Tabs value={activeTab} onChange={handleChangeTab}>
             <Tab value={TaskTabs.History} label={TaskTabs.History}></Tab>
             <Tab value={TaskTabs.Comments} label={TaskTabs.Comments}></Tab>
@@ -168,12 +166,10 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
                 handleChangeSize(e.target.value, task.id);
               }}
             />
+            <Button onClick={handleDelete} variant="contained" startIcon={<DeleteForeverIcon />}>
+              Delete this task
+            </Button>
           </StyledCardContentOptions>
-          <Tooltip title="Delete task">
-            <IconButton onClick={handleDelete}>
-              <DeleteForeverIcon />
-            </IconButton>
-          </Tooltip>
         </StyledBox>
       </StyledCard>
     </ModalWrapper>

@@ -1,22 +1,11 @@
 import { Box, CircularProgress } from '@mui/material';
-import { useState } from 'react';
 
 import BoardCard from 'components/BoardCard';
 import CreateBoardButton from 'components/CreateBoardButton';
-import CreateBoardForm from 'components/CreateBoardForm';
 import { useBoards } from 'hooks/boardHooks/useBoards';
 
 const BoardsPage = () => {
   const { boards, loading, handleDeleteBoard, handleRenameBoard } = useBoards();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const handleCreateBoard = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   if (loading || !boards) {
     return <CircularProgress />;
@@ -26,8 +15,10 @@ const BoardsPage = () => {
     <Box
       sx={{
         display: 'flex',
+        justifyContent: 'center',
         flexWrap: 'wrap',
         gap: '1rem',
+        p: 4,
       }}
     >
       {boards.map((board) => (
@@ -38,8 +29,7 @@ const BoardsPage = () => {
           handleRenameBoard={handleRenameBoard}
         />
       ))}
-      <CreateBoardButton onClick={handleCreateBoard} />
-      <CreateBoardForm handleClose={handleCloseModal} isModalOpen={isModalOpen} />
+      <CreateBoardButton />
     </Box>
   );
 };

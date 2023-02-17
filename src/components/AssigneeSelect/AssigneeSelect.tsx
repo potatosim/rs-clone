@@ -56,6 +56,10 @@ const AssigneeSelect: FC<AssigneeSelectProps> = ({ boardId, currentUser, taskId 
     }
   };
 
+  if (!users) {
+    return null;
+  }
+
   return (
     <FormControl size="small" fullWidth>
       <InputLabel id="assignee-select-label">Assignee</InputLabel>
@@ -63,7 +67,7 @@ const AssigneeSelect: FC<AssigneeSelectProps> = ({ boardId, currentUser, taskId 
         labelId="assignee-select-label"
         id="assignee-select"
         label="Assignee"
-        value={currentUser?.id}
+        value={currentUser?.id || ''}
         onChange={(e: SelectChangeEvent) => {
           handleChangeAssignee(e.target.value);
         }}
@@ -71,8 +75,8 @@ const AssigneeSelect: FC<AssigneeSelectProps> = ({ boardId, currentUser, taskId 
         {users &&
           users.map(({ avatar, login, id }) => (
             <MenuItem divider value={id} key={login}>
-              <Box display="flex" columnGap="5px" alignItems="center">
-                <Avatar src={avatar} />
+              <Box display="flex" columnGap="1rem" alignItems="center">
+                <Avatar sx={{ maxWidth: 25, maxHeight: 25 }} src={avatar} alt="user-avatar" />
                 <Typography>{login}</Typography>
               </Box>
             </MenuItem>

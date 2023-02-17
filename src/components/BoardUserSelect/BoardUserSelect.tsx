@@ -7,6 +7,7 @@ import {
   Chip,
   Typography,
   InputLabel,
+  Skeleton,
 } from '@mui/material';
 import Box from '@mui/material/Box/Box';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -26,7 +27,7 @@ interface BoardUserSelectProps {
 const BoardUserSelect: FC<BoardUserSelectProps> = ({ userIds, setUserIds }) => {
   const { firestore } = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
-  const [users] = useCollectionData<IUserItem>(
+  const [users, loading] = useCollectionData<IUserItem>(
     query(
       collection(firestore, Collections.Users).withConverter(usersConverter),
       where(documentId(), '!=', user.id),
@@ -40,8 +41,12 @@ const BoardUserSelect: FC<BoardUserSelectProps> = ({ userIds, setUserIds }) => {
     setUserIds(typeof value === 'string' ? value.split(',') : value);
   };
 
+  if (loading) {
+    return <Skeleton width={336} height={50} />;
+  }
+
   return (
-    <FormControl sx={{ width: '60%' }} size="small">
+    <FormControl size="small" fullWidth>
       <InputLabel id="users-select-label">Participants</InputLabel>
       <Select
         labelId="users-select-label"
@@ -52,9 +57,6 @@ const BoardUserSelect: FC<BoardUserSelectProps> = ({ userIds, setUserIds }) => {
         onChange={handleUserPick}
         renderValue={(selected) => {
           if (users) {
-            if (selected.length === 0) {
-              return <em>Placeholder</em>;
-            }
             return selected.map((selectItem) => {
               const pickedUser = users.find((findUser) => findUser.id === selectItem);
               if (pickedUser) {

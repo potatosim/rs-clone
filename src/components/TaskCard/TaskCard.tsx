@@ -1,4 +1,4 @@
-import { Box, Chip } from '@mui/material';
+import { Box, Chip, Tooltip } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import IconWrapper from 'components/common/IconWrapper';
@@ -31,7 +31,7 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
       {({ draggableProps, innerRef, dragHandleProps }) => (
         <Paper
           onClick={handleSetQuery}
-          sx={{ padding: '0.5rem 1rem', display: 'flex', flexDirection: 'column', rowGap: '5px' }}
+          sx={{ padding: '0.5rem 1rem', display: 'flex', flexDirection: 'column', rowGap: '1rem' }}
           elevation={8}
           ref={innerRef}
           {...draggableProps}
@@ -40,29 +40,24 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
           <Typography fontWeight={600}>{task.title}</Typography>
           <Box display="flex" columnGap="5px">
             {currentPriority && (
-              // <Box
-              //   sx={{
-              //     display: 'flex',
-              //     borderRadius: '5px',
-              //     columnGap: '4px',
-
-              //     border: `solid 1px ${currentPriority.color}`,
-              //   }}
-              // >
-              //   {currentPriority.symbol} <Typography>{currentPriority.priority}</Typography>
-              // </Box>
-              <Chip
-                variant="outlined"
-                icon={<IconWrapper children={currentPriority.symbol} />}
-                label={currentPriority.priority}
-              />
+              <Tooltip title="Task Priority">
+                <Chip
+                  variant="outlined"
+                  icon={<IconWrapper children={currentPriority.symbol} />}
+                  label={currentPriority.priority}
+                  sx={{ paddingLeft: '0.5rem', cursor: 'pointer' }}
+                />
+              </Tooltip>
             )}
             {currentSize && (
-              <Chip
-                variant="outlined"
-                icon={<IconWrapper children={currentSize.symbol} />}
-                label={currentSize.size}
-              />
+              <Tooltip title="Task Size">
+                <Chip
+                  variant="outlined"
+                  icon={<IconWrapper children={currentSize.symbol} />}
+                  label={currentSize.size}
+                  sx={{ paddingLeft: '0.5rem', cursor: 'pointer' }}
+                />
+              </Tooltip>
             )}
           </Box>
         </Paper>

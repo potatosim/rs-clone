@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from '@mui/material';
+import { Avatar, Box, styled, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { HistoryItem } from 'types/HistoryItem';
 
@@ -12,13 +12,24 @@ interface HistoryItemElProps {
   avatar: string;
 }
 
-const HistoryItemEl = ({ title, date, avatar }: HistoryItemElProps) => {
+export const HistoryWrapper = styled(Box)`
+  padding: 1rem;
+  display: flex;
+  row-gap: 1rem;
+  flex-direction: column;
+  margin-top: 2;
+  max-height: 300px;
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const HistoryItemEl = ({ title, date, avatar }: HistoryItemElProps) => {
   return (
     <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
-      <Avatar
-        src={avatar}
-        // sx={{ borderRadius: '50%', overflow: 'hidden', bgcolor: 'red', width: 36, height: 36 }}
-      />
+      <Avatar src={avatar} />
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Typography>{title}</Typography>
         <Typography variant="caption">{date.split(',').reverse().join(',')}</Typography>
@@ -34,7 +45,7 @@ const getStringByAction = (historyItem: HistoryItem) => {
         <HistoryItemEl
           title={
             <>
-              <strong>{historyItem.initiator.login}</strong> just create a task
+              <strong>{historyItem.initiator.login}</strong> created a task
             </>
           }
           date={historyItem.time}
@@ -62,6 +73,18 @@ const getStringByAction = (historyItem: HistoryItem) => {
             <>
               <strong>{historyItem.initiator.login}</strong> changed task title from{' '}
               <strong>{historyItem.from}</strong> to <strong>{historyItem.to}</strong>
+            </>
+          }
+          date={historyItem.time}
+        />
+      );
+    case 'descriptionChanged':
+      return (
+        <HistoryItemEl
+          avatar={historyItem.initiator.avatar}
+          title={
+            <>
+              <strong>{historyItem.initiator.login}</strong> changed task description
             </>
           }
           date={historyItem.time}
@@ -113,7 +136,7 @@ const getStringByAction = (historyItem: HistoryItem) => {
 
 const History: FC<HistoryProps> = ({ history }) => {
   return (
-    <Box sx={{ display: 'flex', rowGap: '0.5rem', flexDirection: 'column', mt: 2 }}>
+    <HistoryWrapper>
       {history.reverse().map((historyItem) => (
         <Box
           key={historyItem.time + historyItem.action}
@@ -123,7 +146,7 @@ const History: FC<HistoryProps> = ({ history }) => {
           {getStringByAction(historyItem)}
         </Box>
       ))}
-    </Box>
+    </HistoryWrapper>
   );
 };
 

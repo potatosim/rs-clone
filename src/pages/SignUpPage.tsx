@@ -8,7 +8,7 @@ import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firesto
 import { Collections } from 'enum/Collection';
 import ModalLoader from 'components/common/ModalLoader';
 import Paper from '@mui/material/Paper/Paper';
-import PasswordInput from 'components/PasswordInput/PasswordInput';
+import PasswordInput from 'components/PasswordInput';
 import UploadButton from 'components/UploadButton/UploadButton';
 
 enum FirebaseErrors {
