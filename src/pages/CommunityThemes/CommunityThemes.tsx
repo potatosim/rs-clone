@@ -14,7 +14,7 @@ const PageContentWrapper = styled(Box)`
 `;
 
 const CommunityThemes = () => {
-  const { publicThemes, publicThemesLoader } = useGetPublicThemes();
+  const { publicThemes } = useGetPublicThemes();
 
   return (
     <PageContentWrapper>

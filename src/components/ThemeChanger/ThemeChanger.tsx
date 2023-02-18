@@ -1,40 +1,31 @@
 import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc} from 'firebase/firestore';
 import { themeConverter } from 'helpers/converters';
-import { createChangedTheme } from 'helpers/createChangedTheme';
 import { generateTheme } from 'helpers/generateTheme';
 import {
-  createContext,
   FC,
   ReactElement,
   ReactNode,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { IUserItem } from 'types/User';
+
 
 interface ThemeProviderProps {
   children: ReactNode | ReactElement;
-}
-
-enum Colors {
-  primary = '#f5a506',
-  secondary = '#8f1be3',
 }
 
 const lightMode = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: Colors.primary,
+      main: '#d219cf',
     },
     secondary: {
-      main: Colors.secondary,
+      main: '#9c27b0',
     },
   },
 });

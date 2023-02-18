@@ -20,6 +20,7 @@ const UserThemes = () => {
   const { userThemes } = useGetUserThemes();
 
   //TODO:
+  // Theme should change when user logIn and logOut
   // add button for link to AllThemes
   // Themes sorting
   // 2 base themes
