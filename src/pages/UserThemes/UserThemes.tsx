@@ -1,12 +1,11 @@
-import { Box, Button, Container, CssBaseline, Grid, IconButton, Typography } from '@mui/material';
+import { Box, Button, Container, CssBaseline, Grid, Typography } from '@mui/material';
 import { useState } from 'react';
-import ThemeCreator from 'components/UserThemes/ThemeCreator';
-import ThemeCard from 'components/UserThemes/ThemeCard';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
-import ThemesIcon from '@mui/icons-material/InsertPhoto';
 import styled from '@emotion/styled';
 import { useGetUserThemes } from 'hooks/themesHooks/useGetUserThemes';
+import ThemeItem from 'components/UserThemes/ThemeItem';
+import ThemeCreator from 'components/UserThemes/ThemeCreator';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -32,15 +31,15 @@ const UserThemes = () => {
   return (
     <PageContentWrapper>
       <CssBaseline />
-      <Link to={AppRoutes.AllThemes}>
-        <IconButton color="default">
-          <ThemesIcon />
-        </IconButton>
-      </Link>
       <Typography variant="h3" sx={{ m: '1rem' }}>
         Available Themes
       </Typography>
-      <Button variant="contained" sx={{ m: '1rem' }} onClick={() => setIsCreating(true)}>
+      <Link to={AppRoutes.AllThemes} style={{ textDecoration: 'none' }}>
+        <Button variant="contained" sx={{ m: '0.5rem' }}>
+          Community themes
+        </Button>
+      </Link>
+      <Button variant="contained" sx={{ m: '1rem auto 2rem' }} onClick={() => setIsCreating(true)}>
         Create new theme
       </Button>
       {isCreating && <ThemeCreator setIsCreating={setIsCreating} />}
@@ -49,7 +48,7 @@ const UserThemes = () => {
           {userThemes?.map((theme) => {
             return (
               <Grid key={theme.id} item xs={3}>
-                <ThemeCard {...theme} />
+                <ThemeItem {...theme} status={'userTheme'} />
               </Grid>
             );
           })}

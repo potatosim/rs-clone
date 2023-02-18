@@ -1,10 +1,9 @@
-import { Box, IconButton, Typography, Container, Grid } from '@mui/material';
+import { Box, Typography, Container, Grid, Button } from '@mui/material';
 import { AppRoutes } from 'enum/AppRoutes';
 import { Link } from 'react-router-dom';
-import ThemesIcon from '@mui/icons-material/InsertPhoto';
-import CommunityThemeCard from 'components/UserThemes/CommunityThemeCard';
 import styled from '@emotion/styled';
 import { useGetPublicThemes } from 'hooks/themesHooks/useGetPublicThemes';
+import ThemeItem from 'components/UserThemes/ThemeItem';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -18,20 +17,20 @@ const CommunityThemes = () => {
 
   return (
     <PageContentWrapper>
-      <Link to={AppRoutes.UserThemes}>
-        <IconButton color="inherit">
-          <ThemesIcon />
-        </IconButton>
-      </Link>
       <Typography align="center" variant="h3" sx={{ m: '1rem' }}>
         Community Themes
       </Typography>
+      <Link to={AppRoutes.UserThemes} style={{ textDecoration: 'none', marginBottom: '2rem' }}>
+        <Button variant="contained" sx={{ m: '0.5rem' }}>
+          My Themes
+        </Button>
+      </Link>
       <Container maxWidth={false}>
         {publicThemes?.length ? (
           <Grid container spacing={2}>
             {publicThemes.map((theme) => (
               <Grid key={theme.id} item xs={3}>
-                <CommunityThemeCard {...theme} />
+                <ThemeItem {...theme} status={'communityTheme'} />
               </Grid>
             ))}
           </Grid>
