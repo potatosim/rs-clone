@@ -11,7 +11,7 @@ export const useGetUserThemes = () => {
   const [userThemes] = useCollectionData(
     query(
       collection(firestore, 'themes').withConverter(themeConverter),
-      where('holders', 'array-contains-any', [user.id]),
+      where('holders', 'array-contains', user.id),
     ),
   );
   return { userThemes };
