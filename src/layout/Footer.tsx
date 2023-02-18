@@ -1,46 +1,23 @@
-import GitHubIcon from '@mui/icons-material/GitHub';
-import { Fab, Box, ButtonBase, ImageListItem, Toolbar } from '@mui/material';
-import Link from '@mui/material/Link';
+import React from 'react';
+import { Box, ImageListItem, Toolbar } from '@mui/material';
 import RsLogo from 'static/images/rss.svg';
 import styled from '@emotion/styled';
-import SlideFromContainer from 'components/PopUpGitHub';
+import PopUpGitHub from 'components/PopUpGitHub';
 
 const FooterWrapper = styled(Box)(() => ({
-  width: '100%',
   display: 'flex',
-  justifyContent: 'center',
 }));
 
 const Footer = () => {
   return (
     <FooterWrapper>
-      <Toolbar>
+      <Toolbar sx={{ width: '100%', justifyContent: 'space-between', alignContent: 'center' }}>
         <ImageListItem sx={{ width: 100 }}>
           <img src={RsLogo} />
         </ImageListItem>
         <Box sx={{ textAlign: 'center' }}>
-          <ButtonBase
-            centerRipple
-            sx={{
-              transform: 'none',
-              transition: 'transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-            }}
-          >
-            <Fab>
-              <GitHubIcon></GitHubIcon>
-            </Fab>
-          </ButtonBase>
-          <Link href="https://github.com/leon-kn.png" target="_blank" color="inherit">
-            <GitHubIcon></GitHubIcon>
-          </Link>
-          <Link href="https://github.com/potatosim" target="_blank" color="inherit">
-            <GitHubIcon></GitHubIcon>
-          </Link>
-          <Link href="https://github.com/grinmak" target="_blank" color="inherit">
-            <GitHubIcon></GitHubIcon>
-          </Link>
+          <PopUpGitHub />
         </Box>
-        <SlideFromContainer></SlideFromContainer>
       </Toolbar>
     </FooterWrapper>
   );

@@ -11,12 +11,13 @@ import LoginPage from 'pages/LoginPage';
 import SignUpPage from 'pages/SignUpPage';
 import AccountPage from 'pages/AccountPage';
 import RequireAuth from 'components/RequireAuth';
+import Home from 'pages/HomePage';
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path={AppRoutes.Home} element={<Layout />}>
-        <Route index element={<div>Hello, World</div>} />
+        <Route index element={<Home />} />
         <Route path={AppRoutes.NotFoundPage} element={<NotFoundPage />} />
         <Route path={AppRoutes.SignUpPage} element={<SignUpPage />} />
         <Route path={AppRoutes.LoginPage} element={<LoginPage />} />
