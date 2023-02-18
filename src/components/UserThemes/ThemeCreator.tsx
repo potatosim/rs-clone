@@ -14,10 +14,9 @@ import {
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
-import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection} from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import styled from '@emotion/styled';
-import { Collections } from 'enum/Collection';
 import { UserContext } from 'components/RequireAuth';
 
 interface ThemeCreatorProps {
@@ -70,7 +69,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const addTheme = async () => {
     if (user) {
       setIsCreating(false);
-      const newTheme = await addDoc(collection(firestore, 'themes'), {
+      await addDoc(collection(firestore, 'themes'), {
         creator: user.id,
         name: name,
         primary: primary,
