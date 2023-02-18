@@ -1,9 +1,7 @@
-// import Button from '@mui/material/Button';
-// import { motion, useScroll } from 'framer-motion';
-// import { Box, Card, CardMedia, Typography } from '@mui/material';
-// import taskBoardImg from 'static/images/taskBoardMain.png';
 import { Box } from '@mui/material';
-import { SectionOne, SectionTwo } from 'components/HomePageElements/Home';
+import { SectionOne } from 'components/HomePageElements/SectionOne';
+import { SectionTwo } from 'components/HomePageElements/SectionTwo';
+import { SectionThree } from 'components/HomePageElements/SectionThree';
 
 const Home = () => {
   return (
@@ -17,6 +15,7 @@ const Home = () => {
     >
       <SectionOne />
       <SectionTwo />
+      <SectionThree />
     </Box>
   );
 };
