@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { AppBar, Button, ButtonGroup, Toolbar, Typography, Tabs, Tab } from '@mui/material';
 import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -36,7 +35,6 @@ const Header = () => {
             {user ? (
               <>
                 <UserMenu />
-                {/* <Button onClick={() => auth.signOut()}>Logout</Button> */}
               </>
             ) : (
               <Button component={Link} to={AppRoutes.LoginPage}>
