@@ -1,15 +1,5 @@
 import React, { useContext } from 'react';
-import {
-  AppBar,
-  Button,
-  ButtonGroup,
-  Toolbar,
-  Typography,
-  Tabs,
-  Tab,
-  Card,
-  CardMedia,
-} from '@mui/material';
+import { AppBar, Button, ButtonGroup, Toolbar, Tabs, Tab, Card, CardMedia } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
@@ -30,12 +20,10 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar sx={{ position: 'relative' }}>
-        {/* <Typography>RS-Clone</Typography> */}
         <Card
           sx={{
-            // position: 'absolute',
-            width: '200px',
-            height: '70px',
+            width: '150px',
+            height: '50px',
             backgroundColor: 'transparent',
             boxShadow: 'none',
           }}
