@@ -9,7 +9,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppRoutes } from 'enum/AppRoutes';
 import { Link } from 'react-router-dom';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import BurstModeIcon from '@mui/icons-material/BurstMode';
 
 const UserMenu = () => {
   function LogOutandClose() {
@@ -62,9 +62,9 @@ const UserMenu = () => {
           Logout
         </MenuItem>
         <Divider variant="middle" />
-        <MenuItem onClick={handleClose}>
-          <DarkModeIcon sx={{ paddingRight: '10px' }} />
-          Dark mode
+        <MenuItem onClick={handleClose} component={Link} to={AppRoutes.UserThemes}>
+          <BurstModeIcon sx={{ paddingRight: '10px' }} />
+          My Themes
         </MenuItem>
       </Menu>
     </div>
