@@ -81,7 +81,7 @@ export const SectionTwo = () => {
             borderRadius: '20px',
           }}
         >
-          <Typography variant="h3" color="#FFF">
+          <Typography sx={{ textAlign: 'center' }} variant="h3" color="#FFF">
             Easily addition and editing items
           </Typography>
         </Box>
