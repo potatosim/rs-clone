@@ -4,6 +4,9 @@ import { Box, Card, CardMedia, Typography } from '@mui/material';
 import taskBoardImg from 'static/images/taskBoardMain.png';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useContext } from 'react';
+import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 
 const sectionAnimation = {
   hidden: {
@@ -18,6 +21,9 @@ const sectionAnimation = {
 };
 
 export const SectionOne = () => {
+  const { auth } = useContext(FirebaseContext);
+  const [user] = useAuthState(auth);
+
   return (
     <Box
       initial="hidden"
@@ -42,14 +48,25 @@ export const SectionOne = () => {
           variant="contained"
           sx={{ padding: '10px 20px', marginTop: '20px' }}
         >
-          <Typography
-            color="inherit"
-            sx={{ textDecoration: 'none' }}
-            component={Link}
-            to={AppRoutes.LoginPage}
-          >
-            Get Started
-          </Typography>
+          {user ? (
+            <Typography
+              color="inherit"
+              sx={{ textDecoration: 'none' }}
+              component={Link}
+              to={AppRoutes.Boards}
+            >
+              Get Started
+            </Typography>
+          ) : (
+            <Typography
+              color="inherit"
+              sx={{ textDecoration: 'none' }}
+              component={Link}
+              to={AppRoutes.LoginPage}
+            >
+              Get Started
+            </Typography>
+          )}
         </Button>
       </Box>
       <Card sx={{ minWidth: 600, height: 400 }}>
