@@ -1,11 +1,6 @@
 import { motion } from 'framer-motion';
-import { Box, Card, CardMedia, Typography, CardContent } from '@mui/material';
-import devImgOne from 'static/images/team1.svg';
-// import devImgOne from 'static/images/teamMemberOne.png';
-import devImgTwo from 'static/images/team2.svg';
-// import devImgTwo from 'static/images/teamMemberTwo.png';
-import devImgThree from 'static/images/team3.svg';
-// import devImgThree from 'static/images/teamMemberThree.png';
+import { Box, Card, Typography, CardContent } from '@mui/material';
+import { TeamOne, TeamTwo, TeamThree } from 'static';
 
 const cardsAnimation = {
   hidden: {
@@ -60,7 +55,8 @@ export const SectionThree = () => {
               Hanna Yemelyanova
             </Typography>
           </CardContent>
-          <CardMedia image={devImgTwo} sx={{ width: 200, height: 200 }} />
+
+          <TeamOne />
         </Card>
         <Card
           sx={{ width: 200, height: 'min-content' }}
@@ -73,7 +69,8 @@ export const SectionThree = () => {
               Knyazev Leontiy
             </Typography>
           </CardContent>
-          <CardMedia image={devImgOne} sx={{ width: 200, height: 200 }} />
+
+          <TeamTwo />
         </Card>
 
         <Card
@@ -87,7 +84,8 @@ export const SectionThree = () => {
               Maksim <br /> Gorin
             </Typography>
           </CardContent>
-          <CardMedia image={devImgThree} sx={{ width: 200, height: 200 }} />
+
+          <TeamThree />
         </Card>
       </Box>
     </Box>
