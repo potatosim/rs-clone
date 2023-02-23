@@ -15,7 +15,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface IThemeItem extends ITheme {
-  status: 'userTheme' | 'communityTheme';
+  status: 'userTheme' | 'communityTheme' | 'default';
 }
 
 const ThemeItem: FC<IThemeItem> = (props) => {
@@ -29,6 +29,12 @@ const ThemeItem: FC<IThemeItem> = (props) => {
         holders: arrayUnion(user.id),
       });
     }
+  };
+
+  const handlerApplyTheme = () => {
+    updateDoc<IUserItem>(doc(firestore, Collections.Users, user.id).withConverter(usersConverter), {
+      currentTheme: props.id,
+    });
   };
 
   return (
@@ -48,17 +54,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
       <Box sx={{ display: 'flex', justifyContent: 'space-around', m: '20px auto 10px' }}>
         {props.status === 'userTheme' ? (
           <ButtonGroup fullWidth={true}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                updateDoc<IUserItem>(
-                  doc(firestore, Collections.Users, user.id).withConverter(usersConverter),
-                  {
-                    currentTheme: props.id,
-                  },
-                );
-              }}
-            >
+            <Button variant="contained" onClick={handlerApplyTheme}>
               Apply
             </Button>
             <Button
@@ -87,13 +83,21 @@ const ThemeItem: FC<IThemeItem> = (props) => {
               Delete
             </Button>
           </ButtonGroup>
-        ) : (
+        ) : props.status === 'communityTheme' ? (
           <Button
             variant="contained"
             onClick={handlerAddTheme}
             sx={{ maxWidth: '120px', width: '100%' }}
           >
             Add
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            onClick={handlerApplyTheme}
+            sx={{ maxWidth: '120px', width: '100%' }}
+          >
+            Apply
           </Button>
         )}
       </Box>

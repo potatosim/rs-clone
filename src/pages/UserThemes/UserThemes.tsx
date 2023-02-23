@@ -1,11 +1,18 @@
 import { Box, Button, Container, CssBaseline, Grid, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import styled from '@emotion/styled';
 import { useGetUserThemes } from 'hooks/themesHooks/useGetUserThemes';
 import ThemeItem from 'components/UserThemes/ThemeItem';
 import ThemeCreator from 'components/UserThemes/ThemeCreator';
+import { useGetDefaultThemes } from 'hooks/themesHooks/useGetDefaultThemes';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { themeConverter } from 'helpers/converters';
+import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { UserContext } from 'components/RequireAuth';
+import { ITheme } from 'types/Theme';
+import { createDefaultThemes } from 'helpers/createDefaultThemes';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -15,16 +22,13 @@ const PageContentWrapper = styled(Box)`
 `;
 
 const UserThemes = () => {
+  const { firestore, user } = useContext(FirebaseContext);
   const [isCreating, setIsCreating] = useState(false);
   const { userThemes } = useGetUserThemes();
+  const { defaultThemes } = useGetDefaultThemes();
 
   //TODO:
-  // Theme should change when user logIn and logOut
-  // add button for link to AllThemes
   // Themes sorting
-  // 2 base themes
-  // add new theme template - CreateBoardButton component
-  // dark and light modes
   // refactor code and components
   // add more params for ThemeCreator and ThemeEditor
 
@@ -45,6 +49,13 @@ const UserThemes = () => {
       {isCreating && <ThemeCreator setIsCreating={setIsCreating} />}
       <Container maxWidth={false}>
         <Grid container spacing={2}>
+          {defaultThemes?.map((theme) => {
+            return (
+              <Grid key={theme.id} item xs={3}>
+                <ThemeItem {...theme} status={'default'} />
+              </Grid>
+            );
+          })}
           {userThemes?.map((theme) => {
             return (
               <Grid key={theme.id} item xs={3}>
