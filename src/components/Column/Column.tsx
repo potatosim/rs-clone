@@ -10,7 +10,6 @@ import { IColumnItem } from 'types/Column';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import TaskCard from 'components/TaskCard';
-import { sortByOrder } from 'helpers/sortByOrder';
 import { useTasks } from 'hooks/taskHooks/useTasks';
 
 import styled from '@emotion/styled';

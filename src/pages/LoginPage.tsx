@@ -76,13 +76,13 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <Button variant="contained" onClick={handleLogin}>
+          <Button variant="contained" color="secondary" onClick={handleLogin}>
             Enter
           </Button>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           or
-          <Button variant="outlined" onClick={handleSignInWithGoogle}>
+          <Button variant="outlined" color="secondary" onClick={handleSignInWithGoogle}>
             <GoogleIcon sx={{ marginRight: '15px' }}></GoogleIcon>
             Login with Google
           </Button>

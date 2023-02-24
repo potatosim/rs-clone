@@ -15,9 +15,7 @@ const Footer = () => {
         <ImageListItem sx={{ width: 100 }}>
           <img src={RsLogo} />
         </ImageListItem>
-        <Box sx={{ textAlign: 'center' }}>
-          <PopUpGitHub />
-        </Box>
+        <PopUpGitHub />
       </Toolbar>
     </FooterWrapper>
   );

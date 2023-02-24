@@ -43,7 +43,7 @@ export const CommentItem = ({ author, createdAt, message }: ICommentItem) => {
     >
       <Avatar
         onClick={() => {
-          navigate(AppRoutes.AccountPage.replace(':id', author));
+          navigate(AppRoutes.AccountPage.replace(':accountId', author));
         }}
         sx={{ cursor: 'pointer' }}
         src={avatar}

@@ -29,7 +29,7 @@ export const SectionOne = () => {
       initial="hidden"
       whileInView="visible"
       component={motion.div}
-      sx={{ display: 'flex', columnGap: 20, width: '80%', height: '70vh', marginTop: 30 }}
+      sx={{ display: 'flex', columnGap: 20, width: '80%' }}
     >
       <Box>
         <Typography
@@ -44,29 +44,18 @@ export const SectionOne = () => {
         <Button
           component={motion.div}
           variants={sectionAnimation}
-          custom={5}
+          custom={2}
           variant="contained"
           sx={{ padding: '10px 20px', marginTop: '20px' }}
         >
-          {user ? (
-            <Typography
-              color="inherit"
-              sx={{ textDecoration: 'none' }}
-              component={Link}
-              to={AppRoutes.Boards}
-            >
-              Get Started
-            </Typography>
-          ) : (
-            <Typography
-              color="inherit"
-              sx={{ textDecoration: 'none' }}
-              component={Link}
-              to={AppRoutes.LoginPage}
-            >
-              Get Started
-            </Typography>
-          )}
+          <Typography
+            color="inherit"
+            sx={{ textDecoration: 'none' }}
+            component={Link}
+            to={user ? AppRoutes.Boards : AppRoutes.LoginPage}
+          >
+            Get Started
+          </Typography>
         </Button>
       </Box>
       <Card sx={{ minWidth: 600, height: 400 }}>

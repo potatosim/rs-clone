@@ -11,7 +11,6 @@ interface BoardItemProps {
   board: IBoardItem;
   handleDeleteBoard: (boardId: string) => void;
   handleRenameBoard: (title: string, boardId: string) => void;
-  width?: string;
 }
 
 const CardWrapper = styled(Paper)`
@@ -22,7 +21,7 @@ const CardWrapper = styled(Paper)`
   overflow: hidden;
 `;
 
-const BoardCard: FC<BoardItemProps> = ({ board, handleDeleteBoard, handleRenameBoard, width }) => {
+const BoardCard: FC<BoardItemProps> = ({ board, handleDeleteBoard, handleRenameBoard }) => {
   const navigate = useNavigate();
 
   return (

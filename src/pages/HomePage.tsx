@@ -11,6 +11,8 @@ const Home = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: '10rem',
+        rowGap: '10rem',
       }}
     >
       <SectionOne />

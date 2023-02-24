@@ -1,4 +1,4 @@
-import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
+import { Theme, ThemeProvider } from '@mui/material/styles';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
 import { doc, getDoc } from 'firebase/firestore';
@@ -10,18 +10,6 @@ import { FC, ReactElement, ReactNode, useContext, useEffect, useState } from 're
 interface ThemeProviderProps {
   children: ReactNode | ReactElement;
 }
-
-const lightMode = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#d219cf',
-    },
-    secondary: {
-      main: '#9c27b0',
-    },
-  },
-});
 
 const defaultThemes = {
   defaultDark: generateTheme(defaultDark),
@@ -46,7 +34,7 @@ const ThemeChanger: FC<ThemeProviderProps> = ({ children }) => {
         setCurrentTheme(createdTheme);
       }
     } else {
-      setCurrentTheme(lightMode);
+      setCurrentTheme(defaultThemes.defaultDark);
     }
   };
 
