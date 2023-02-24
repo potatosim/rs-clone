@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { usersConverter } from 'helpers/converters';
+import { DefaultThemes } from 'enum/DefaultThemes';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const LoginPage = () => {
           avatar: googleAccount.user.photoURL,
           boards: [],
           login: googleAccount.user.displayName,
-          currentTheme: '',
+          currentTheme: DefaultThemes.DefaultDark,
         });
       }
       navigate(AppRoutes.Boards);

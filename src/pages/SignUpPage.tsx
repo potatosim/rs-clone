@@ -10,6 +10,7 @@ import ModalLoader from 'components/common/ModalLoader';
 import Paper from '@mui/material/Paper/Paper';
 import PasswordInput from 'components/PasswordInput';
 import UploadButton from 'components/UploadButton/UploadButton';
+import { DefaultThemes } from 'enum/DefaultThemes';
 
 enum FirebaseErrors {
   Password = 'auth/weak-password',
@@ -53,7 +54,7 @@ const SignUpPage = () => {
         boards: [],
         avatar,
         login: login.toLowerCase(),
-        currentTheme: '',
+        currentTheme: DefaultThemes.DefaultDark,
       });
 
       navigate(AppRoutes.Boards);

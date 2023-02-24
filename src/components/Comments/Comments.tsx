@@ -1,10 +1,12 @@
 import { Avatar, Box, Typography } from '@mui/material';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { AppRoutes } from 'enum/AppRoutes';
 import { Collections } from 'enum/Collection';
 import { doc } from 'firebase/firestore';
 import { usersConverter } from 'helpers/converters';
 import { FC, useContext } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useNavigate } from 'react-router-dom';
 import { ICommentItem } from 'types/CommentItem';
 import { IUserItem } from 'types/User';
 
@@ -17,6 +19,8 @@ export const CommentItem = ({ author, createdAt, message }: ICommentItem) => {
   const [user, loading] = useDocumentData<IUserItem>(
     doc(firestore, Collections.Users, author).withConverter(usersConverter),
   );
+
+  const navigate = useNavigate();
 
   if (!user || loading) {
     return null;
@@ -37,7 +41,13 @@ export const CommentItem = ({ author, createdAt, message }: ICommentItem) => {
         alignSelf: 'flex-start',
       }}
     >
-      <Avatar src={avatar} />
+      <Avatar
+        onClick={() => {
+          navigate(AppRoutes.AccountPage.replace(':id', author));
+        }}
+        sx={{ cursor: 'pointer' }}
+        src={avatar}
+      />
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Typography>{message}</Typography>
         <Typography variant="caption">{createdAt.split(',').reverse().join(',')}</Typography>

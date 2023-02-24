@@ -13,6 +13,7 @@ import { usersConverter } from 'helpers/converters';
 import { IUserItem } from 'types/User';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { isDefaultTheme } from 'helpers/defaultThemes';
 
 interface IThemeItem extends ITheme {
   status: 'userTheme' | 'communityTheme';
@@ -61,31 +62,35 @@ const ThemeItem: FC<IThemeItem> = (props) => {
             >
               Apply
             </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                if (user.id === props.creator) {
-                  setIsEditing(true);
-                } else {
-                  toast.warn('You cannot edit the themes of another user');
-                }
-              }}
-            >
-              Edit
-            </Button>
+            {!isDefaultTheme(props.id) && (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if (user.id === props.creator) {
+                    setIsEditing(true);
+                  } else {
+                    toast.warn('You cannot edit the themes of another user');
+                  }
+                }}
+              >
+                Edit
+              </Button>
+            )}
             {isEditing && <ThemeEditor {...props} setIsEditing={setIsEditing} />}
-            <Button
-              variant="contained"
-              onClick={() => {
-                if (user.id === props.creator) {
-                  deleteDoc(doc(firestore, Collections.Themes, props.id));
-                } else {
-                  deleteFromHolders(firestore, props.id, user.id);
-                }
-              }}
-            >
-              Delete
-            </Button>
+            {!isDefaultTheme(props.id) && (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if (user.id === props.creator) {
+                    deleteDoc(doc(firestore, Collections.Themes, props.id));
+                  } else {
+                    deleteFromHolders(firestore, props.id, user.id);
+                  }
+                }}
+              >
+                Delete
+              </Button>
+            )}
           </ButtonGroup>
         ) : (
           <Button

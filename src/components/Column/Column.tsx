@@ -33,7 +33,7 @@ const ScrollableColumnWrapper = styled('div')`
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
-    width: 0;
+    display: none;
   }
 `;
 
@@ -68,7 +68,7 @@ const Column: FC<BoardColumnProps> = ({ column, handleDeleteColumn, handleRename
                   ref={columnRef}
                   {...droppableProps}
                 >
-                  {sortByOrder(tasks).map((task) => (
+                  {tasks.map((task) => (
                     <TaskCard task={task} key={task.id} />
                   ))}
                   {placeholder}

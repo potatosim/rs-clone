@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppBar, Button, Stack, Toolbar, Card, CardMedia, ButtonGroup } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
@@ -6,10 +6,11 @@ import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import UserMenu from 'components/UserMenu';
 import Logo from 'static/images/logo.png';
+import { UserContext } from 'components/RequireAuth';
 
 const Header = () => {
-  const { auth } = useContext(FirebaseContext);
-  const [user] = useAuthState(auth);
+  const [activePage, setActivePage] = useState(0);
+  const { auth, user } = useContext(FirebaseContext);
 
   return (
     <AppBar position="static">
@@ -45,6 +46,8 @@ const Header = () => {
             {user ? (
               <>
                 <UserMenu />
+                <Avatar src={user.avatar} />
+                <Button onClick={() => auth.signOut()}>Logout</Button>
               </>
             ) : (
               <Button component={Link} to={AppRoutes.LoginPage}>
