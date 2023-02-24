@@ -14,7 +14,7 @@ const AccountPage = () => {
   const { user } = useContext(UserContext);
 
   const { accountId } = useParams();
-  const { userFromFirestore, userLoading } = useGetUser(accountId!);
+  const { userFromFirestore } = useGetUser(accountId!);
 
   if (accountId === user.id) {
     return <CurrentAccount />;

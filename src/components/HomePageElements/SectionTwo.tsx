@@ -74,11 +74,12 @@ export const SectionTwo = () => {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
             height: '33.3%',
+            justifyContent: 'center',
             bgcolor: 'primary.main',
             maxWidth: '60%',
             borderRadius: '20px',
+            padding: '1rem',
           }}
         >
           <Typography sx={{ textAlign: 'center' }} variant="h3" color="#FFF">
@@ -96,6 +97,7 @@ export const SectionTwo = () => {
             bgcolor: 'primary.main',
             maxWidth: '60%',
             borderRadius: '20px',
+            padding: '1rem',
           }}
         >
           <Typography sx={{ textAlign: 'center' }} variant="h3" color="#FFF">
@@ -113,6 +115,7 @@ export const SectionTwo = () => {
             bgcolor: 'primary.main',
             maxWidth: '60%',
             borderRadius: '20px',
+            padding: '1rem',
           }}
         >
           <Typography sx={{ textAlign: 'center' }} variant="h3" color="#FFF">
