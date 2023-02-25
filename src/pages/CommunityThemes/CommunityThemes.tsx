@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useGetPublicThemes } from 'hooks/themesHooks/useGetPublicThemes';
 import ThemeItem from 'components/UserThemes/ThemeItem';
+import { sortByThemeName } from 'helpers/sortByThemeName';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -28,7 +29,7 @@ const CommunityThemes = () => {
       <Container maxWidth={false}>
         {publicThemes?.length ? (
           <Grid container spacing={2}>
-            {publicThemes.map((theme) => (
+            {sortByThemeName(publicThemes).map((theme) => (
               <Grid key={theme.id} item xs={3}>
                 <ThemeItem {...theme} status={'communityTheme'} />
               </Grid>
