@@ -36,11 +36,16 @@ const UserThemes = () => {
         Available Themes
       </Typography>
       <Link to={AppRoutes.AllThemes} style={{ textDecoration: 'none' }}>
-        <Button variant="contained" sx={{ m: '0.5rem' }}>
+        <Button variant="contained" color="secondary" sx={{ m: '0.5rem' }}>
           Community themes
         </Button>
       </Link>
-      <Button variant="contained" sx={{ m: '1rem auto 2rem' }} onClick={() => setIsCreating(true)}>
+      <Button
+        variant="contained"
+        color="secondary"
+        sx={{ m: '1rem auto 2rem' }}
+        onClick={() => setIsCreating(true)}
+      >
         Create new theme
       </Button>
       {isCreating && <ThemeCreator setIsCreating={setIsCreating} />}

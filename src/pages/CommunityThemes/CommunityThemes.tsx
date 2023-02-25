@@ -21,7 +21,7 @@ const CommunityThemes = () => {
         Community Themes
       </Typography>
       <Link to={AppRoutes.UserThemes} style={{ textDecoration: 'none', marginBottom: '2rem' }}>
-        <Button variant="contained" sx={{ m: '0.5rem' }}>
+        <Button variant="contained" color="secondary" sx={{ m: '0.5rem' }}>
           My Themes
         </Button>
       </Link>

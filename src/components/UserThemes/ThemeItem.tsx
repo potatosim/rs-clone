@@ -48,9 +48,10 @@ const ThemeItem: FC<IThemeItem> = (props) => {
       ></Paper>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', m: '20px auto 10px' }}>
         {props.status === 'userTheme' ? (
-          <ButtonGroup fullWidth={true}>
+          <ButtonGroup fullWidth={true} sx={{display: 'flex', justifyContent: 'center'}}>
             <Button
               variant="contained"
+              sx={{width: '100%', maxWidth: '150px'}}
               onClick={() => {
                 updateDoc<IUserItem>(
                   doc(firestore, Collections.Users, user.id).withConverter(usersConverter),
