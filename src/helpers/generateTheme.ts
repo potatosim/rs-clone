@@ -1,15 +1,15 @@
 import { createTheme } from '@mui/material';
 import { ITheme } from 'types/Theme';
 
-export const generateTheme = (obj: ITheme) => {
+export const generateTheme = ({ primary, secondary, mode }: ITheme) => {
   const newTheme = createTheme({
     palette: {
-      mode: 'light',
+      mode,
       primary: {
-        main: obj.primary,
+        main: primary,
       },
       secondary: {
-        main: obj.secondary,
+        main: secondary,
       },
     },
   });

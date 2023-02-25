@@ -2,7 +2,7 @@ import { DefaultThemes } from 'enum/DefaultThemes';
 import { ITheme } from 'types/Theme';
 
 export const isDefaultTheme = (themeId: string) =>
-  themeId === DefaultThemes.DefaultLight || themeId === DefaultThemes.DefaultLight;
+  themeId === DefaultThemes.DefaultDark || themeId === DefaultThemes.DefaultLight;
 
 export const defaultDark: ITheme = {
   creator: '',
@@ -10,8 +10,9 @@ export const defaultDark: ITheme = {
   id: DefaultThemes.DefaultDark,
   isPublic: false,
   name: 'Default Dark',
-  primary: '#fefe00',
-  secondary: '#202026',
+  primary: '#202026',
+  secondary: '#fefe00',
+  mode: 'dark',
 };
 
 export const defaultLight: ITheme = {
@@ -19,6 +20,7 @@ export const defaultLight: ITheme = {
   holders: [],
   id: DefaultThemes.DefaultLight,
   isPublic: false,
+  mode: 'light',
   name: 'Default Light',
   primary: '#202026',
   secondary: '#fefe00',

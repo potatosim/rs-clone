@@ -6,4 +6,5 @@ export interface ITheme {
   secondary: string;
   isPublic: boolean;
   holders: string[];
+  mode: 'light' | 'dark';
 }

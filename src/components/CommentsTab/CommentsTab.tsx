@@ -36,14 +36,16 @@ const CommentsTab: FC<CommentsTabProps> = ({ comments, handleAddComment }) => {
         />
 
         <Tooltip title="Send a comment">
-          <IconButton
-            color="info"
-            disabled={!text.trim().length}
-            size="large"
-            onClick={handleComment}
-          >
-            <SendIcon />
-          </IconButton>
+          <span>
+            <IconButton
+              color="info"
+              disabled={!text.trim().length}
+              size="large"
+              onClick={handleComment}
+            >
+              <SendIcon />
+            </IconButton>
+          </span>
         </Tooltip>
       </Box>
       <Comments comments={comments} />
