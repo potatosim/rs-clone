@@ -1,10 +1,12 @@
 import { Avatar, Box, styled, Typography } from '@mui/material';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { AppRoutes } from 'enum/AppRoutes';
 import { Collections } from 'enum/Collection';
 import { doc } from 'firebase/firestore';
 import { usersConverter } from 'helpers/converters';
 import React, { FC, useContext } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useNavigate } from 'react-router-dom';
 import { HistoryItem } from 'types/HistoryItem';
 import { IUserItem } from 'types/User';
 
@@ -31,6 +33,7 @@ export const HistoryItemEl = (historyItem: HistoryItem) => {
   const [user, loading] = useDocumentData<IUserItem>(
     doc(firestore, Collections.Users, historyItem.initiator).withConverter(usersConverter),
   );
+  const navigate = useNavigate();
 
   if (!user || loading) {
     return null;
@@ -42,7 +45,13 @@ export const HistoryItemEl = (historyItem: HistoryItem) => {
 
   return (
     <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
-      <Avatar src={avatar} />
+      <Avatar
+        onClick={() => {
+          navigate(AppRoutes.AccountPage.replace(':accountId', historyItem.initiator));
+        }}
+        sx={{ cursor: 'pointer' }}
+        src={avatar}
+      />
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Typography>{title}</Typography>
         <Typography variant="caption">{historyItem.time.split(',').reverse().join(',')}</Typography>

@@ -3,7 +3,6 @@ import {
   Avatar,
   Box,
   Button,
-  Collapse,
   IconButton,
   ListItemButton,
   ListItemText,
@@ -28,12 +27,18 @@ import BoardCardAccount from 'components/BoardCardAccount';
 // import { useUpdatePassword } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import TaskCardAccount from 'components/TaskCardAccount';
+import { useNavigate } from 'react-router-dom';
+import { AppRoutes } from 'enum/AppRoutes';
+import EditIcon from '@mui/icons-material/Edit';
+import CustomCollapse from 'components/CustomCollapse';
+import PanToolAltIcon from '@mui/icons-material/PanToolAlt';
 
 export const StyledItemWrapper = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 80%;
+  width: 70%;
+  padding: 1rem;
 `;
 
 export const StyledPaper = styled(Paper)`
@@ -48,18 +53,16 @@ export const StyledPaper = styled(Paper)`
 
 export const CommonWrapper = styled(Box)`
   display: flex;
-  width: 80%;
+  width: 50%;
   column-gap: 1rem;
   align-items: flex-start;
 `;
 
 const CurrentAccount = () => {
   const { firestore } = useContext(FirebaseContext);
-  // const [updatePassword, , error] = useUpdatePassword(auth);
   const { user } = useContext(UserContext);
   const [avatar, setAvatar] = useState(user.avatar);
   const [login, setLogin] = useState(user.login);
-  // const [password, setPassword] = useState('');
   const [isLoginChange, setIsLoginChange] = useState(false);
   const [isBoardsOpen, setIsBoardsOpen] = useState(false);
   const [isTasksOpen, setIsTasksOpen] = useState(false);
@@ -71,6 +74,7 @@ const CurrentAccount = () => {
       where('assignee', '==', user.id),
     ),
   );
+  const navigate = useNavigate();
 
   const handleUpdateAvatar = async (newAvatar: string, userId: string) => {
     setAvatar(newAvatar);
@@ -90,10 +94,6 @@ const CurrentAccount = () => {
       },
     );
   };
-
-  // const handleUpdatePassword = async (newPassword: string) => {
-  //   await updatePassword(newPassword);
-  // };
 
   const handleBoardsOpen = () => {
     setIsBoardsOpen(!isBoardsOpen);
@@ -117,28 +117,31 @@ const CurrentAccount = () => {
   return (
     <CommonWrapper>
       <StyledPaper elevation={12}>
+        <UploadButton
+          getFileUrl={(fileUrl) => {
+            handleUpdateAvatar(fileUrl, user.id);
+          }}
+        >
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <Avatar src={avatar} sx={{ width: '100px', height: '100px' }} />
+            <PanToolAltIcon />
+          </Box>
+        </UploadButton>
         <StyledItemWrapper>
-          <UploadButton
-            getFileUrl={(fileUrl) => {
-              handleUpdateAvatar(fileUrl, user.id);
-            }}
-          >
-            <Avatar src={avatar} sx={{ width: '100%', height: '100%' }} />
-          </UploadButton>
           {!isLoginChange ? (
             <>
               <Typography variant="h4" fontWeight={600}>
                 {login}
               </Typography>
-              <Tooltip title="Change my login">
-                <Button
-                  variant="contained"
+
+              <Tooltip title="Change login">
+                <IconButton
                   onClick={() => {
                     setIsLoginChange(true);
                   }}
                 >
-                  Change login
-                </Button>
+                  <EditIcon />
+                </IconButton>
               </Tooltip>
             </>
           ) : (
@@ -171,18 +174,51 @@ const CurrentAccount = () => {
             </>
           )}
         </StyledItemWrapper>
-        <Box sx={{ width: '80%' }}>
-          <ListItemButton onClick={handleBoardsOpen}>
-            <ListItemText primary="Available boards" />
-            {isBoardsOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
-          </ListItemButton>
-        </Box>
-        <Box sx={{ width: '80%' }}>
-          <ListItemButton onClick={handleTasksOpen}>
-            <ListItemText primary="My list of tasks" />
-            {isTasksOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
-          </ListItemButton>
-        </Box>
+        {boards && boards.length ? (
+          <Box sx={{ width: '70%' }}>
+            <ListItemButton onClick={handleBoardsOpen}>
+              <ListItemText primary="My boards" />
+              {isBoardsOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
+            </ListItemButton>
+          </Box>
+        ) : (
+          <Paper
+            elevation={12}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '1rem',
+              rowGap: '1rem',
+              width: '70%',
+            }}
+          >
+            <Typography variant="h6" fontWeight={500}>
+              You don`t have any boards yet
+            </Typography>
+            <Button
+              onClick={() => {
+                navigate(AppRoutes.Boards);
+              }}
+              color="secondary"
+              variant="contained"
+            >
+              Create my board
+            </Button>
+          </Paper>
+        )}
+        {tasks && tasks.length ? (
+          <Box sx={{ width: '70%' }}>
+            <ListItemButton onClick={handleTasksOpen}>
+              <ListItemText primary="My list of tasks" />
+              {isTasksOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
+            </ListItemButton>
+          </Box>
+        ) : (
+          <Typography variant="h6" fontWeight={500}>
+            You don`t have any tasks yet
+          </Typography>
+        )}
         {/* <StyledItemWrapper>
         <TextField
           label="New password"
@@ -201,68 +237,16 @@ const CurrentAccount = () => {
         </Button>
       </StyledItemWrapper> */}
       </StyledPaper>
-      <Collapse orientation="horizontal" in={isBoardsOpen}>
-        <Box
-          sx={{
-            maxHeight: 600,
-            overflowY: 'scroll',
-            '::-webkit-scrollbar': {
-              display: 'none',
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              p: 1,
-              gap: '1rem',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {boards && boards.length ? (
-              <>
-                {boards && boards.map((board) => <BoardCardAccount key={board.id} board={board} />)}
-              </>
-            ) : (
-              <Typography variant="h5" fontWeight={500}>
-                You don`t have any boards yet
-              </Typography>
-            )}
-          </Box>
-        </Box>
-      </Collapse>
-      <Collapse orientation="horizontal" in={isTasksOpen}>
-        <Box
-          sx={{
-            maxHeight: 600,
-            overflowY: 'scroll',
-            '::-webkit-scrollbar': {
-              display: 'none',
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              p: 1,
-              gap: '1rem',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {tasks && tasks.length ? (
-              <>{tasks && tasks.map((task) => <TaskCardAccount key={task.id} task={task} />)}</>
-            ) : (
-              <Typography variant="h5" fontWeight={500}>
-                You don`t have any tasks yet
-              </Typography>
-            )}
-          </Box>
-        </Box>
-      </Collapse>
+      <CustomCollapse
+        isOpen={isBoardsOpen}
+        children={
+          boards && boards.map((board) => <BoardCardAccount key={board.id} board={board} />)
+        }
+      />
+      <CustomCollapse
+        isOpen={isTasksOpen}
+        children={tasks && tasks.map((task) => <TaskCardAccount key={task.id} task={task} />)}
+      />
     </CommonWrapper>
   );
 };
