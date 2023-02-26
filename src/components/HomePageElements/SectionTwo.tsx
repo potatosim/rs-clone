@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
-import { Box, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import styled from '@emotion/styled';
 
-const sectionAnimation = {
+const featureQuestionAnimation = {
   hidden: {
-    x: -200,
+    x: -50,
     opacity: 0,
   },
   visible: {
@@ -24,38 +25,83 @@ const elementAnimation = {
   }),
 };
 
+const FeatureDescription = styled(Typography)(() => ({
+  textAlign: 'center',
+  padding: '5%  10%',
+}));
+
 export const SectionTwo = () => {
   return (
-    <Box
+    <Grid //main wrapper
+      justifyContent="center"
+      container
+      direction="row"
       sx={{
-        display: 'flex',
         width: '80%',
-        columnGap: '20px',
-        marginLeft: 'auto',
+        columnGap: '30px',
+        rowGap: {
+          xs: '30px',
+        },
       }}
     >
-      <Box
-        viewport={{ amount: 0.2, once: true }}
+      <Grid //question wrapper
+        item
+        lg={3}
+        md={2}
+        sm={2}
+        xs={9}
+        viewport={{ amount: 0.7, once: true }}
         initial="hidden"
         whileInView="visible"
         component={motion.div}
         sx={{
-          width: '350px',
-          borderRadius: '50% 25% 25% 50% / 0% 50% 50% 0%',
-          borderTopLeftRadius: '30px',
-          borderBottomLeftRadius: '30px',
+          aspectRatio: '1 / 1 ',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: {
+            lg: '50% 25% 25% 50% / 0% 50% 50% 0%',
+            sm: '50% 25% 25% 50% / 0% 50% 50% 0%',
+            xs: '50%',
+          },
+          borderTopLeftRadius: {
+            lg: '30px',
+            sm: '30px',
+          },
+          borderBottomLeftRadius: {
+            lg: '30px',
+            sm: '30px',
+          },
           textAlign: 'center',
-          padding: '15px 30px 15px 15px',
           bgcolor: 'primary.main',
         }}
-        variants={sectionAnimation}
+        variants={featureQuestionAnimation}
       >
-        <Typography variant="h2" color="#FFF">
+        <Typography
+          variant="h2"
+          color="#FFF"
+          sx={{
+            fontSize: {
+              lg: 50,
+              md: 30,
+              sm: 15,
+              xs: 25,
+            },
+            padding: {
+              lg: '10% 15%',
+              sm: '15% 20%',
+            },
+          }}
+        >
           What are the <br /> key features <br /> of a <br />
           PRO-Boards app?
         </Typography>
-      </Box>
-      <Box
+      </Grid>
+      <Grid //features wrapper
+        item
+        lg={8}
+        sm={7}
+        xs={11}
         viewport={{ amount: 0.8, once: true }}
         initial="hidden"
         whileInView="visible"
@@ -64,65 +110,96 @@ export const SectionTwo = () => {
           display: 'flex',
           flexDirection: 'column',
           rowGap: '20px',
-          flexGrow: '1',
         }}
       >
-        <Box
+        <Grid //first feature
+          item
           component={motion.div}
           variants={elementAnimation}
           custom={3}
           sx={{
             display: 'flex',
             alignItems: 'center',
-            height: '33.3%',
             justifyContent: 'center',
+            height: '33.3%',
             bgcolor: 'primary.main',
-            maxWidth: '60%',
             borderRadius: '20px',
-            padding: '1rem',
           }}
         >
-          <Typography sx={{ textAlign: 'center' }} variant="h3" color="#FFF">
+          <FeatureDescription
+            variant="h3"
+            // color="#FFF"
+            sx={{
+              fontSize: {
+                lg: 50,
+                md: 30,
+                sm: 15,
+                xs: 25,
+              },
+            }}
+          >
             Easily addition and editing items
-          </Typography>
-        </Box>
-        <Box
+          </FeatureDescription>
+        </Grid>
+        <Grid //second feature
+          item
           component={motion.div}
           variants={elementAnimation}
           custom={6}
           sx={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             height: '33.3%',
             bgcolor: 'primary.main',
-            maxWidth: '60%',
             borderRadius: '20px',
-            padding: '1rem',
           }}
         >
-          <Typography sx={{ textAlign: 'center' }} variant="h3" color="#FFF">
+          <FeatureDescription
+            variant="h3"
+            // color="#FFF"
+            sx={{
+              fontSize: {
+                lg: 50,
+                md: 30,
+                sm: 15,
+                xs: 25,
+              },
+            }}
+          >
             Task labels and tags for better organization
-          </Typography>
-        </Box>
-        <Box
+          </FeatureDescription>
+        </Grid>
+        <Grid //third feature
+          item
           component={motion.div}
           variants={elementAnimation}
           custom={9}
           sx={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             height: '33.3%',
             bgcolor: 'primary.main',
-            maxWidth: '60%',
             borderRadius: '20px',
-            padding: '1rem',
           }}
         >
-          <Typography sx={{ textAlign: 'center' }} variant="h3" color="#FFF">
+          <FeatureDescription
+            variant="h3"
+            // color="#FFF"
+            sx={{
+              fontSize: {
+                lg: 50,
+                md: 30,
+                sm: 15,
+                xs: 25,
+              },
+            }}
+          >
             Customizable themes and community themes library
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
+          </FeatureDescription>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };

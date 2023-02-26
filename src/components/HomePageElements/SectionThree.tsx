@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Box, Card, Typography, CardContent } from '@mui/material';
 import { TeamOne, TeamTwo, TeamThree } from 'static';
+import { useTheme } from '@mui/material/styles';
 
 const cardsAnimation = {
   hidden: {
@@ -15,9 +16,21 @@ const cardsAnimation = {
 };
 
 export const SectionThree = () => {
+  const theme = useTheme();
+  const myColor = theme.palette.primary.main;
+
   return (
     <Box
-      sx={{ marginTop: 20 }}
+      sx={{
+        marginTop: {
+          lg: 20,
+          md: 10,
+          sm: 10,
+          xs: 5,
+        },
+        marginBottom: 2,
+        width: '80%',
+      }}
       initial="hidden"
       whileInView="visible"
       viewport={{ amount: 0.2 }}
@@ -27,8 +40,14 @@ export const SectionThree = () => {
         custom={1}
         component={motion.div}
         variants={cardsAnimation}
-        color="primary"
-        variant="h3"
+        sx={{
+          fontSize: {
+            lg: '3rem',
+            sm: '2rem',
+            xs: '1.5rem',
+          },
+          textAlign: 'center',
+        }}
       >
         Created by the best team on the web:
       </Typography>
@@ -39,53 +58,116 @@ export const SectionThree = () => {
         component={motion.div}
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
-          columnGap: 10,
+          justifyContent: 'center',
           marginTop: 5,
+          columnGap: {
+            lg: '10%',
+            xs: '2%',
+          },
         }}
       >
         <Card
-          sx={{ width: 200, height: 'min-content' }}
+          sx={{
+            width: {
+              lg: 200,
+              md: 170,
+              sm: 150,
+              xs: '33%',
+            },
+            height: 'min-content',
+          }}
           custom={3}
           component={motion.div}
           variants={cardsAnimation}
         >
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Hanna Yemelyanova
+          <CardContent sx={{ paddingLeft: 1 }}>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              sx={{
+                fontSize: {
+                  lg: '1.5rem',
+                  md: '1.5rem',
+                  sm: '1rem',
+                  xs: '1rem',
+                },
+              }}
+            >
+              Hanna <br /> Yemelyanova
             </Typography>
           </CardContent>
 
-          <TeamOne />
+          <TeamTwo fill={myColor} />
         </Card>
         <Card
-          sx={{ width: 200, height: 'min-content' }}
+          sx={{
+            width: {
+              lg: 200,
+              md: 170,
+              sm: 150,
+              xs: '33%',
+            },
+            height: 'min-content',
+          }}
           custom={2}
           component={motion.div}
           variants={cardsAnimation}
         >
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Knyazev Leontiy
+          <CardContent sx={{ paddingLeft: 1 }}>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              sx={{
+                fontSize: {
+                  lg: '1.5rem',
+                  md: '1.5rem',
+                  sm: '1rem',
+                  xs: '1rem',
+                },
+              }}
+            >
+              Knyazev <br /> Leontiy
             </Typography>
           </CardContent>
 
-          <TeamTwo />
+          <TeamOne fill={myColor} />
         </Card>
 
         <Card
-          sx={{ width: 200, height: 'min-content' }}
+          sx={{
+            width: {
+              lg: 200,
+              md: 170,
+              sm: 150,
+              xs: '33%',
+            },
+            height: 'min-content',
+          }}
           custom={4}
           component={motion.div}
           variants={cardsAnimation}
         >
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+          <CardContent sx={{ paddingLeft: 1 }}>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              sx={{
+                fontSize: {
+                  lg: '1.5rem',
+                  md: '1.5rem',
+                  sm: '1rem',
+                  xs: '1rem',
+                },
+              }}
+            >
               Maksim <br /> Gorin
             </Typography>
           </CardContent>
 
-          <TeamThree />
+          <TeamThree fill={myColor} />
         </Card>
       </Box>
     </Box>

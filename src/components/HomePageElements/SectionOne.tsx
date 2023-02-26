@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { motion } from 'framer-motion';
-import { Box, Card, CardMedia, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import taskBoardImg from 'static/images/taskBoardMain.png';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
@@ -25,26 +25,50 @@ export const SectionOne = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <Box
+    <Grid
+      container
+      spacing={10}
       initial="hidden"
       whileInView="visible"
       component={motion.div}
-      sx={{ display: 'flex', columnGap: 20, width: '80%' }}
+      sx={{
+        width: { lg: '80%', xs: '100%' },
+        marginTop: {
+          lg: 10,
+          sm: 5,
+          xs: 0,
+        },
+        paddingLeft: 0,
+        paddingBottom: {
+          lg: 40,
+          md: 25,
+          sm: 15,
+          xs: 5,
+        },
+        justifyContent: 'center',
+      }}
     >
-      <Box>
+      <Grid item xs={10} sm={6} xl={6}>
         <Typography
           variants={sectionAnimation}
           custom={1}
           component={motion.div}
           variant="h2"
-          color="primary"
+          sx={{
+            fontSize: {
+              lg: 50,
+              md: 30,
+              sm: 15,
+              xs: 25,
+            },
+          }}
         >
           Meet the best way to boost your productivity with easy and powerful tool
         </Typography>
         <Button
           component={motion.div}
           variants={sectionAnimation}
-          custom={2}
+          custom={5}
           variant="contained"
           sx={{ padding: '10px 20px', marginTop: '20px' }}
         >
@@ -57,10 +81,10 @@ export const SectionOne = () => {
             Get Started
           </Typography>
         </Button>
-      </Box>
-      <Card sx={{ minWidth: 600, height: 400 }}>
-        <CardMedia image={taskBoardImg} sx={{ width: '100%', height: '100%' }} />
-      </Card>
-    </Box>
+      </Grid>
+      <Grid item xs={10} sm={6} xl={6}>
+        <img src={taskBoardImg} style={{ width: '100%' }} />
+      </Grid>
+    </Grid>
   );
 };
