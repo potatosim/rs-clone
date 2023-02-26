@@ -1,4 +1,4 @@
-import { Box, Button, Card, Paper, useMediaQuery } from '@mui/material';
+import { Box, Button, Card, Paper } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -12,8 +12,8 @@ import { UserContext } from 'components/RequireAuth';
 import { usersConverter } from 'helpers/converters';
 import { IUserItem } from 'types/User';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { isDefaultTheme } from 'helpers/defaultThemes';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IThemeItem extends ITheme {
   status: 'userTheme' | 'communityTheme';

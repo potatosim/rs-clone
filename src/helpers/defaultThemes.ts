@@ -22,6 +22,6 @@ export const defaultLight: ITheme = {
   isPublic: false,
   mode: 'light',
   name: 'Default Light',
-  primary: '#F9AF10',
-  secondary: '#F9AF10',
+  primary: '#45D96A',
+  secondary: '#19853F',
 };
