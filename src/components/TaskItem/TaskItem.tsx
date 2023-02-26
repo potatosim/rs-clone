@@ -171,7 +171,12 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
                 handleChangeSize(e.target.value as ITaskItem['size'], task.id);
               }}
             />
-            <Button onClick={handleDelete} variant="contained" startIcon={<DeleteForeverIcon />}>
+            <Button
+              color="secondary"
+              onClick={handleDelete}
+              variant="contained"
+              startIcon={<DeleteForeverIcon />}
+            >
               Delete this task
             </Button>
           </StyledCardContentOptions>

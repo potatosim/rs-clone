@@ -3,13 +3,11 @@ import { AppBar, Button, Stack, Toolbar, Card, CardMedia, ButtonGroup } from '@m
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import UserMenu from 'components/UserMenu';
 import Logo from 'static/images/logo.png';
 
 const Header = () => {
-  const { auth } = useContext(FirebaseContext);
-  const [user] = useAuthState(auth);
+  const { user } = useContext(FirebaseContext);
 
   return (
     <AppBar position="static">

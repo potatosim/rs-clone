@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { useGetUserThemes } from 'hooks/themesHooks/useGetUserThemes';
 import ThemeItem from 'components/UserThemes/ThemeItem';
 import ThemeCreator from 'components/UserThemes/ThemeCreator';
+import { defaultDark, defaultLight } from 'helpers/defaultThemes';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -45,7 +46,7 @@ const UserThemes = () => {
       {isCreating && <ThemeCreator setIsCreating={setIsCreating} />}
       <Container maxWidth={false}>
         <Grid container spacing={2}>
-          {userThemes?.map((theme) => {
+          {[defaultDark, defaultLight, ...(userThemes || [])].map((theme) => {
             return (
               <Grid key={theme.id} item xs={3}>
                 <ThemeItem {...theme} status={'userTheme'} />

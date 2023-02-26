@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { motion } from 'framer-motion';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Box, Card, CardMedia, Typography } from '@mui/material';
 import taskBoardImg from 'static/images/taskBoardMain.png';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
@@ -74,25 +74,14 @@ export const SectionOne = () => {
           variant="contained"
           sx={{ padding: '10px 20px', marginTop: '20px' }}
         >
-          {user ? (
-            <Typography
-              color="inherit"
-              sx={{ textDecoration: 'none' }}
-              component={Link}
-              to={AppRoutes.Boards}
-            >
-              Get Started
-            </Typography>
-          ) : (
-            <Typography
-              color="inherit"
-              sx={{ textDecoration: 'none' }}
-              component={Link}
-              to={AppRoutes.LoginPage}
-            >
-              Get Started
-            </Typography>
-          )}
+          <Typography
+            color="inherit"
+            sx={{ textDecoration: 'none' }}
+            component={Link}
+            to={user ? AppRoutes.Boards : AppRoutes.LoginPage}
+          >
+            Get Started
+          </Typography>
         </Button>
       </Grid>
       <Grid item xs={10} sm={6} xl={6}>

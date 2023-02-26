@@ -1,4 +1,4 @@
-import { Button, FormLabel, styled, TextField } from '@mui/material';
+import { Box, Button, FormLabel, styled, TextField } from '@mui/material';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import UploadIcon from '@mui/icons-material/Upload';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -9,6 +9,15 @@ const CustomButton = styled(Button)`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const CustomWrapper = styled(Box)`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
 `;
 
 const UploadLabel = styled(FormLabel)`
@@ -23,9 +32,10 @@ const UploadLabel = styled(FormLabel)`
 
 interface UploadButtonProps {
   getFileUrl: (fileUrl: string) => void;
+  children?: React.ReactElement;
 }
 
-const UploadButton = ({ getFileUrl }: UploadButtonProps) => {
+const UploadButton = ({ getFileUrl, children }: UploadButtonProps) => {
   const { storage } = useContext(FirebaseContext);
 
   const [lastFileName, setLastFileName] = useState('');
@@ -57,6 +67,21 @@ const UploadButton = ({ getFileUrl }: UploadButtonProps) => {
       getFileUrl(fileUrl);
     }
   }, [fileUrl]);
+
+  if (children) {
+    return (
+      <CustomWrapper>
+        <UploadLabel>
+          <TextField
+            type="file"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setFile(e.target.files![0])}
+            sx={{ display: 'none' }}
+          />
+          {children}
+        </UploadLabel>
+      </CustomWrapper>
+    );
+  }
 
   return (
     <CustomButton variant="contained" startIcon={<UploadIcon />}>

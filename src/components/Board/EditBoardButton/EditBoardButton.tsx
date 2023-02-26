@@ -16,7 +16,7 @@ const EditBoardButton = ({ board }: EditBoardButtonProps) => {
 
   return (
     <>
-      <Button onClick={() => setIsModalOpen(true)} startIcon={<EditIcon />}>
+      <Button color="secondary" onClick={() => setIsModalOpen(true)} startIcon={<EditIcon />}>
         Edit
       </Button>
       {isModalOpen && (

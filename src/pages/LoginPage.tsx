@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { usersConverter } from 'helpers/converters';
+import { DefaultThemes } from 'enum/DefaultThemes';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const LoginPage = () => {
           avatar: googleAccount.user.photoURL,
           boards: [],
           login: googleAccount.user.displayName,
-          currentTheme: '',
+          currentTheme: DefaultThemes.DefaultDark,
         });
       }
       navigate(AppRoutes.Boards);
@@ -75,13 +76,13 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <Button variant="contained" onClick={handleLogin}>
+          <Button variant="contained" color="secondary" onClick={handleLogin}>
             Enter
           </Button>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           or
-          <Button variant="outlined" onClick={handleSignInWithGoogle}>
+          <Button variant="outlined" color="secondary" onClick={handleSignInWithGoogle}>
             <GoogleIcon sx={{ marginRight: '15px' }}></GoogleIcon>
             Login with Google
           </Button>

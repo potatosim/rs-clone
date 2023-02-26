@@ -4,28 +4,30 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Avatar, Divider } from '@mui/material';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppRoutes } from 'enum/AppRoutes';
 import { Link } from 'react-router-dom';
 import BurstModeIcon from '@mui/icons-material/BurstMode';
+import { useContext, useState } from 'react';
 
 const UserMenu = () => {
-  function LogOutandClose() {
-    auth.signOut();
-    handleClose();
-  }
-  const { auth } = React.useContext(FirebaseContext);
-  const [user] = useAuthState(auth);
+  const { auth, user } = useContext(FirebaseContext);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const logOutAndClose = () => {
+    auth.signOut();
+    handleClose();
   };
 
   return (
@@ -37,7 +39,7 @@ const UserMenu = () => {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        {user ? <Avatar src={user.photoURL!} /> : <Avatar>no image</Avatar>}
+        <Avatar src={user?.avatar} />
       </Button>
       <Menu
         id="basic-menu"
@@ -48,16 +50,15 @@ const UserMenu = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar src={user?.photoURL!} sx={{ marginRight: '10px' }}></Avatar>
-          {user?.displayName}
-        </MenuItem>
-        <Divider variant="middle" />
-        <MenuItem onClick={handleClose} component={Link} to={AppRoutes.AccountPage}>
+        <MenuItem
+          onClick={handleClose}
+          component={Link}
+          to={AppRoutes.AccountPage.replace(':accountId', user?.id || '')}
+        >
           <ManageAccountsIcon sx={{ paddingRight: '10px' }} />
           My account
         </MenuItem>
-        <MenuItem onClick={LogOutandClose}>
+        <MenuItem onClick={logOutAndClose}>
           <LogoutIcon sx={{ paddingRight: '10px' }} />
           Logout
         </MenuItem>

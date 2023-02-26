@@ -74,7 +74,7 @@ const Board = (board: IBoardItem) => {
   return (
     <BoardWrapper>
       <BoardHeader elevation={12}>
-        <Button onClick={() => navigate(AppRoutes.Boards)} variant="contained">
+        <Button color="secondary" onClick={() => navigate(AppRoutes.Boards)} variant="contained">
           Back to my boards
         </Button>
 
@@ -84,6 +84,7 @@ const Board = (board: IBoardItem) => {
         <ButtonGroup>
           <EditBoardButton board={board} />
           <Button
+            color="secondary"
             sx={{ minWidth: 150 }}
             variant="contained"
             startIcon={<AddIcon />}
