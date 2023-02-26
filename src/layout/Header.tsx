@@ -40,6 +40,7 @@ const Header = () => {
 
         <ButtonGroup variant="text" sx={{ marginLeft: 'auto' }}>
           <>
+            <Button variant="outlined">Lang</Button>
             {user ? (
               <>
                 <UserMenu />
