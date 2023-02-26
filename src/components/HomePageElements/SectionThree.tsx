@@ -28,6 +28,7 @@ export const SectionThree = () => {
           xs: 5,
         },
         marginBottom: 2,
+        width: '80%',
       }}
       initial="hidden"
       whileInView="visible"
@@ -65,7 +66,7 @@ export const SectionThree = () => {
           sx={{
             width: {
               lg: 200,
-              xs: 120,
+              xs: 110,
             },
             height: 'min-content',
           }}
@@ -97,7 +98,7 @@ export const SectionThree = () => {
           sx={{
             width: {
               lg: 200,
-              xs: 120,
+              xs: 110,
             },
             height: 'min-content',
           }}
@@ -130,7 +131,7 @@ export const SectionThree = () => {
           sx={{
             width: {
               lg: 200,
-              xs: 120,
+              xs: 110,
             },
             height: 'min-content',
           }}
