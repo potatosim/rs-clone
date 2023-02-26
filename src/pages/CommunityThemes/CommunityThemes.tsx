@@ -11,6 +11,7 @@ const PageContentWrapper = styled(Box)`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin-bottom: 15px;
 `;
 
 const CommunityThemes = () => {
@@ -18,7 +19,7 @@ const CommunityThemes = () => {
 
   return (
     <PageContentWrapper>
-      <Typography align="center" variant="h3" sx={{ m: '1rem' }}>
+      <Typography align="center" variant="h3" sx={{ m: '2rem' }}>
         Community Themes
       </Typography>
       <Link to={AppRoutes.UserThemes} style={{ textDecoration: 'none', marginBottom: '2rem' }}>
@@ -30,13 +31,15 @@ const CommunityThemes = () => {
         {publicThemes?.length ? (
           <Grid container spacing={2}>
             {sortByThemeName(publicThemes).map((theme) => (
-              <Grid key={theme.id} item xs={3}>
+              <Grid key={theme.id} item xs={12} sm={6} md={4} lg={3}>
                 <ThemeItem {...theme} status={'communityTheme'} />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <Typography variant="h2">Themes not found</Typography>
+          <Typography variant="h4" align="center">
+            Themes not found
+          </Typography>
         )}
       </Container>
     </PageContentWrapper>

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Paper } from '@mui/material';
+import { Box, Button, Card, Paper, useMediaQuery } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -33,7 +33,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
   };
 
   return (
-    <Card raised={true} sx={{ p: '15px' }}>
+    <Card raised={true} sx={{ p: '15px', m: 'auto', maxWidth: '400px' }}>
       <Typography variant="h5" align="center">
         {props.name}
       </Typography>
@@ -48,10 +48,11 @@ const ThemeItem: FC<IThemeItem> = (props) => {
       ></Paper>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', m: '20px auto 10px' }}>
         {props.status === 'userTheme' ? (
-          <ButtonGroup fullWidth={true} sx={{display: 'flex', justifyContent: 'center'}}>
+          <ButtonGroup fullWidth={true} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               variant="contained"
-              sx={{width: '100%', maxWidth: '150px'}}
+              color="secondary"
+              sx={{ width: '100%', maxWidth: '150px' }}
               onClick={() => {
                 updateDoc<IUserItem>(
                   doc(firestore, Collections.Users, user.id).withConverter(usersConverter),
@@ -66,6 +67,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
             {!isDefaultTheme(props.id) && (
               <Button
                 variant="contained"
+                color="secondary"
                 onClick={() => {
                   if (user.id === props.creator) {
                     setIsEditing(true);
@@ -81,6 +83,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
             {!isDefaultTheme(props.id) && (
               <Button
                 variant="contained"
+                color="secondary"
                 onClick={() => {
                   if (user.id === props.creator) {
                     deleteDoc(doc(firestore, Collections.Themes, props.id));
@@ -96,6 +99,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
         ) : (
           <Button
             variant="contained"
+            color="secondary"
             onClick={handlerAddTheme}
             sx={{ maxWidth: '120px', width: '100%' }}
           >

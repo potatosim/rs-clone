@@ -14,6 +14,7 @@ const PageContentWrapper = styled(Box)`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin-bottom: 15px;
 `;
 
 const UserThemes = () => {
@@ -23,7 +24,7 @@ const UserThemes = () => {
   return (
     <PageContentWrapper>
       <CssBaseline />
-      <Typography variant="h3" sx={{ m: '1rem' }}>
+      <Typography variant="h3" align="center" sx={{ m: '1rem' }}>
         Available Themes
       </Typography>
       <Link to={AppRoutes.AllThemes} style={{ textDecoration: 'none' }}>
@@ -44,7 +45,7 @@ const UserThemes = () => {
         <Grid container spacing={2}>
           {[defaultLight, defaultDark, ...(sortByThemeName(userThemes) || [])].map((theme) => {
             return (
-              <Grid key={theme.id} item xs={3}>
+              <Grid key={theme.id} item xs={12} sm={6} md={4} lg={3}>
                 <ThemeItem {...theme} status={'userTheme'} />
               </Grid>
             );
