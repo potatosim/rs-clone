@@ -54,7 +54,6 @@ export const SectionOne = () => {
           custom={1}
           component={motion.div}
           variant="h2"
-          color="primary"
           sx={{
             fontSize: {
               lg: 50,

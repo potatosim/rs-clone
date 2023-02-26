@@ -128,7 +128,7 @@ export const SectionTwo = () => {
         >
           <FeatureDescription
             variant="h3"
-            color="#FFF"
+            // color="#FFF"
             sx={{
               fontSize: {
                 lg: 50,
@@ -157,7 +157,7 @@ export const SectionTwo = () => {
         >
           <FeatureDescription
             variant="h3"
-            color="#FFF"
+            // color="#FFF"
             sx={{
               fontSize: {
                 lg: 50,
@@ -186,7 +186,7 @@ export const SectionTwo = () => {
         >
           <FeatureDescription
             variant="h3"
-            color="#FFF"
+            // color="#FFF"
             sx={{
               fontSize: {
                 lg: 50,

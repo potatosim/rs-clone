@@ -24,6 +24,7 @@ export const SectionThree = () => {
       sx={{
         marginTop: {
           lg: 20,
+          md: 10,
           sm: 10,
           xs: 5,
         },
@@ -39,7 +40,6 @@ export const SectionThree = () => {
         custom={1}
         component={motion.div}
         variants={cardsAnimation}
-        color="primary"
         sx={{
           fontSize: {
             lg: '3rem',
@@ -58,15 +58,21 @@ export const SectionThree = () => {
         component={motion.div}
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           marginTop: 5,
+          columnGap: {
+            lg: '10%',
+            xs: '2%',
+          },
         }}
       >
         <Card
           sx={{
             width: {
               lg: 200,
-              xs: 110,
+              md: 170,
+              sm: 150,
+              xs: '33%',
             },
             height: 'min-content',
           }}
@@ -74,7 +80,7 @@ export const SectionThree = () => {
           component={motion.div}
           variants={cardsAnimation}
         >
-          <CardContent>
+          <CardContent sx={{ paddingLeft: 1 }}>
             <Typography
               gutterBottom
               variant="h5"
@@ -88,7 +94,7 @@ export const SectionThree = () => {
                 },
               }}
             >
-              Hanna Yemelyanova
+              Hanna <br /> Yemelyanova
             </Typography>
           </CardContent>
 
@@ -98,7 +104,9 @@ export const SectionThree = () => {
           sx={{
             width: {
               lg: 200,
-              xs: 110,
+              md: 170,
+              sm: 150,
+              xs: '33%',
             },
             height: 'min-content',
           }}
@@ -106,7 +114,7 @@ export const SectionThree = () => {
           component={motion.div}
           variants={cardsAnimation}
         >
-          <CardContent>
+          <CardContent sx={{ paddingLeft: 1 }}>
             <Typography
               gutterBottom
               variant="h5"
@@ -120,7 +128,7 @@ export const SectionThree = () => {
                 },
               }}
             >
-              Knyazev Leontiy
+              Knyazev <br /> Leontiy
             </Typography>
           </CardContent>
 
@@ -131,7 +139,9 @@ export const SectionThree = () => {
           sx={{
             width: {
               lg: 200,
-              xs: 110,
+              md: 170,
+              sm: 150,
+              xs: '33%',
             },
             height: 'min-content',
           }}
@@ -139,7 +149,7 @@ export const SectionThree = () => {
           component={motion.div}
           variants={cardsAnimation}
         >
-          <CardContent>
+          <CardContent sx={{ paddingLeft: 1 }}>
             <Typography
               gutterBottom
               variant="h5"

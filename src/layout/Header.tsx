@@ -27,7 +27,7 @@ const Header = () => {
             to={AppRoutes.Home}
           />
         </Card>
-        <Stack direction="row" sx={{ marginLeft: 'auto', background: 'yellow', borderRadius: 2 }}>
+        <Stack direction="row" sx={{ marginLeft: 'auto', background: '#FF0', borderRadius: 2 }}>
           <Button component={Link} to={AppRoutes.Home} sx={{ color: '#000' }}>
             Home
           </Button>
@@ -47,8 +47,9 @@ const Header = () => {
             ) : (
               <Button
                 component={Link}
+                variant="contained"
                 to={AppRoutes.LoginPage}
-                sx={{ background: 'yellow', borderRadius: 2, color: '#000' }}
+                sx={{ background: '#FF0', borderRadius: 2, color: '#000' }}
               >
                 Login
               </Button>
