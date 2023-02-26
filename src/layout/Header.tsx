@@ -47,7 +47,6 @@ const Header = () => {
             ) : (
               <Button
                 component={Link}
-                variant="contained"
                 to={AppRoutes.LoginPage}
                 sx={{ background: '#FF0', borderRadius: 2, color: '#000' }}
               >
