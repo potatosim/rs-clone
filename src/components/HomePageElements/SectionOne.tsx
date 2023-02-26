@@ -39,12 +39,7 @@ export const SectionOne = () => {
           sm: 5,
           xs: 0,
         },
-        paddingLeft: {
-          xs: 0,
-          lg: 0,
-          md: 0,
-          sm: 0,
-        },
+        paddingLeft: 0,
         paddingBottom: {
           lg: 40,
           md: 25,
@@ -54,7 +49,7 @@ export const SectionOne = () => {
         justifyContent: 'center',
       }}
     >
-      <Grid item xs={10} sm={6} xl={6} sx={{}}>
+      <Grid item xs={10} sm={6} xl={6}>
         <Typography
           variants={sectionAnimation}
           custom={1}
@@ -64,7 +59,7 @@ export const SectionOne = () => {
           sx={{
             fontSize: {
               lg: 50,
-              md: 20,
+              md: 30,
               sm: 15,
               xs: 25,
             },
