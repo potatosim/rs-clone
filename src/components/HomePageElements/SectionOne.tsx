@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { motion } from 'framer-motion';
-import { Grid, Box, Card, CardMedia, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import taskBoardImg from 'static/images/taskBoardMain.png';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
@@ -33,7 +33,6 @@ export const SectionOne = () => {
       component={motion.div}
       sx={{
         width: { lg: '80%', xs: '100%' },
-        // height: '70vh',
         marginTop: {
           lg: 10,
           sm: 5,
