@@ -1,14 +1,27 @@
-import { Box, Button, Paper, Typography } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  Button,
+  Paper,
+  TextField,
+  Theme,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { generateTheme } from 'helpers/generateTheme';
+import { ITheme } from 'types/Theme';
 
 interface ThumbnailProps {
   name: string;
   primary: string;
   secondary: string;
+  mode: 'light' | 'dark';
 }
 
-const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary }) => {
+const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) => {
   return (
     <Box
       sx={{
@@ -21,7 +34,49 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary }) => {
         {name}
       </Typography>
       <Box sx={{ border: '4px solid black', borderRadius: '5px', m: '0 15px 15px' }}>
-        <Box
+        <ThemeProvider theme={generateTheme({ primary, secondary, mode } as ITheme)}>
+          <AppBar position="static" color="primary">
+            <Toolbar>
+              <MenuIcon />
+              <Typography variant="h6" sx={{ ml: '1rem' }}>
+                Logo
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              maxHeight: '400px',
+              height: '300px',
+              
+            }}
+          >
+            <Typography variant="h4" sx={{ m: '5px 10px' }}>
+              Primary Background
+            </Typography>
+            <Paper
+              square
+              elevation={12}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '75%',
+                height: '70%',
+                m: ' 5px auto 10px',
+              }}
+            >
+              <Typography variant="h5" sx={{ m: '10px' }}>
+                Secondary Background
+              </Typography>
+              <Button variant="contained" color="secondary" sx={{ maxWidth: '200px' }}>
+                Secondary Color
+              </Button>
+              <TextField label="Field" color="primary" sx={{ m: '1rem auto' }} />
+            </Paper>
+          </Box>
+          {/* <Box
           sx={{
             display: 'flex',
             justifyContent: 'start',
@@ -65,7 +120,8 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary }) => {
               Secondary Color
             </Button>
           </Paper>
-        </Box>
+        </Box> */}
+        </ThemeProvider>
       </Box>
     </Box>
   );

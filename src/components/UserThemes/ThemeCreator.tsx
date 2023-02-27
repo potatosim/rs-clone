@@ -10,11 +10,12 @@ import {
   Divider,
   FormControlLabel,
   Checkbox,
+  Switch,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
-import { addDoc, collection} from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import styled from '@emotion/styled';
 import { UserContext } from 'components/RequireAuth';
@@ -64,6 +65,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const [primary, setPrimary] = useState<string>('#9E9E9E');
   const [secondary, setSecondary] = useState<string>('#9E9E9E');
   const [checked, setChecked] = useState<boolean>(false);
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   const { user } = useContext(UserContext);
 
   const addTheme = async () => {
@@ -76,6 +78,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
         secondary: secondary,
         isPublic: checked,
         holders: [user.id],
+        mode,
       });
     }
   };
@@ -148,10 +151,29 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
+          <Accordion square disableGutters={true}>
+            <AccordionSummary expandIcon={<ArrowIcon />}>
+              <Typography variant="h6">Mode</Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography>Light</Typography>
+              <Switch
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setMode('dark');
+                  } else {
+                    setMode('light');
+                  }
+                }}
+              />
+              <Typography>Dark</Typography>
+            </AccordionDetails>
+          </Accordion>
+          <Divider sx={{ backgroundColor: 'black' }} />
         </Box>
         <Divider orientation="vertical" sx={{ backgroundColor: 'grey', width: '4px' }} />
         <ThumbnailWrapper>
-          <ThemeThumbnail name={name} primary={primary} secondary={secondary} />
+          <ThemeThumbnail name={name} primary={primary} secondary={secondary} mode={mode} />
           <Box sx={{ mt: '1rem' }}>
             <Button
               variant="contained"

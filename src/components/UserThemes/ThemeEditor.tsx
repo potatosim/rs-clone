@@ -10,6 +10,7 @@ import {
   Divider,
   Checkbox,
   FormControlLabel,
+  Switch,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
@@ -66,6 +67,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
   primary,
   secondary,
   isPublic,
+  mode,
   setIsEditing,
 }) => {
   const { firestore } = useContext(FirebaseContext);
@@ -73,6 +75,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
   const [newPrimary, setNewPrimary] = useState<string>(primary);
   const [newSecondary, setNewSecondary] = useState<string>(secondary);
   const [checked, setChecked] = useState<boolean>(isPublic);
+  const [themeMode, setMode] = useState<'light' | 'dark'>(mode);
   const { user } = useContext(UserContext);
 
   const editTheme = async () => {
@@ -83,6 +86,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
         primary: newPrimary,
         secondary: newSecondary,
         isPublic: checked,
+        mode: themeMode,
       });
     }
   };
@@ -155,10 +159,35 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
+          <Accordion square disableGutters={true}>
+            <AccordionSummary expandIcon={<ArrowIcon />}>
+              <Typography variant="h6">Mode</Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography>Light</Typography>
+              <Switch
+                defaultChecked={mode === 'dark' ? true : false}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setMode('dark');
+                  } else {
+                    setMode('light');
+                  }
+                }}
+              />
+              <Typography>Dark</Typography>
+            </AccordionDetails>
+          </Accordion>
+          <Divider sx={{ backgroundColor: 'black' }} />
         </Box>
         <Divider orientation="vertical" sx={{ backgroundColor: 'grey', width: '4px' }} />
         <ThumbnailWrapper>
-          <ThemeThumbnail name={newName} primary={newPrimary} secondary={newSecondary} />
+          <ThemeThumbnail
+            name={newName}
+            primary={newPrimary}
+            secondary={newSecondary}
+            mode={themeMode}
+          />
           <Box sx={{ mt: '1rem' }}>
             <Button
               variant="contained"
