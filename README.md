@@ -1,4 +1,3 @@
-
 # PRO-Boards
 
 ## Prerequisites
@@ -100,10 +99,8 @@ service cloud.firestore {
 }
 ```
 
-## Running application as is
-
+## Running application
 1. Start application.
-
 ```
 npm start
 ```
