@@ -10,6 +10,8 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { UserContext } from 'components/RequireAuth';
@@ -48,6 +50,7 @@ export const StyledItemWrapper = styled(Box)`
 
 export const StyledPaper = styled(Paper)`
   flex: 1 1 auto;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,10 +60,12 @@ export const StyledPaper = styled(Paper)`
 `;
 
 export const CommonWrapper = styled(Box)`
+  padding: 1rem;
   display: flex;
-  width: 50%;
-  column-gap: 1rem;
+  width: 100%;
+  gap: 1rem;
   align-items: flex-start;
+  justify-content: center;
 `;
 
 const CurrentAccount = () => {
@@ -71,6 +76,9 @@ const CurrentAccount = () => {
   const [isLoginChange, setIsLoginChange] = useState(false);
   const [isBoardsOpen, setIsBoardsOpen] = useState(false);
   const [isTasksOpen, setIsTasksOpen] = useState(false);
+
+  const theme = useTheme();
+  const mediaQuery = useMediaQuery(theme.breakpoints.down(768));
 
   const { boards } = useBoards();
   const [tasks] = useCollectionData(
@@ -177,6 +185,7 @@ const CurrentAccount = () => {
               />
 
               <Button
+                color="secondary"
                 disabled={login === user.login || login === ''}
                 onClick={() => {
                   handleUpdateLogin(login, user.id);
@@ -189,12 +198,23 @@ const CurrentAccount = () => {
           )}
         </StyledItemWrapper>
         {boards && boards.length ? (
-          <Box sx={{ width: '70%' }}>
-            <ListItemButton onClick={handleBoardsOpen}>
-              <ListItemText primary={translate(ButtonTranslationKeys.MyBoards)} />
-              {isBoardsOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
-            </ListItemButton>
-          </Box>
+          <>
+            <Box sx={{ width: '70%' }}>
+              <ListItemButton onClick={handleBoardsOpen}>
+                <ListItemText primary={translate(ButtonTranslationKeys.MyBoards)} />
+                {isBoardsOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
+              </ListItemButton>
+            </Box>
+            {mediaQuery && (
+              <CustomCollapse
+                orientation="vertical"
+                isOpen={isBoardsOpen}
+                children={
+                  boards && boards.map((board) => <BoardCardAccount key={board.id} board={board} />)
+                }
+              />
+            )}
+          </>
         ) : (
           <Paper
             elevation={12}
@@ -224,12 +244,23 @@ const CurrentAccount = () => {
           </Paper>
         )}
         {tasks && tasks.length ? (
-          <Box sx={{ width: '70%' }}>
-            <ListItemButton onClick={handleTasksOpen}>
-              <ListItemText primary={translate(ButtonTranslationKeys.MyListOfTasks)} />
-              {isTasksOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
-            </ListItemButton>
-          </Box>
+          <>
+            <Box sx={{ width: '70%' }}>
+              <ListItemButton onClick={handleTasksOpen}>
+                <ListItemText primary={translate(ButtonTranslationKeys.MyListOfTasks)} />
+                {isTasksOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
+              </ListItemButton>
+            </Box>
+            {mediaQuery && (
+              <CustomCollapse
+                orientation="vertical"
+                isOpen={isTasksOpen}
+                children={
+                  tasks && tasks.map((task) => <TaskCardAccount key={task.id} task={task} />)
+                }
+              />
+            )}
+          </>
         ) : (
           <Typography variant="h6" fontWeight={500}>
             {translate(TypographyTranslationKeys.NoTasksYet, {
@@ -238,16 +269,20 @@ const CurrentAccount = () => {
           </Typography>
         )}
       </StyledPaper>
-      <CustomCollapse
-        isOpen={isBoardsOpen}
-        children={
-          boards && boards.map((board) => <BoardCardAccount key={board.id} board={board} />)
-        }
-      />
-      <CustomCollapse
-        isOpen={isTasksOpen}
-        children={tasks && tasks.map((task) => <TaskCardAccount key={task.id} task={task} />)}
-      />
+      {!mediaQuery && (
+        <>
+          <CustomCollapse
+            isOpen={isBoardsOpen}
+            children={
+              boards && boards.map((board) => <BoardCardAccount key={board.id} board={board} />)
+            }
+          />
+          <CustomCollapse
+            isOpen={isTasksOpen}
+            children={tasks && tasks.map((task) => <TaskCardAccount key={task.id} task={task} />)}
+          />
+        </>
+      )}
     </CommonWrapper>
   );
 };

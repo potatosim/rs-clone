@@ -182,6 +182,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
                 })}
               </Typography>
               <Switch
+                color="secondary"
                 onChange={(e) => {
                   if (e.target.checked) {
                     setMode('dark');
