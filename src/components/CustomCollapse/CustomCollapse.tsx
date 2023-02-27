@@ -1,18 +1,25 @@
-import { Box, Collapse } from '@mui/material';
+import { Box, Collapse, useMediaQuery, useTheme } from '@mui/material';
 import React, { FC, ReactElement, ReactNode } from 'react';
 
 interface CustomCollapseProps {
   isOpen: boolean;
   children: ReactElement | ReactNode;
+  orientation?: 'vertical' | 'horizontal';
 }
 
-const CustomCollapse: FC<CustomCollapseProps> = ({ isOpen, children }) => {
+const CustomCollapse: FC<CustomCollapseProps> = ({
+  isOpen,
+  children,
+  orientation = 'horizontal',
+}) => {
+  const theme = useTheme();
+  const mediaQuery = useMediaQuery(theme.breakpoints.down(768));
   return (
-    <Collapse orientation="horizontal" in={isOpen}>
+    <Collapse orientation={orientation} in={isOpen}>
       <Box
         sx={{
           maxHeight: 600,
-          overflowY: 'scroll',
+          overflow: 'scroll',
           '::-webkit-scrollbar': {
             display: 'none',
           },
@@ -21,7 +28,8 @@ const CustomCollapse: FC<CustomCollapseProps> = ({ isOpen, children }) => {
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: mediaQuery ? 'row' : 'column',
+            flexWrap: 'wrap',
             p: 1,
             gap: '1rem',
             alignItems: 'center',

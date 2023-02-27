@@ -60,6 +60,14 @@ const ThemeCard: FC<IThemeItem> = (props) => {
     const batch = writeBatch(firestore);
     if (user.id === props.creator) {
       batch.delete(doc(firestore, Collections.Themes, props.id));
+      usersWithTheme.docs.map((item) => {
+        batch.update<IUserItem>(
+          doc(firestore, Collections.Users, item.id).withConverter(usersConverter),
+          {
+            currentTheme: DefaultThemes.DefaultLight,
+          },
+        );
+      });
     } else {
       batch.update<ITheme>(
         doc(firestore, Collections.Themes, props.id).withConverter(themeConverter),
@@ -68,14 +76,15 @@ const ThemeCard: FC<IThemeItem> = (props) => {
         },
       );
     }
-    usersWithTheme.docs.map((item) => {
+
+    if (user.currentTheme === props.id) {
       batch.update<IUserItem>(
-        doc(firestore, Collections.Users, item.id).withConverter(usersConverter),
+        doc(firestore, Collections.Users, user.id).withConverter(usersConverter),
         {
           currentTheme: DefaultThemes.DefaultLight,
         },
       );
-    });
+    }
 
     await batch.commit();
   };

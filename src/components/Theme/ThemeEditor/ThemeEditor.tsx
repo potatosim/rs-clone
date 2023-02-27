@@ -196,6 +196,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
                 })}
               </Typography>
               <Switch
+                color="secondary"
                 defaultChecked={mode === 'dark' ? true : false}
                 onChange={(e) => {
                   if (e.target.checked) {

@@ -1,4 +1,12 @@
-import { Avatar, Box, ListItemButton, ListItemText, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  ListItemButton,
+  ListItemText,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { CommonWrapper, StyledPaper } from 'components/CurrentAccount/CurrentAccount';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
@@ -27,6 +35,9 @@ interface AnotherAccountProps {
 const AnotherAccount: FC<AnotherAccountProps> = ({ anotherUser }) => {
   const { firestore } = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
+
+  const theme = useTheme();
+  const mediaQuery = useMediaQuery(theme.breakpoints.down(768));
 
   const { t: translate } = useTranslation([
     TranslationNameSpaces.Buttons,
@@ -63,6 +74,16 @@ const AnotherAccount: FC<AnotherAccountProps> = ({ anotherUser }) => {
               <ListItemText primary={translate(ButtonTranslationKeys.AvailableBoards)} />
               {isBoardsOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
             </ListItemButton>
+            {mediaQuery && (
+              <CustomCollapse
+                orientation="vertical"
+                isOpen={isBoardsOpen}
+                children={
+                  filteredBoards &&
+                  filteredBoards.map((board) => <BoardCardAccount key={board.id} board={board} />)
+                }
+              />
+            )}
           </Box>
         ) : (
           <Typography variant="h5" fontWeight={500}>
@@ -72,13 +93,15 @@ const AnotherAccount: FC<AnotherAccountProps> = ({ anotherUser }) => {
           </Typography>
         )}
       </StyledPaper>
-      <CustomCollapse
-        isOpen={isBoardsOpen}
-        children={
-          filteredBoards &&
-          filteredBoards.map((board) => <BoardCardAccount key={board.id} board={board} />)
-        }
-      />
+      {!mediaQuery && (
+        <CustomCollapse
+          isOpen={isBoardsOpen}
+          children={
+            filteredBoards &&
+            filteredBoards.map((board) => <BoardCardAccount key={board.id} board={board} />)
+          }
+        />
+      )}
     </CommonWrapper>
   );
 };
