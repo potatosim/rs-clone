@@ -1,8 +1,8 @@
 import { Paper, Typography } from '@mui/material';
 import { priorityItems } from 'components/PrioritySelect/PrioritySelect';
 import { sizeItems } from 'components/SizeSelect/SizeSelect';
-import { AppRoutes } from 'enum/AppRoutes';
-import React, { FC } from 'react';
+import { getBoardPageUrl } from 'helpers/getBoardPageUrl';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ITaskItem } from 'types/Task';
 
@@ -28,9 +28,7 @@ const TaskCardAccount: FC<TaskCardAccountProps> = ({ task }) => {
         width: '150px',
         cursor: 'pointer',
       }}
-      onClick={() =>
-        navigate(AppRoutes.Board.replace(':boardId', task.boardId) + `?task=${task.id}`)
-      }
+      onClick={() => navigate(getBoardPageUrl(task.boardId) + `?task=${task.id}`)}
     >
       <Typography
         variant="h5"

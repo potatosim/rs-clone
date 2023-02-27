@@ -22,6 +22,12 @@ import CommentsTab from 'components/CommentsTab';
 import AssigneeSelect from 'components/AssigneeSelect';
 import DescriptionField from 'components/DescriptionField';
 import Divider from '@mui/material/Divider';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+} from 'enum/Translations';
 
 interface TaskItemProps {
   taskId: string;
@@ -31,18 +37,28 @@ interface TaskItemProps {
 }
 
 const StyledCard = styled(Card)`
-  width: 70%;
-  height: 650px;
+  width: 100%;
+  min-height: 650px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 `;
 
 const StyledCardContent = styled(CardContent)`
   grid-area: 2 / 1 / 7 / 4;
   border-right: 2px double lightgrey;
+
+  @media (max-width: 768px) {
+    order: 3;
+  }
 `;
 
 const StyledCardContentOptions = styled(CardContent)`
@@ -50,10 +66,26 @@ const StyledCardContentOptions = styled(CardContent)`
   padding: 2rem;
   row-gap: 2rem;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas:
+      'select select'
+      'select select'
+      'button button';
+  }
 `;
 
 const StyledBox = styled(Box)`
   grid-area: 2 / 4 / 7 / 5;
+
+  @media (max-width: 768px) {
+    order: 2;
+  }
 `;
 
 const getCurrentColumnOption = (columns: IColumnItem[], task: ITaskItem): OptionItem => {
@@ -91,6 +123,11 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
   } = useTask(taskId, columns);
   const [activeTab, setActiveTab] = useState<TaskTabs>(TaskTabs.History);
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+  ]);
+
   const close = () => {
     query.delete(Queries.Task);
     setQuery(query);
@@ -125,7 +162,12 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
         />
 
         <StyledCardContent>
-          <Typography fontWeight={600}>Description:</Typography>
+          <Typography fontWeight={600}>
+            {translate(InputsTranslationKeys.Description, {
+              ns: TranslationNameSpaces.Inputs,
+            })}
+            :
+          </Typography>
 
           <DescriptionField
             taskDescription={task.description}
@@ -135,9 +177,19 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
           />
           <Divider />
 
-          <Tabs value={activeTab} onChange={handleChangeTab}>
-            <Tab value={TaskTabs.History} label={TaskTabs.History}></Tab>
-            <Tab value={TaskTabs.Comments} label={TaskTabs.Comments}></Tab>
+          <Tabs textColor="secondary" value={activeTab} onChange={handleChangeTab}>
+            <Tab
+              value={TaskTabs.History}
+              label={translate(InputsTranslationKeys.History, {
+                ns: TranslationNameSpaces.Inputs,
+              })}
+            ></Tab>
+            <Tab
+              value={TaskTabs.Comments}
+              label={translate(InputsTranslationKeys.Comments, {
+                ns: TranslationNameSpaces.Inputs,
+              })}
+            ></Tab>
           </Tabs>
           <TabPanel value={activeTab} index={TaskTabs.History}>
             <History history={task.history} />
@@ -176,8 +228,9 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
               onClick={handleDelete}
               variant="contained"
               startIcon={<DeleteForeverIcon />}
+              sx={{ gridArea: 'button' }}
             >
-              Delete this task
+              {translate(ButtonTranslationKeys.DeleteThisTask)}
             </Button>
           </StyledCardContentOptions>
         </StyledBox>

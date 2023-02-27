@@ -1,11 +1,13 @@
 import { Avatar, Box, Typography } from '@mui/material';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { AppRoutes } from 'enum/AppRoutes';
 import { Collections } from 'enum/Collection';
+import { TranslationNameSpaces, TypographyTranslationKeys } from 'enum/Translations';
 import { doc } from 'firebase/firestore';
 import { usersConverter } from 'helpers/converters';
+import { getUserPage } from 'helpers/getUserPage';
 import { FC, useContext } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ICommentItem } from 'types/CommentItem';
 import { IUserItem } from 'types/User';
@@ -37,13 +39,13 @@ export const CommentItem = ({ author, createdAt, message }: ICommentItem) => {
         border: '1px solid lightgrey',
         borderRadius: '5px',
         padding: '0.5rem',
-        width: '70%',
+        width: '100%',
         alignSelf: 'flex-start',
       }}
     >
       <Avatar
         onClick={() => {
-          navigate(AppRoutes.AccountPage.replace(':accountId', author));
+          navigate(getUserPage(author));
         }}
         sx={{ cursor: 'pointer' }}
         src={avatar}
@@ -57,6 +59,7 @@ export const CommentItem = ({ author, createdAt, message }: ICommentItem) => {
 };
 
 const Comments: FC<CommentProps> = ({ comments }) => {
+  const { t: translate } = useTranslation(TranslationNameSpaces.Typography);
   if (comments.length) {
     return (
       <Box
@@ -80,7 +83,11 @@ const Comments: FC<CommentProps> = ({ comments }) => {
   }
   return (
     <Box padding="1rem 0">
-      <Typography>No comments yet</Typography>
+      <Typography>
+        {translate(TypographyTranslationKeys.NoCommentsYet, {
+          ns: TranslationNameSpaces.Typography,
+        })}
+      </Typography>
     </Box>
   );
 };

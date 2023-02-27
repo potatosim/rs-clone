@@ -42,4 +42,5 @@ type HistoryDescriptionChanged = {
 
 type HistoryAssigneeChanged = {
   action: 'assigneeChanged';
+  assigneeId: string;
 } & UpdateHistoryItem;

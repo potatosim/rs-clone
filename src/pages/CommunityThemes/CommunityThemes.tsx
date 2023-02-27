@@ -5,6 +5,12 @@ import styled from '@emotion/styled';
 import { useGetPublicThemes } from 'hooks/themesHooks/useGetPublicThemes';
 import ThemeItem from 'components/UserThemes/ThemeItem';
 import { sortByThemeName } from 'helpers/sortByThemeName';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -17,14 +23,19 @@ const PageContentWrapper = styled(Box)`
 const CommunityThemes = () => {
   const { publicThemes } = useGetPublicThemes();
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
+
   return (
     <PageContentWrapper>
       <Typography align="center" variant="h3" sx={{ m: '2rem' }}>
-        Community Themes
+        {translate(ButtonTranslationKeys.CommunityThemes)}
       </Typography>
       <Link to={AppRoutes.UserThemes} style={{ textDecoration: 'none', marginBottom: '2rem' }}>
         <Button variant="contained" color="secondary" sx={{ m: '0.5rem' }}>
-          My Themes
+          {translate(ButtonTranslationKeys.MyThemes)}
         </Button>
       </Link>
       <Container maxWidth={false}>
@@ -38,7 +49,9 @@ const CommunityThemes = () => {
           </Grid>
         ) : (
           <Typography variant="h4" align="center">
-            Themes not found
+            {translate(TypographyTranslationKeys.ThemesNotFound, {
+              ns: TranslationNameSpaces.Typography,
+            })}
           </Typography>
         )}
       </Container>

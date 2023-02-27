@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import { Box, Card, Typography, CardContent } from '@mui/material';
 import { TeamOne, TeamTwo, TeamThree } from 'static';
-import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+import { TranslationNameSpaces, TypographyTranslationKeys } from 'enum/Translations';
+import { useContrastText } from 'hooks/useContrastText';
 
 const cardsAnimation = {
   hidden: {
@@ -15,10 +17,60 @@ const cardsAnimation = {
   }),
 };
 
-export const SectionThree = () => {
-  const theme = useTheme();
-  const myColor = theme.palette.primary.main;
+const DeveloperCard = ({
+  firstName,
+  lastName,
+  delay,
+  icon,
+}: {
+  icon: React.ReactElement | React.ReactNode;
+  delay: number;
+  firstName: string;
+  lastName: string;
+}) => {
+  return (
+    <Card
+      sx={{
+        width: {
+          lg: 200,
+          md: 170,
+          sm: 150,
+          xs: '33%',
+        },
+        height: 'min-content',
+      }}
+      custom={delay}
+      component={motion.div}
+      variants={cardsAnimation}
+    >
+      <CardContent sx={{ paddingLeft: 1 }}>
+        <Typography
+          gutterBottom
+          variant="h5"
+          component="div"
+          sx={{
+            fontSize: {
+              lg: '1.5rem',
+              md: '1.5rem',
+              sm: '1rem',
+              xs: '1rem',
+            },
+          }}
+        >
+          {firstName}
+          <br />
+          {lastName}
+        </Typography>
+      </CardContent>
 
+      {icon}
+    </Card>
+  );
+};
+
+export const SectionThree = () => {
+  const { t: translate } = useTranslation(TranslationNameSpaces.Typography);
+  const { primaryColor } = useContrastText();
   return (
     <Box
       sx={{
@@ -33,7 +85,7 @@ export const SectionThree = () => {
       }}
       initial="hidden"
       whileInView="visible"
-      viewport={{ amount: 0.2 }}
+      viewport={{ amount: 0.2, once: true }}
       component={motion.div}
     >
       <Typography
@@ -49,7 +101,9 @@ export const SectionThree = () => {
           textAlign: 'center',
         }}
       >
-        Created by the best team on the web:
+        {translate(TypographyTranslationKeys.CreatedByTeam, {
+          ns: TranslationNameSpaces.Typography,
+        })}
       </Typography>
       <Box
         initial="hidden"
@@ -66,109 +120,36 @@ export const SectionThree = () => {
           },
         }}
       >
-        <Card
-          sx={{
-            width: {
-              lg: 200,
-              md: 170,
-              sm: 150,
-              xs: '33%',
-            },
-            height: 'min-content',
-          }}
-          custom={3}
-          component={motion.div}
-          variants={cardsAnimation}
-        >
-          <CardContent sx={{ paddingLeft: 1 }}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              sx={{
-                fontSize: {
-                  lg: '1.5rem',
-                  md: '1.5rem',
-                  sm: '1rem',
-                  xs: '1rem',
-                },
-              }}
-            >
-              Hanna <br /> Yemelyanova
-            </Typography>
-          </CardContent>
-
-          <TeamTwo fill={myColor} />
-        </Card>
-        <Card
-          sx={{
-            width: {
-              lg: 200,
-              md: 170,
-              sm: 150,
-              xs: '33%',
-            },
-            height: 'min-content',
-          }}
-          custom={2}
-          component={motion.div}
-          variants={cardsAnimation}
-        >
-          <CardContent sx={{ paddingLeft: 1 }}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              sx={{
-                fontSize: {
-                  lg: '1.5rem',
-                  md: '1.5rem',
-                  sm: '1rem',
-                  xs: '1rem',
-                },
-              }}
-            >
-              Knyazev <br /> Leontiy
-            </Typography>
-          </CardContent>
-
-          <TeamOne fill={myColor} />
-        </Card>
-
-        <Card
-          sx={{
-            width: {
-              lg: 200,
-              md: 170,
-              sm: 150,
-              xs: '33%',
-            },
-            height: 'min-content',
-          }}
-          custom={4}
-          component={motion.div}
-          variants={cardsAnimation}
-        >
-          <CardContent sx={{ paddingLeft: 1 }}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              sx={{
-                fontSize: {
-                  lg: '1.5rem',
-                  md: '1.5rem',
-                  sm: '1rem',
-                  xs: '1rem',
-                },
-              }}
-            >
-              Maksim <br /> Gorin
-            </Typography>
-          </CardContent>
-
-          <TeamThree fill={myColor} />
-        </Card>
+        <DeveloperCard
+          delay={3}
+          firstName={translate(TypographyTranslationKeys.Hanna, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+          lastName={translate(TypographyTranslationKeys.Yemelyanova, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+          icon={<TeamTwo fill={primaryColor} />}
+        />
+        <DeveloperCard
+          delay={2}
+          firstName={translate(TypographyTranslationKeys.Leon, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+          lastName={translate(TypographyTranslationKeys.Knyazev, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+          icon={<TeamOne fill={primaryColor} />}
+        />
+        <DeveloperCard
+          delay={4}
+          firstName={translate(TypographyTranslationKeys.Maksim, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+          lastName={translate(TypographyTranslationKeys.Gorin, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+          icon={<TeamThree fill={primaryColor} />}
+        />
       </Box>
     </Box>
   );

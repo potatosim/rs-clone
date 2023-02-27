@@ -13,10 +13,12 @@ import Box from '@mui/material/Box/Box';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { UserContext } from 'components/RequireAuth';
 import { Collections } from 'enum/Collection';
+import { InputsTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 import { collection, documentId, query, where } from 'firebase/firestore';
 import { usersConverter } from 'helpers/converters';
 import React, { FC, useContext } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { useTranslation } from 'react-i18next';
 import { IUserItem } from 'types/User';
 
 interface BoardUserSelectProps {
@@ -34,6 +36,8 @@ const BoardUserSelect: FC<BoardUserSelectProps> = ({ userIds, setUserIds }) => {
     ),
   );
 
+  const { t: translate } = useTranslation(TranslationNameSpaces.Inputs);
+
   const handleUserPick = (event: SelectChangeEvent<typeof userIds>) => {
     const {
       target: { value },
@@ -46,12 +50,15 @@ const BoardUserSelect: FC<BoardUserSelectProps> = ({ userIds, setUserIds }) => {
   }
 
   return (
-    <FormControl size="small" fullWidth>
-      <InputLabel id="users-select-label">Participants</InputLabel>
+    <FormControl color="secondary" size="small" fullWidth>
+      <InputLabel id="users-select-label">
+        {translate(InputsTranslationKeys.Participants)}
+      </InputLabel>
       <Select
+        color="secondary"
         labelId="users-select-label"
         id="users-select"
-        label="Participants"
+        label={translate(InputsTranslationKeys.Participants)}
         multiple
         value={userIds}
         onChange={handleUserPick}

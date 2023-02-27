@@ -11,6 +11,13 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useAddTask } from 'hooks/taskHooks/useAddTask';
 import { Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 interface CreateTaskFormProps {
   isModalOpen: boolean;
@@ -29,6 +36,12 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({
   const [taskDescription, setTaskDescription] = useState<string>('');
   const [priority, setPriority] = useState<Priorities>(Priorities.Medium);
   const [size, setSize] = useState<Sizes>(Sizes.Medium);
+
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const addTask = useAddTask(columnId, {
     description: taskDescription,
@@ -50,18 +63,28 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({
   return (
     <ModalWrapper open={isModalOpen} onClose={handleClose}>
       <FormWrapper>
-        <Typography>Add new task</Typography>
+        <Typography>
+          {translate(TypographyTranslationKeys.AddNewTask, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+        </Typography>
         <TextField
+          color="secondary"
           value={taskTitle}
           required
-          label="Title of the task"
+          label={translate(InputsTranslationKeys.TitleOfTheTask, {
+            ns: TranslationNameSpaces.Inputs,
+          })}
           onChange={(e) => setTaskTitle(e.target.value)}
           size="small"
           fullWidth
         />
         <TextField
+          color="secondary"
           value={taskDescription}
-          label="Description"
+          label={translate(InputsTranslationKeys.Description, {
+            ns: TranslationNameSpaces.Inputs,
+          })}
           onChange={(e) => setTaskDescription(e.target.value)}
           size="small"
           fullWidth
@@ -83,13 +106,14 @@ const CreateTaskForm: FC<CreateTaskFormProps> = ({
           />
         </Box>
         <Button
+          color="secondary"
           disabled={!taskTitle.trim().length}
           variant="contained"
           type="submit"
           onClick={handleCreateTask}
           fullWidth
         >
-          Add
+          {translate(ButtonTranslationKeys.Add)}
         </Button>
       </FormWrapper>
     </ModalWrapper>

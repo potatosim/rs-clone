@@ -1,17 +1,30 @@
-import React, { useContext } from 'react';
-import { AppBar, Button, Stack, Toolbar, Card, CardMedia, ButtonGroup } from '@mui/material';
+import { useContext } from 'react';
+import { AppBar, Button, Toolbar, Card, CardMedia, ButtonGroup } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import UserMenu from 'components/UserMenu';
 import Logo from 'static/images/logo.png';
+import { useTranslation } from 'react-i18next';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
+import Box from '@mui/material/Box';
+import LanguageButton from 'components/LanguageButton';
 
 const Header = () => {
   const { user } = useContext(FirebaseContext);
 
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
+
   return (
-    <AppBar position="static">
-      <Toolbar sx={{ position: 'relative' }}>
+    <AppBar position="fixed">
+      <Toolbar
+        sx={{
+          position: 'relative',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <Card
           sx={{
             minWidth: '116px',
@@ -27,34 +40,26 @@ const Header = () => {
             to={AppRoutes.Home}
           />
         </Card>
-        <Stack direction="row" sx={{ marginLeft: 'auto', background: '#FF0', borderRadius: 2 }}>
-          <Button component={Link} to={AppRoutes.Home} sx={{ color: '#000' }}>
-            Home
-          </Button>
-          {user && (
-            <Button component={Link} to={AppRoutes.Boards} sx={{ color: '#000' }}>
-              Boards
+        {user && (
+          <ButtonGroup variant="contained" color="secondary">
+            <Button component={Link} to={AppRoutes.Boards}>
+              {translate(ButtonTranslationKeys.Boards)}
             </Button>
-          )}
-        </Stack>
+          </ButtonGroup>
+        )}
 
-        <ButtonGroup variant="text" sx={{ marginLeft: 'auto' }}>
+        <Box display="flex" alignItems="center" columnGap="1rem">
           <>
+            <LanguageButton />
             {user ? (
-              <>
-                <UserMenu />
-              </>
+              <UserMenu />
             ) : (
-              <Button
-                component={Link}
-                to={AppRoutes.LoginPage}
-                sx={{ background: '#FF0', borderRadius: 2, color: '#000' }}
-              >
-                Login
+              <Button color="secondary" component={Link} to={AppRoutes.LoginPage}>
+                {translate(ButtonTranslationKeys.Login)}
               </Button>
             )}
           </>
-        </ButtonGroup>
+        </Box>
       </Toolbar>
     </AppBar>
   );

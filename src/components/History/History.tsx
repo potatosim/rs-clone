@@ -1,12 +1,15 @@
 import { Avatar, Box, styled, Typography } from '@mui/material';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { AppRoutes } from 'enum/AppRoutes';
 import { Collections } from 'enum/Collection';
+import { TranslationNameSpaces } from 'enum/Translations';
 import { doc } from 'firebase/firestore';
 import { usersConverter } from 'helpers/converters';
-import React, { FC, useContext } from 'react';
+import { getUserPage } from 'helpers/getUserPage';
+import { TFunction } from 'i18next';
+import { FC, useContext } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { useNavigate } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { HistoryItem } from 'types/HistoryItem';
 import { IUserItem } from 'types/User';
 
@@ -29,6 +32,8 @@ export const HistoryWrapper = styled(Box)`
 `;
 
 export const HistoryItemEl = (historyItem: HistoryItem) => {
+  const { t } = useTranslation([TranslationNameSpaces.History, TranslationNameSpaces.Typography]);
+
   const { firestore } = useContext(FirebaseContext);
   const [user, loading] = useDocumentData<IUserItem>(
     doc(firestore, Collections.Users, historyItem.initiator).withConverter(usersConverter),
@@ -41,13 +46,13 @@ export const HistoryItemEl = (historyItem: HistoryItem) => {
 
   const { avatar } = user;
 
-  const title = getTitleByAction(historyItem, user);
+  const title = getTitleByAction(historyItem, user, t, navigate);
 
   return (
     <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
       <Avatar
         onClick={() => {
-          navigate(AppRoutes.AccountPage.replace(':accountId', historyItem.initiator));
+          navigate(getUserPage(historyItem.initiator));
         }}
         sx={{ cursor: 'pointer' }}
         src={avatar}
@@ -60,53 +65,93 @@ export const HistoryItemEl = (historyItem: HistoryItem) => {
   );
 };
 
-const getTitleByAction = (historyItem: HistoryItem, user: IUserItem) => {
+const getTitleByAction = (
+  historyItem: HistoryItem,
+  user: IUserItem,
+  translate: TFunction,
+  navigate: NavigateFunction,
+) => {
   switch (historyItem.action) {
     case 'created':
-      return (
-        <>
-          <strong>{user.login}</strong> created a task
-        </>
-      );
+      return <Trans i18nKey={'created'} t={translate} values={{ login: user.login }} />;
     case 'statusChanged':
       return (
-        <>
-          <strong>{user.login}</strong> changed task status from <strong>{historyItem.from}</strong>{' '}
-          to <strong>{historyItem.to}</strong>
-        </>
+        <Trans
+          i18nKey={'statusChanged'}
+          t={translate}
+          values={{
+            login: user.login,
+            from: translate(historyItem.from.toLowerCase(), {
+              ns: TranslationNameSpaces.Typography,
+            }),
+            to: translate(historyItem.to.toLowerCase(), { ns: TranslationNameSpaces.Typography }),
+          }}
+        />
       );
     case 'titleChanged':
       return (
-        <>
-          <strong>{user.login}</strong> changed task title from <strong>{historyItem.from}</strong>{' '}
-          to <strong>{historyItem.to}</strong>
-        </>
+        <Trans
+          i18nKey={'titleChanged'}
+          t={translate}
+          values={{
+            login: user.login,
+            from: translate(historyItem.from.toLowerCase(), {
+              ns: TranslationNameSpaces.Typography,
+            }),
+            to: translate(historyItem.to.toLowerCase(), { ns: TranslationNameSpaces.Typography }),
+          }}
+        />
       );
     case 'descriptionChanged':
-      return (
-        <>
-          <strong>{user.login}</strong> changed task description
-        </>
-      );
+      return <Trans i18nKey={'descriptionChanged'} t={translate} values={{ login: user.login }} />;
     case 'priorityChanged':
       return (
-        <>
-          <strong>{user.login}</strong> changed task priority from{' '}
-          <strong> {historyItem.from} </strong>to<strong> {historyItem.to} </strong>
-        </>
+        <Trans
+          i18nKey={'priorityChanged'}
+          t={translate}
+          values={{
+            login: user.login,
+            from: translate(historyItem.from.toLowerCase(), {
+              ns: TranslationNameSpaces.Typography,
+            }),
+            to: translate(historyItem.to.toLowerCase(), { ns: TranslationNameSpaces.Typography }),
+          }}
+        />
       );
     case 'sizeChanged':
       return (
-        <>
-          <strong>{user.login}</strong> changed task size from <strong>{historyItem.from}</strong>{' '}
-          to <strong>{historyItem.to}</strong>
-        </>
+        <Trans
+          i18nKey={'sizeChanged'}
+          t={translate}
+          values={{
+            login: user.login,
+            from: translate(historyItem.from.toLowerCase(), {
+              ns: TranslationNameSpaces.Typography,
+            }),
+            to: translate(historyItem.to.toLowerCase(), { ns: TranslationNameSpaces.Typography }),
+          }}
+        />
       );
     case 'assigneeChanged':
       return (
-        <>
-          <strong>{user.login}</strong> changed the assignee to <strong>{historyItem.to}</strong>
-        </>
+        <Trans
+          i18nKey={'assigneeChanged'}
+          t={translate}
+          values={{
+            login: user.login,
+            to: historyItem.to,
+          }}
+          components={{
+            nav: (
+              <Typography
+                fontWeight={600}
+                component="span"
+                sx={{ cursor: 'pointer' }}
+                onClick={() => navigate(getUserPage(historyItem.assigneeId))}
+              />
+            ),
+          }}
+        />
       );
     default:
       return '' as never;

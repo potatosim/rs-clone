@@ -24,7 +24,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import BoardCardAccount from 'components/BoardCardAccount';
-// import { useUpdatePassword } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import TaskCardAccount from 'components/TaskCardAccount';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +31,12 @@ import { AppRoutes } from 'enum/AppRoutes';
 import EditIcon from '@mui/icons-material/Edit';
 import CustomCollapse from 'components/CustomCollapse';
 import PanToolAltIcon from '@mui/icons-material/PanToolAlt';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 export const StyledItemWrapper = styled(Box)`
   display: flex;
@@ -75,6 +80,11 @@ const CurrentAccount = () => {
     ),
   );
   const navigate = useNavigate();
+
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const handleUpdateAvatar = async (newAvatar: string, userId: string) => {
     setAvatar(newAvatar);
@@ -134,7 +144,7 @@ const CurrentAccount = () => {
                 {login}
               </Typography>
 
-              <Tooltip title="Change login">
+              <Tooltip title={translate(ButtonTranslationKeys.ChangeLogin)}>
                 <IconButton
                   onClick={() => {
                     setIsLoginChange(true);
@@ -152,7 +162,11 @@ const CurrentAccount = () => {
                 onChange={(e) => setLogin(e.target.value)}
                 InputProps={{
                   endAdornment: (
-                    <Tooltip title="Close">
+                    <Tooltip
+                      title={translate(ButtonTranslationKeys.Close, {
+                        ns: TranslationNameSpaces.Buttons,
+                      })}
+                    >
                       <IconButton color="error" onClick={handleCloseChanges}>
                         {' '}
                         <CancelIcon />
@@ -169,7 +183,7 @@ const CurrentAccount = () => {
                   setIsLoginChange(false);
                 }}
               >
-                Accept changes
+                {translate(ButtonTranslationKeys.AcceptChanges)}
               </Button>
             </>
           )}
@@ -177,7 +191,7 @@ const CurrentAccount = () => {
         {boards && boards.length ? (
           <Box sx={{ width: '70%' }}>
             <ListItemButton onClick={handleBoardsOpen}>
-              <ListItemText primary="My boards" />
+              <ListItemText primary={translate(ButtonTranslationKeys.MyBoards)} />
               {isBoardsOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
             </ListItemButton>
           </Box>
@@ -194,7 +208,9 @@ const CurrentAccount = () => {
             }}
           >
             <Typography variant="h6" fontWeight={500}>
-              You don`t have any boards yet
+              {translate(TypographyTranslationKeys.NoBoardsYet, {
+                ns: TranslationNameSpaces.Typography,
+              })}
             </Typography>
             <Button
               onClick={() => {
@@ -203,39 +219,24 @@ const CurrentAccount = () => {
               color="secondary"
               variant="contained"
             >
-              Create my board
+              {translate(ButtonTranslationKeys.CreateMyBoard)}
             </Button>
           </Paper>
         )}
         {tasks && tasks.length ? (
           <Box sx={{ width: '70%' }}>
             <ListItemButton onClick={handleTasksOpen}>
-              <ListItemText primary="My list of tasks" />
+              <ListItemText primary={translate(ButtonTranslationKeys.MyListOfTasks)} />
               {isTasksOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
             </ListItemButton>
           </Box>
         ) : (
           <Typography variant="h6" fontWeight={500}>
-            You don`t have any tasks yet
+            {translate(TypographyTranslationKeys.NoTasksYet, {
+              ns: TranslationNameSpaces.Typography,
+            })}
           </Typography>
         )}
-        {/* <StyledItemWrapper>
-        <TextField
-          label="New password"
-          size="small"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <Button
-          onClick={() => {
-            handleUpdatePassword(password);
-          }}
-        >
-          Update password
-        </Button>
-      </StyledItemWrapper> */}
       </StyledPaper>
       <CustomCollapse
         isOpen={isBoardsOpen}

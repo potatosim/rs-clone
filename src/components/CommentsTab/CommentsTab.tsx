@@ -1,9 +1,17 @@
-import { Box, TextareaAutosize, Tooltip } from '@mui/material';
-import IconButton from '@mui/material/IconButton/IconButton';
-import Comments from 'components/Comments';
-import { CommentProps } from 'components/Comments/Comments';
+import { Box, Tooltip } from '@mui/material';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+} from 'enum/Translations';
 import React, { FC, useState } from 'react';
+
+import { CommentProps } from 'components/Comments/Comments';
+import Comments from 'components/Comments';
+import IconButton from '@mui/material/IconButton/IconButton';
 import SendIcon from '@mui/icons-material/Send';
+import { TextArea } from 'components/DescriptionField/DescriptionField';
+import { useTranslation } from 'react-i18next';
 
 interface CommentsTabProps extends CommentProps {
   handleAddComment: (message: string) => void;
@@ -12,6 +20,11 @@ interface CommentsTabProps extends CommentProps {
 const CommentsTab: FC<CommentsTabProps> = ({ comments, handleAddComment }) => {
   const [text, setText] = useState('');
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+  ]);
+
   const handleComment = async () => {
     setText('');
     await handleAddComment(text);
@@ -19,23 +32,22 @@ const CommentsTab: FC<CommentsTabProps> = ({ comments, handleAddComment }) => {
   return (
     <Box padding="1rem">
       <Box display="flex" alignItems="center" columnGap="1rem">
-        <TextareaAutosize
+        <TextArea
           style={{
-            resize: 'none',
-            padding: '0.5rem',
-            borderRadius: '5px',
             height: '50px',
             width: '90%',
-            fontSize: '1rem',
-            outline: 'none',
           }}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Enter some text..."
+          placeholder={
+            translate(InputsTranslationKeys.EnterSomeText, {
+              ns: TranslationNameSpaces.Inputs,
+            }) as string
+          }
           maxRows={2}
         />
 
-        <Tooltip title="Send a comment">
+        <Tooltip title={translate(ButtonTranslationKeys.SendAComment)}>
           <span>
             <IconButton
               color="info"

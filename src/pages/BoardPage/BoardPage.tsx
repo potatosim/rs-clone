@@ -6,6 +6,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from 'components/RequireAuth';
 import { AppRoutes } from 'enum/AppRoutes';
 import NotFoundElement from 'components/NotFoundElement';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const BoardPage = () => {
   const { boardId } = useParams();
@@ -13,20 +19,37 @@ const BoardPage = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
+
   if (boardLoading) {
     // TODO make this shit beautiful
     return <CircularProgress />;
   }
 
   if (!board) {
-    return <div>Not found</div>;
+    return (
+      <NotFoundElement
+        buttonText={translate(ButtonTranslationKeys.ToMyBoards)}
+        notification={translate(TypographyTranslationKeys.BoardExist, {
+          ns: TranslationNameSpaces.Typography,
+        })}
+        onClick={() => {
+          navigate(AppRoutes.Boards);
+        }}
+      ></NotFoundElement>
+    );
   }
 
   if (!board.allowedUsers.some((allowedUser) => allowedUser === user.id)) {
     return (
       <NotFoundElement
-        buttonText="to my boards"
-        notification="You don't have permission to access this board"
+        buttonText={translate(ButtonTranslationKeys.ToMyBoards)}
+        notification={translate(TypographyTranslationKeys.PermissionToBoard, {
+          ns: TranslationNameSpaces.Typography,
+        })}
         onClick={() => {
           navigate(AppRoutes.Boards);
         }}

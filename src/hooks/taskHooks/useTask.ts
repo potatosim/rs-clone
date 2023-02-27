@@ -9,6 +9,7 @@ import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
 import { HistoryItem } from 'types/HistoryItem';
 import { IColumnItem } from 'types/Column';
 import { UserContext } from 'components/RequireAuth';
+import { getCurrentDate } from 'helpers/getCurrentDateInFormat';
 
 export const useTask = (taskId: string, columns: IColumnItem[]) => {
   const { firestore } = useContext(FirebaseContext);
@@ -27,7 +28,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
           history: arrayUnion({
             initiator: user.id,
             action: 'descriptionChanged',
-            time: new Date().toLocaleString(),
+            time: getCurrentDate(),
           } as HistoryItem),
         },
       );
@@ -45,7 +46,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
             action: 'titleChanged',
             from: task.title,
             to: taskTitle,
-            time: new Date().toLocaleString(),
+            time: getCurrentDate(),
           } as HistoryItem),
         },
       );
@@ -108,7 +109,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
           action: 'statusChanged',
           from: prevColumn?.title,
           to: newColumn?.title,
-          time: new Date().toLocaleString(),
+          time: getCurrentDate(),
         } as HistoryItem),
         columnId,
       });
@@ -127,7 +128,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
           action: 'priorityChanged',
           from: task?.priority,
           to: priority,
-          time: new Date().toLocaleString(),
+          time: getCurrentDate(),
         } as HistoryItem),
       },
     );
@@ -143,7 +144,7 @@ export const useTask = (taskId: string, columns: IColumnItem[]) => {
           action: 'sizeChanged',
           from: task?.size,
           to: size,
-          time: new Date().toLocaleString(),
+          time: getCurrentDate(),
         } as HistoryItem),
       },
     );

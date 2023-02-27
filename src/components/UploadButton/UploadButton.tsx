@@ -3,6 +3,8 @@ import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import UploadIcon from '@mui/icons-material/Upload';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { uploadBytes, ref, getDownloadURL, deleteObject } from 'firebase/storage';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
+import { useTranslation } from 'react-i18next';
 
 const CustomButton = styled(Button)`
   position: relative;
@@ -41,6 +43,8 @@ const UploadButton = ({ getFileUrl, children }: UploadButtonProps) => {
   const [lastFileName, setLastFileName] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState('');
+
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
 
   const handleUploadFile = async () => {
     if (file) {
@@ -84,8 +88,8 @@ const UploadButton = ({ getFileUrl, children }: UploadButtonProps) => {
   }
 
   return (
-    <CustomButton variant="contained" startIcon={<UploadIcon />}>
-      Upload
+    <CustomButton color="secondary" variant="contained" startIcon={<UploadIcon />}>
+      {translate(ButtonTranslationKeys.Upload)}
       <UploadLabel>
         <TextField
           type="file"

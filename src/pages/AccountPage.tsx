@@ -1,17 +1,27 @@
-import { UserContext } from 'components/RequireAuth';
-import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetUser } from 'hooks/userHooks/useGetUser';
 
-import CurrentAccount from 'components/CurrentAccount';
 import AnotherAccount from 'components/AnotherAccount';
-import NotFoundElement from 'components/NotFoundElement';
-import { AppRoutes } from 'enum/AppRoutes';
 import { CircularProgress } from '@mui/material';
+import CurrentAccount from 'components/CurrentAccount';
+import NotFoundElement from 'components/NotFoundElement';
+import { UserContext } from 'components/RequireAuth';
+import { getUserPage } from 'helpers/getUserPage';
+import { useContext } from 'react';
+import { useGetUser } from 'hooks/userHooks/useGetUser';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const AccountPage = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Typography,
+    TranslationNameSpaces.Buttons,
+  ]);
 
   const { accountId } = useParams();
   const { userFromFirestore, userLoading } = useGetUser(accountId!);
@@ -30,10 +40,14 @@ const AccountPage = () => {
 
   return (
     <NotFoundElement
-      buttonText="to my account"
-      notification="Such user doesn't exist"
+      buttonText={translate(ButtonTranslationKeys.ToMyAccount, {
+        ns: TranslationNameSpaces.Buttons,
+      })}
+      notification={translate(TypographyTranslationKeys.UserExist, {
+        ns: TranslationNameSpaces.Typography,
+      })}
       onClick={() => {
-        navigate(AppRoutes.AccountPage.replace(':accountId', user?.id || ''));
+        navigate(getUserPage(user.id));
       }}
     />
   );

@@ -5,8 +5,10 @@ import IconWrapper from 'components/common/IconWrapper';
 import { priorityItems } from 'components/PrioritySelect/PrioritySelect';
 import { sizeItems } from 'components/SizeSelect/SizeSelect';
 import { Queries } from 'enum/Queries';
+import { InputsTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 import React, { FC } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { ITaskItem } from 'types/Task';
 
@@ -16,6 +18,11 @@ interface TaskCardProps {
 
 const TaskCard: FC<TaskCardProps> = ({ task }) => {
   const [query, setQuery] = useSearchParams();
+
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Inputs,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const handleSetQuery = () => {
     query.set(Queries.Task, task.id);
@@ -40,21 +47,33 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
           <Typography fontWeight={600}>{task.title}</Typography>
           <Box display="flex" columnGap="5px">
             {currentPriority && (
-              <Tooltip title="Task Priority">
+              <Tooltip
+                title={translate(InputsTranslationKeys.Priority, {
+                  ns: TranslationNameSpaces.Inputs,
+                })}
+              >
                 <Chip
                   variant="outlined"
                   icon={<IconWrapper children={currentPriority.symbol} />}
-                  label={currentPriority.priority}
+                  label={translate(currentPriority.priority.toLowerCase(), {
+                    ns: TranslationNameSpaces.Typography,
+                  })}
                   sx={{ paddingLeft: '0.5rem', cursor: 'pointer' }}
                 />
               </Tooltip>
             )}
             {currentSize && (
-              <Tooltip title="Task Size">
+              <Tooltip
+                title={translate(InputsTranslationKeys.Size, {
+                  ns: TranslationNameSpaces.Inputs,
+                })}
+              >
                 <Chip
                   variant="outlined"
                   icon={<IconWrapper children={currentSize.symbol} />}
-                  label={currentSize.size}
+                  label={translate(currentSize.size.toLowerCase(), {
+                    ns: TranslationNameSpaces.Typography,
+                  })}
                   sx={{ paddingLeft: '0.5rem', cursor: 'pointer' }}
                 />
               </Tooltip>

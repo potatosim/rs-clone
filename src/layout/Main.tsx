@@ -4,6 +4,7 @@ import ComponentWithChildren from 'types/ComponentWithChildren';
 
 const StyledMain = styled('main')(() => ({
   flex: '1 1 auto',
+  paddingTop: '64px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

@@ -1,6 +1,6 @@
-import { Box, TextField } from '@mui/material';
+import { Box, Paper, TextField } from '@mui/material';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 
 import { AppRoutes } from 'enum/AppRoutes';
@@ -8,25 +8,57 @@ import Button from '@mui/material/Button';
 import { Collections } from 'enum/Collection';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import GoogleIcon from '@mui/icons-material/Google';
-import Grid from '@mui/material/Grid';
 import { IUserItem } from 'types/User';
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { usersConverter } from 'helpers/converters';
 import { DefaultThemes } from 'enum/DefaultThemes';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
+import PasswordInput from 'components/PasswordInput';
+import { FirebaseErrors } from 'enum/FirebaseErrors';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { firestore, auth } = useContext(FirebaseContext);
+  const { firestore, auth, user } = useContext(FirebaseContext);
   const [email, setEmail] = useState('');
+  const [isEmailError, setIsEmailError] = useState(false);
   const [password, setPassword] = useState('');
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const [isPasswordError, setIsPasswordError] = useState(false);
+  const [signInWithEmailAndPassword, , , error] = useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  useEffect(() => {
+    if (user) {
+      navigate(AppRoutes.Boards);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (error) {
+      if (error.code === FirebaseErrors.Email || error.code === FirebaseErrors.InCorrectEmail) {
+        setIsEmailError(true);
+      }
+      if (error.code === FirebaseErrors.WrongPassword) {
+        setIsPasswordError(true);
+      }
+    }
+  }, [error]);
+
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const handleLogin = async () => {
     await signInWithEmailAndPassword(email, password);
-    navigate(AppRoutes.Boards);
   };
 
   const handleSignInWithGoogle = async () => {
@@ -49,50 +81,81 @@ const LoginPage = () => {
   };
 
   return (
-    <Grid container sx={{ alignItems: 'center', justifyContent: 'center' }}>
-      <Grid
-        p={5}
+    <Paper
+      sx={{
+        p: 4,
+      }}
+      elevation={12}
+    >
+      <Box
+        component="form"
         sx={{
-          boxShadow: '4px 4px 4px 4px gray',
-          textAlign: 'center',
-          direction: 'column',
-          borderRadius: '15px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          rowGap: '1rem',
         }}
       >
-        <Box
-          component="form"
-          sx={{ width: '250px', display: 'flex', flexDirection: 'column', gap: '10px' }}
-        >
-          <Typography>Login to your account</Typography>
-          <TextField
-            label="E-mail address"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <Button variant="contained" color="secondary" onClick={handleLogin}>
-            Enter
-          </Button>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          or
-          <Button variant="outlined" color="secondary" onClick={handleSignInWithGoogle}>
-            <GoogleIcon sx={{ marginRight: '15px' }}></GoogleIcon>
-            Login with Google
-          </Button>
-        </Box>
-        <Typography sx={{ marginTop: '15px' }}>
-          Do not have an account? <br />
-          <Link to={AppRoutes.SignUpPage}> SignUp for free!</Link>
+        <Typography>
+          {translate(TypographyTranslationKeys.LoginToAccount, {
+            ns: TranslationNameSpaces.Typography,
+          })}
         </Typography>
-      </Grid>
-    </Grid>
+        <TextField
+          size="small"
+          color="secondary"
+          required
+          label={translate(InputsTranslationKeys.EMailAddress, {
+            ns: TranslationNameSpaces.Inputs,
+          })}
+          type="email"
+          onChange={(e) => {
+            if (isEmailError) {
+              setIsEmailError(false);
+            }
+            setEmail(e.target.value);
+          }}
+          value={email}
+          fullWidth
+          error={isEmailError}
+          helperText={
+            isEmailError &&
+            translate(TypographyTranslationKeys.IncorrectEmail, {
+              ns: TranslationNameSpaces.Typography,
+            })
+          }
+        />
+        <PasswordInput
+          value={password}
+          setValue={(value) => {
+            if (isPasswordError) {
+              setIsPasswordError(false);
+            }
+            setPassword(value);
+          }}
+          error={isPasswordError}
+          errorMessage={translate(TypographyTranslationKeys.WrongPassword, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+        />
+        <Button fullWidth variant="contained" color="secondary" onClick={handleLogin}>
+          {translate(ButtonTranslationKeys.Enter)}
+        </Button>
+        <Button fullWidth variant="contained" color="secondary" onClick={handleSignInWithGoogle}>
+          <GoogleIcon sx={{ marginRight: '15px' }}></GoogleIcon>
+          {translate(ButtonTranslationKeys.LoginWithGoogle)}
+        </Button>
+        <Typography sx={{ marginTop: '15px' }}>
+          {translate(TypographyTranslationKeys.DontHaveAccount, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+        </Typography>
+        <Button variant="contained" color="secondary" component={Link} to={AppRoutes.SignUpPage}>
+          {translate(ButtonTranslationKeys.SignUp)}
+        </Button>
+      </Box>
+    </Paper>
   );
 };
 

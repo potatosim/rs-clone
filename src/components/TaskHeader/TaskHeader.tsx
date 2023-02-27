@@ -4,6 +4,8 @@ import { FC, useState } from 'react';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CloseIcon from '@mui/icons-material/Close';
 import RenameTextField from 'components/RenameTextField/RenameTextField';
+import { useTranslation } from 'react-i18next';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 
 const StyledCardHeader = styled(Box)`
   grid-area: 1 / 1 / 2 / 5;
@@ -13,6 +15,10 @@ const StyledCardHeader = styled(Box)`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+
+  @media (max-width: 768px) {
+    order: 1;
+  }
 `;
 
 interface TaskHeaderProps {
@@ -24,6 +30,8 @@ interface TaskHeaderProps {
 
 const TaskHeader: FC<TaskHeaderProps> = ({ taskTitle, taskId, handleClose, handleUpdateTitle }) => {
   const [isChangeTitle, setIsChangeTitle] = useState(false);
+
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
 
   const handleRename = () => {
     setIsChangeTitle(true);
@@ -51,12 +59,12 @@ const TaskHeader: FC<TaskHeaderProps> = ({ taskTitle, taskId, handleClose, handl
         <Typography variant="h4">{taskTitle}</Typography>
       )}
       <ButtonGroup>
-        <Tooltip title="Change task title">
+        <Tooltip title={translate(ButtonTranslationKeys.ChangeTaskTitle)}>
           <IconButton onClick={handleRename}>
             <ModeEditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Close task">
+        <Tooltip title={translate(ButtonTranslationKeys.Close)}>
           <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>

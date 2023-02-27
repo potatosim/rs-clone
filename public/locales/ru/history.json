@@ -1,0 +1,9 @@
+{
+  "created": "<strong>{{login}}</strong> создал(а) задачу.",
+  "statusChanged": "<strong>{{login}}</strong> изменил(а) статус задачи с <strong>{{from}}</strong> на <strong>{{to}}</strong>.",
+  "titleChanged": "<strong>{{login}}</strong> изменил(а) имя задачи с <strong>{{from}}</strong> на <strong>{{to}}</strong>.",
+  "descriptionChanged": "<strong>{{login}}</strong> изменил(а) описание задачи.",
+  "priorityChanged": "<strong>{{login}}</strong> изменил(а) приоритет задачи с <strong> {{from}} </strong>на<strong> {{to}} </strong>.",
+  "sizeChanged": "<strong>{{login}}</strong> изменил(а) размер задачи с <strong>{{from}}</strong> на <strong>{{to}}</strong>.",
+  "assigneeChanged": "<strong>{{login}}</strong> изменил(а) исполнителя на <nav>{{to}}</nav>."
+}

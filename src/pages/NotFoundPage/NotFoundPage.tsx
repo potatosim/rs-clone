@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom';
 import { keyframes } from '@emotion/react';
 import ghostImg from 'static/images/ghost.png';
 import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const HoverEffect = keyframes`
   0% {
@@ -25,16 +31,27 @@ const ContentWrapper = styled(Box)(() => ({
 
 const MessageWrapper = styled(Box)(() => ({}));
 const NotFoundPage = () => {
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
+
   return (
     <>
       <ContentWrapper>
         <MessageWrapper>
-          <Typography>Error 404</Typography>
+          <Typography>
+            {translate(TypographyTranslationKeys.Error404, {
+              ns: TranslationNameSpaces.Typography,
+            })}
+          </Typography>
           <Typography variant="h6">
-            Sorry, we can't find that page. Don't worry though, everything is still awesome!
+            {translate(TypographyTranslationKeys.PageNotFound, {
+              ns: TranslationNameSpaces.Typography,
+            })}
           </Typography>
           <Button sx={{ marginTop: 5 }} variant="contained" component={Link} to="/">
-            Go Home
+            {translate(ButtonTranslationKeys.GoHome)}
           </Button>
         </MessageWrapper>
 

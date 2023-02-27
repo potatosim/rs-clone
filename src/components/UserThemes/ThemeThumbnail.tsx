@@ -12,6 +12,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { FC } from 'react';
 import { generateTheme } from 'helpers/generateTheme';
 import { ITheme } from 'types/Theme';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 interface ThumbnailProps {
   name: string;
@@ -21,6 +27,11 @@ interface ThumbnailProps {
 }
 
 const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) => {
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
+
   return (
     <Box
       sx={{
@@ -38,7 +49,9 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) 
             <Toolbar>
               <MenuIcon />
               <Typography variant="h6" sx={{ ml: '1rem' }}>
-                Logo
+                {translate(TypographyTranslationKeys.Logo, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
               </Typography>
             </Toolbar>
           </AppBar>
@@ -62,16 +75,24 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) 
               }}
             >
               <Typography variant="h5" sx={{ mt: '25px' }}>
-                Text
+                {translate(TypographyTranslationKeys.SecondaryBackground, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
               </Typography>
               <Button
                 variant="contained"
                 color="secondary"
                 sx={{ maxWidth: '200px', m: '25px auto' }}
               >
-                Button
+                {translate(ButtonTranslationKeys.SecondaryColor)}
               </Button>
-              <TextField label="Field" color="primary" sx={{ m: '1rem auto' }} />
+              <TextField
+                label={translate(TypographyTranslationKeys.SecondaryBackground, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+                color="primary"
+                sx={{ m: '1rem auto' }}
+              />
             </Paper>
           </Box>
         </ThemeProvider>
