@@ -1,0 +1,9 @@
+{
+  "created": "<strong>{{login}}</strong> created a task.",
+  "statusChanged": "<strong>{{login}}</strong> changed task status from <strong>{{from}}</strong> to <strong>{{to}}</strong>.",
+  "titleChanged": "<strong>{{login}}</strong> changed task title from <strong>{{from}}</strong> to <strong>{{to}}</strong>.",
+  "descriptionChanged": "<strong>{{login}}</strong> changed task description.",
+  "priorityChanged": "<strong>{{login}}</strong> changed task priority from <strong> {{from}} </strong>to<strong> {{to}} </strong>.",
+  "sizeChanged": "<strong>{{login}}</strong> changed task size from <strong>{{from}}</strong> to <strong>{{to}}</strong>.",
+  "assigneeChanged": "<strong>{{login}}</strong> changed the assignee to <nav>{{to}}</nav>."
+}
