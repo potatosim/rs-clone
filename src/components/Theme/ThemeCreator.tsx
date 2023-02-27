@@ -30,6 +30,7 @@ import {
 } from 'enum/Translations';
 import { ModalWrapper } from 'components/common/ModalWrapper';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { TwitterPicker } from 'react-color';
 
 interface ThemeCreatorProps {
   setIsCreating: (value: boolean) => void;
@@ -128,20 +129,11 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <TextField
-                label={translate(InputsTranslationKeys.Primary, {
-                  ns: TranslationNameSpaces.Inputs,
-                })}
-                type="color"
-                color="secondary"
-                value={primary}
-                onChange={(e) => setPrimary(e.target.value)}
-                sx={{ width: '250px', mb: '20px' }}
-              />
+              <TwitterPicker color={primary} onChangeComplete={(c) => setPrimary(c.hex)} />
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
-          <Accordion square disableGutters={true}>
+          <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">
                 {translate(InputsTranslationKeys.Secondary, {
@@ -150,20 +142,11 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <TextField
-                label={translate(InputsTranslationKeys.Secondary, {
-                  ns: TranslationNameSpaces.Inputs,
-                })}
-                type="color"
-                color="secondary"
-                value={secondary}
-                onChange={(e) => setSecondary(e.target.value)}
-                sx={{ width: '250px' }}
-              />
+              <TwitterPicker color={secondary} onChangeComplete={(c) => setSecondary(c.hex)} />
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
-          <Accordion square disableGutters={true}>
+          <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">
                 {translate(TypographyTranslationKeys.Privacy, {
@@ -188,7 +171,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
-          <Accordion square disableGutters={true}>
+          <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">
                 {translate(TypographyTranslationKeys.Mode, {
