@@ -99,10 +99,8 @@ service cloud.firestore {
 }
 ```
 
-## Running application as is
-
-1. Install npm modules.
-
+## Running application
+1. Start application.
 ```
 npm start
 ```
