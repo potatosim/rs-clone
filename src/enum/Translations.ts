@@ -124,4 +124,6 @@ export enum TypographyTranslationKeys {
   LoginToAccount = 'loginToAccount',
   Login = 'login',
   WrongPassword = 'wrongPassword',
+  PageNotFound = 'pageNotFound',
+  Error404 = 'error404',
 }

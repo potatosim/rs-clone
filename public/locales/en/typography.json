@@ -46,5 +46,7 @@
   "loginToAccount": "Login to your account",
   "incorrectEmail": "Incorrect Email",
   "login": "Login",
-  "wrongPassword": "Wrong Password"
+  "wrongPassword": "Wrong Password",
+  "error404": "Error 404",
+  "pageNotFound": "Sorry, we can't find that page. Don't worry though, everything is still awesome!"
 }

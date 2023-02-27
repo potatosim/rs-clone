@@ -46,5 +46,7 @@
   "loginToAccount": "Войдите в Ваш аккаунт",
   "incorrectEmail": "Неверный Email",
   "login": "Логин",
-  "wrongPassword": "Неверный пароль"
+  "wrongPassword": "Неверный пароль",
+  "error404": "Ошибка 404",
+  "pageNotFound": "К сожалению такая страница не найдена или пока не была создана!"
 }
