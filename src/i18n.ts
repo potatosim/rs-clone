@@ -8,7 +8,7 @@ i18next
   .use(I18nextBrowserLanguageDetector)
   .use(HttpApi)
   .init({
-    supportedLngs: ['en'],
+    supportedLngs: ['en', 'ru'],
     fallbackLng: 'en',
     detection: {
       order: ['cookie', 'localStorage', 'htmlTag', 'path', 'subdomain'],
@@ -19,3 +19,5 @@ i18next
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
   });
+
+export default i18next;

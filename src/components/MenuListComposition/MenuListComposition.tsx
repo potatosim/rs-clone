@@ -8,6 +8,8 @@ import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useTranslation } from 'react-i18next';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 
 interface MenuListCompositionProps {
   handleDelete: () => void;
@@ -17,6 +19,8 @@ interface MenuListCompositionProps {
 const MenuListComposition: FC<MenuListCompositionProps> = ({ handleDelete, handleRename }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
+
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
 
   const handleToggle = () => {
     setOpen((prev) => !prev);
@@ -48,9 +52,11 @@ const MenuListComposition: FC<MenuListCompositionProps> = ({ handleDelete, handl
                       handleRename();
                     }}
                   >
-                    Rename
+                    {translate(ButtonTranslationKeys.Rename)}
                   </MenuItem>
-                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                  <MenuItem onClick={handleDelete}>
+                    {translate(ButtonTranslationKeys.Delete)}
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

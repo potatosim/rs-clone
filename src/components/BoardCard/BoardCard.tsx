@@ -1,11 +1,11 @@
-import styled from '@emotion/styled';
-import { Paper } from '@mui/material';
-import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppRoutes } from 'enum/AppRoutes';
 import { BackgroundWrapper } from 'components/common/BackgroundWrapper';
 import CardHeader from 'components/CardHeader';
+import { FC } from 'react';
 import { IBoardItem } from 'types/Board';
+import { Paper } from '@mui/material';
+import { getBoardPageUrl } from 'helpers/getBoardPageUrl';
+import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 
 interface BoardItemProps {
   board: IBoardItem;
@@ -25,10 +25,7 @@ const BoardCard: FC<BoardItemProps> = ({ board, handleDeleteBoard, handleRenameB
   const navigate = useNavigate();
 
   return (
-    <CardWrapper
-      elevation={12}
-      onClick={() => navigate(AppRoutes.Board.replace(':boardId', board.id))}
-    >
+    <CardWrapper elevation={12} onClick={() => navigate(getBoardPageUrl(board.id))}>
       <CardHeader
         padding="0.5rem 1rem"
         cardTitle={board.title}

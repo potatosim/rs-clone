@@ -18,9 +18,7 @@ const AppRouter = () => {
     <Routes>
       <Route path={AppRoutes.Home} element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path={AppRoutes.NotFoundPage} element={<NotFoundPage />} />
-        <Route path={AppRoutes.SignUpPage} element={<SignUpPage />} />
-        <Route path={AppRoutes.LoginPage} element={<LoginPage />} />
+
         <Route element={<RequireAuth />}>
           <Route path={AppRoutes.Boards} element={<BoardsPage />} />
           <Route path={AppRoutes.Board} element={<BoardPage />} />
@@ -28,6 +26,9 @@ const AppRouter = () => {
           <Route path={AppRoutes.UserThemes} element={<UserThemes />} />
           <Route path={AppRoutes.AllThemes} element={<AllThemes />} />
         </Route>
+        <Route path={AppRoutes.NotFoundPage} element={<NotFoundPage />} />
+        <Route path={AppRoutes.SignUpPage} element={<SignUpPage />} />
+        <Route path={AppRoutes.LoginPage} element={<LoginPage />} />
       </Route>
     </Routes>
   );

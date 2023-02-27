@@ -13,6 +13,12 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import BoardCardAccount from 'components/BoardCardAccount';
 import { UserContext } from 'components/RequireAuth';
 import CustomCollapse from 'components/CustomCollapse';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 interface AnotherAccountProps {
   anotherUser: IUserItem;
@@ -21,6 +27,11 @@ interface AnotherAccountProps {
 const AnotherAccount: FC<AnotherAccountProps> = ({ anotherUser }) => {
   const { firestore } = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
+
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const [boards] = useCollectionData<IBoardItem>(
     query(
@@ -49,13 +60,15 @@ const AnotherAccount: FC<AnotherAccountProps> = ({ anotherUser }) => {
         {filteredBoards && filteredBoards.length ? (
           <Box sx={{ width: '80%' }}>
             <ListItemButton onClick={handleBoardsOpen}>
-              <ListItemText primary="Available boards" />
+              <ListItemText primary={translate(ButtonTranslationKeys.AvailableBoards)} />
               {isBoardsOpen ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
             </ListItemButton>
           </Box>
         ) : (
           <Typography variant="h5" fontWeight={500}>
-            You don't have any common boards with this user
+            {translate(TypographyTranslationKeys.BoardsNotMatched, {
+              ns: TranslationNameSpaces.Typography,
+            })}
           </Typography>
         )}
       </StyledPaper>

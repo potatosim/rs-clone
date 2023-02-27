@@ -14,6 +14,8 @@ import { IUserItem } from 'types/User';
 import { toast, ToastContainer } from 'react-toastify';
 import { isDefaultTheme } from 'helpers/defaultThemes';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTranslation } from 'react-i18next';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 
 interface IThemeItem extends ITheme {
   status: 'userTheme' | 'communityTheme';
@@ -23,6 +25,8 @@ const ThemeItem: FC<IThemeItem> = (props) => {
   const { firestore } = useContext(FirebaseContext);
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useContext(UserContext);
+
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
 
   const handlerAddTheme = async () => {
     if (user && props.holders.every((uid) => uid !== user.id)) {
@@ -62,7 +66,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
                 );
               }}
             >
-              Apply
+              {translate(ButtonTranslationKeys.Apply)}
             </Button>
             {!isDefaultTheme(props.id) && (
               <Button
@@ -76,7 +80,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
                   }
                 }}
               >
-                Edit
+                {translate(ButtonTranslationKeys.Edit)}
               </Button>
             )}
             {isEditing && <ThemeEditor {...props} setIsEditing={setIsEditing} />}
@@ -92,7 +96,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
                   }
                 }}
               >
-                Delete
+                {translate(ButtonTranslationKeys.Delete)}
               </Button>
             )}
           </ButtonGroup>
@@ -103,7 +107,7 @@ const ThemeItem: FC<IThemeItem> = (props) => {
             onClick={handlerAddTheme}
             sx={{ maxWidth: '120px', width: '100%' }}
           >
-            Add
+            {translate(ButtonTranslationKeys.Add)}
           </Button>
         )}
       </Box>

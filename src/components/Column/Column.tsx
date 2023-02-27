@@ -13,6 +13,8 @@ import TaskCard from 'components/TaskCard';
 import { useTasks } from 'hooks/taskHooks/useTasks';
 
 import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 
 interface BoardColumnProps {
   column: IColumnItem;
@@ -39,6 +41,8 @@ const ScrollableColumnWrapper = styled('div')`
 const Column: FC<BoardColumnProps> = ({ column, handleDeleteColumn, handleRenameColumn }) => {
   const { tasks } = useTasks(column.id);
   const [isOpen, setIsOpen] = useState(false);
+
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
@@ -75,8 +79,8 @@ const Column: FC<BoardColumnProps> = ({ column, handleDeleteColumn, handleRename
               )}
             </Droppable>
           </ScrollableColumnWrapper>
-          <Button onClick={handleOpen} startIcon={<AddIcon />}>
-            Add task
+          <Button color="secondary" onClick={handleOpen} startIcon={<AddIcon />}>
+            {translate(ButtonTranslationKeys.AddTask)}
           </Button>
           {isOpen && (
             <CreateTaskForm

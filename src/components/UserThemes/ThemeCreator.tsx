@@ -21,6 +21,13 @@ import { addDoc, collection } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import styled from '@emotion/styled';
 import { UserContext } from 'components/RequireAuth';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 interface ThemeCreatorProps {
   setIsCreating: (value: boolean) => void;
@@ -62,7 +69,14 @@ const ThumbnailWrapper = styled(Box)`
 
 const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const { firestore } = useContext(FirebaseContext);
-  const [name, setName] = useState<string>('New Theme');
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+    TranslationNameSpaces.Typography,
+  ]);
+  const [name, setName] = useState<string>(
+    `${translate(TypographyTranslationKeys.NewTheme, { ns: TranslationNameSpaces.Typography })}`,
+  );
   const [primary, setPrimary] = useState<string>('#9E9E9E');
   const [secondary, setSecondary] = useState<string>('#9E9E9E');
   const [checked, setChecked] = useState<boolean>(false);
@@ -98,11 +112,13 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
         <Box sx={{ maxWidth: '600px', width: '100%', flexShrink: '10', p: '0 auto' }}>
           <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
-              <Typography variant="h6">Name</Typography>
+              <Typography variant="h6">
+                {translate(InputsTranslationKeys.Name, { ns: TranslationNameSpaces.Inputs })}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <TextField
-                label="Name"
+                label={translate(InputsTranslationKeys.Name, { ns: TranslationNameSpaces.Inputs })}
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -113,11 +129,17 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
           <Divider sx={{ backgroundColor: 'black' }} />
           <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
-              <Typography variant="h6">Primary Color</Typography>
+              <Typography variant="h6">
+                {translate(InputsTranslationKeys.Primary, {
+                  ns: TranslationNameSpaces.Inputs,
+                })}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <TextField
-                label="primary"
+                label={translate(InputsTranslationKeys.Primary, {
+                  ns: TranslationNameSpaces.Inputs,
+                })}
                 type="color"
                 value={primary}
                 onChange={(e) => setPrimary(e.target.value)}
@@ -128,11 +150,17 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
           <Divider sx={{ backgroundColor: 'black' }} />
           <Accordion square disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
-              <Typography variant="h6">Secondary Color</Typography>
+              <Typography variant="h6">
+                {translate(InputsTranslationKeys.Secondary, {
+                  ns: TranslationNameSpaces.Inputs,
+                })}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <TextField
-                label="secondary"
+                label={translate(InputsTranslationKeys.Secondary, {
+                  ns: TranslationNameSpaces.Inputs,
+                })}
                 type="color"
                 value={secondary}
                 onChange={(e) => setSecondary(e.target.value)}
@@ -143,7 +171,11 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
           <Divider sx={{ backgroundColor: 'black' }} />
           <Accordion square disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
-              <Typography variant="h6">Privacy</Typography>
+              <Typography variant="h6">
+                {translate(TypographyTranslationKeys.Privacy, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <FormControlLabel
@@ -155,7 +187,9 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
                     setChecked(true);
                   }
                 }}
-                label="Add to community themes"
+                label={translate(InputsTranslationKeys.AddToCommunityThemes, {
+                  ns: TranslationNameSpaces.Inputs,
+                })}
               />
             </AccordionDetails>
           </Accordion>
@@ -193,14 +227,14 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               sx={{ width: '100px', mr: '1rem' }}
               onClick={() => addTheme()}
             >
-              Create
+              {translate(ButtonTranslationKeys.Create)}
             </Button>
             <Button
               variant="contained"
               sx={{ width: '100px' }}
               onClick={() => setIsCreating(false)}
             >
-              Cancel
+              {translate(ButtonTranslationKeys.Cancel)}
             </Button>
           </Box>
         </ThumbnailWrapper>

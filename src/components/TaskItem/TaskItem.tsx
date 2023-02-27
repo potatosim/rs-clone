@@ -22,6 +22,12 @@ import CommentsTab from 'components/CommentsTab';
 import AssigneeSelect from 'components/AssigneeSelect';
 import DescriptionField from 'components/DescriptionField';
 import Divider from '@mui/material/Divider';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+} from 'enum/Translations';
 
 interface TaskItemProps {
   taskId: string;
@@ -91,6 +97,11 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
   } = useTask(taskId, columns);
   const [activeTab, setActiveTab] = useState<TaskTabs>(TaskTabs.History);
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+  ]);
+
   const close = () => {
     query.delete(Queries.Task);
     setQuery(query);
@@ -125,7 +136,12 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
         />
 
         <StyledCardContent>
-          <Typography fontWeight={600}>Description:</Typography>
+          <Typography fontWeight={600}>
+            {translate(InputsTranslationKeys.Description, {
+              ns: TranslationNameSpaces.Inputs,
+            })}
+            :
+          </Typography>
 
           <DescriptionField
             taskDescription={task.description}
@@ -135,9 +151,19 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
           />
           <Divider />
 
-          <Tabs value={activeTab} onChange={handleChangeTab}>
-            <Tab value={TaskTabs.History} label={TaskTabs.History}></Tab>
-            <Tab value={TaskTabs.Comments} label={TaskTabs.Comments}></Tab>
+          <Tabs textColor="secondary" value={activeTab} onChange={handleChangeTab}>
+            <Tab
+              value={TaskTabs.History}
+              label={translate(InputsTranslationKeys.History, {
+                ns: TranslationNameSpaces.Inputs,
+              })}
+            ></Tab>
+            <Tab
+              value={TaskTabs.Comments}
+              label={translate(InputsTranslationKeys.Comments, {
+                ns: TranslationNameSpaces.Inputs,
+              })}
+            ></Tab>
           </Tabs>
           <TabPanel value={activeTab} index={TaskTabs.History}>
             <History history={task.history} />
@@ -177,7 +203,7 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
               variant="contained"
               startIcon={<DeleteForeverIcon />}
             >
-              Delete this task
+              {translate(ButtonTranslationKeys.DeleteThisTask)}
             </Button>
           </StyledCardContentOptions>
         </StyledBox>

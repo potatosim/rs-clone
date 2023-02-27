@@ -1,24 +1,24 @@
 import { Box, ButtonGroup, Paper, Typography } from '@mui/material';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import AddIcon from '@mui/icons-material/Add';
-import { AppRoutes } from 'enum/AppRoutes';
 import { BackgroundWrapper } from 'components/common/BackgroundWrapper';
 import Button from '@mui/material/Button';
 import Column from 'components/Column';
 import CreateColumnForm from 'components/CreateColumnForm';
 import { DnDTypes } from 'enum/DnDTypes';
+import EditBoardButton from './EditBoardButton';
 import { IBoardItem } from 'types/Board';
 import ModalLoader from 'components/common/ModalLoader';
+import { Queries } from 'enum/Queries';
+import TaskItem from 'components/TaskItem';
 import { sortByOrder } from 'helpers/sortByOrder';
 import styled from '@emotion/styled';
 import { useColumns } from 'hooks/columnHooks/useColumns';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import useQueryParam from 'hooks/useQueryParam';
-import { Queries } from 'enum/Queries';
-import TaskItem from 'components/TaskItem';
-import EditBoardButton from './EditBoardButton';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const BoardWrapper = styled(Box)`
   position: relative;
@@ -36,6 +36,12 @@ const BoardHeader = styled(Paper)`
   padding: 0.5rem 1rem;
   align-items: center;
   justify-content: space-between;
+  border-radius: 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    row-gap: 1rem;
+  }
 `;
 
 const ScrollableWrapper = styled('div')<{ columnsCount?: number }>`
@@ -59,9 +65,10 @@ const Board = (board: IBoardItem) => {
   const { columnsItems, columnsLoading, updateOrder, handleDeleteColumn, handleRenameColumn } =
     useColumns(id);
   const [isCreateColumnOpen, setIsCreateColumnOpen] = useState(false);
-  const navigate = useNavigate();
 
   const taskQuery = useQueryParam(Queries.Task);
+
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
 
   const handleOpen = () => setIsCreateColumnOpen(true);
 
@@ -74,10 +81,6 @@ const Board = (board: IBoardItem) => {
   return (
     <BoardWrapper>
       <BoardHeader elevation={12}>
-        <Button color="secondary" onClick={() => navigate(AppRoutes.Boards)} variant="contained">
-          Back to my boards
-        </Button>
-
         <Typography variant="h4" fontWeight="600" textTransform="capitalize">
           {title}
         </Typography>
@@ -90,7 +93,7 @@ const Board = (board: IBoardItem) => {
             startIcon={<AddIcon />}
             onClick={handleOpen}
           >
-            Add Column
+            {translate(ButtonTranslationKeys.AddColumn)}
           </Button>
         </ButtonGroup>
       </BoardHeader>

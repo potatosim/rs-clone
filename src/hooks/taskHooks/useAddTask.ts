@@ -3,6 +3,7 @@ import { UserContext } from 'components/RequireAuth';
 import { Collections } from 'enum/Collection';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
 import { columnsConverter, tasksConverter } from 'helpers/converters';
+import { getCurrentDate } from 'helpers/getCurrentDateInFormat';
 import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { IColumnItem } from 'types/Column';
@@ -26,7 +27,7 @@ export const useAddTask = (
           {
             action: 'created',
             initiator: user.id,
-            time: new Date().toLocaleString(),
+            time: getCurrentDate(),
           },
         ],
         comments: [],

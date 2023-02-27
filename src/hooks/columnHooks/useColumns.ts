@@ -23,6 +23,7 @@ import { getDocumentsByMatchedKey } from 'helpers/getDocumentsWithId';
 import { IColumnItem } from 'types/Column';
 import { UserContext } from 'components/RequireAuth';
 import { IBoardItem } from 'types/Board';
+import { getCurrentDate } from 'helpers/getCurrentDateInFormat';
 
 export const useColumns = (boardId: string) => {
   const { firestore } = useContext(FirebaseContext);
@@ -175,7 +176,7 @@ export const useColumns = (boardId: string) => {
             action: 'statusChanged',
             from: prevColumn?.title,
             to: newColumn?.title,
-            time: new Date().toLocaleString(),
+            time: getCurrentDate(),
           }),
         });
 

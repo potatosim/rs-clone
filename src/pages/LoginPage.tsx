@@ -1,4 +1,4 @@
-import { Box, TextField } from '@mui/material';
+import { Box, Paper, TextField } from '@mui/material';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useContext, useState } from 'react';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
@@ -8,13 +8,19 @@ import Button from '@mui/material/Button';
 import { Collections } from 'enum/Collection';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import GoogleIcon from '@mui/icons-material/Google';
-import Grid from '@mui/material/Grid';
 import { IUserItem } from 'types/User';
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { usersConverter } from 'helpers/converters';
 import { DefaultThemes } from 'enum/DefaultThemes';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -23,6 +29,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const handleLogin = async () => {
     await signInWithEmailAndPassword(email, password);
@@ -49,50 +61,60 @@ const LoginPage = () => {
   };
 
   return (
-    <Grid container sx={{ alignItems: 'center', justifyContent: 'center' }}>
-      <Grid
-        p={5}
+    <Paper
+      sx={{
+        p: 4,
+      }}
+      elevation={12}
+    >
+      <Box
+        component="form"
         sx={{
-          boxShadow: '4px 4px 4px 4px gray',
-          textAlign: 'center',
-          direction: 'column',
-          borderRadius: '15px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          rowGap: '1rem',
         }}
       >
-        <Box
-          component="form"
-          sx={{ width: '250px', display: 'flex', flexDirection: 'column', gap: '10px' }}
-        >
-          <Typography>Login to your account</Typography>
-          <TextField
-            label="E-mail address"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <Button variant="contained" color="secondary" onClick={handleLogin}>
-            Enter
-          </Button>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          or
-          <Button variant="outlined" color="secondary" onClick={handleSignInWithGoogle}>
-            <GoogleIcon sx={{ marginRight: '15px' }}></GoogleIcon>
-            Login with Google
-          </Button>
-        </Box>
+        <Typography>Login to your account</Typography>
+        <TextField
+          size="small"
+          color="secondary"
+          label={translate(InputsTranslationKeys.EMailAddress, {
+            ns: TranslationNameSpaces.Inputs,
+          })}
+          type="email"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
+        <TextField
+          size="small"
+          color="secondary"
+          label={translate(InputsTranslationKeys.Password, {
+            ns: TranslationNameSpaces.Inputs,
+          })}
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+        <Button variant="contained" color="secondary" onClick={handleLogin}>
+          {translate(ButtonTranslationKeys.Enter)}
+        </Button>
+        <Button variant="outlined" color="secondary" onClick={handleSignInWithGoogle}>
+          <GoogleIcon sx={{ marginRight: '15px' }}></GoogleIcon>
+          {translate(ButtonTranslationKeys.LoginWithGoogle)}
+        </Button>
         <Typography sx={{ marginTop: '15px' }}>
-          Do not have an account? <br />
-          <Link to={AppRoutes.SignUpPage}> SignUp for free!</Link>
+          {translate(TypographyTranslationKeys.DontHaveAccount, {
+            ns: TranslationNameSpaces.Typography,
+          })}
         </Typography>
-      </Grid>
-    </Grid>
+        <Button color="secondary" component={Link} to={AppRoutes.SignUpPage}>
+          {translate(ButtonTranslationKeys.SignUp)}
+        </Button>
+      </Box>
+    </Paper>
   );
 };
 

@@ -1,6 +1,11 @@
-import { motion } from 'framer-motion';
 import { Grid, Typography } from '@mui/material';
+import { ReactElement, ReactNode } from 'react';
+import { TranslationNameSpaces, TypographyTranslationKeys } from 'enum/Translations';
+
+import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
+import { useContrastText } from 'hooks/useContrastText';
+import { useTranslation } from 'react-i18next';
 
 const featureQuestionAnimation = {
   hidden: {
@@ -27,10 +32,63 @@ const elementAnimation = {
 
 const FeatureDescription = styled(Typography)(() => ({
   textAlign: 'center',
-  padding: '5%  10%',
+  padding: '2rem',
 }));
 
+const FeatureWrapper = ({
+  delay,
+  children,
+}: {
+  delay: number;
+  children: ReactNode | ReactElement;
+}) => {
+  return (
+    <Grid
+      item
+      component={motion.div}
+      variants={elementAnimation}
+      custom={delay}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bgcolor: 'primary.main',
+        borderRadius: {
+          sm: '0 20px 20px 0',
+          xs: '0',
+        },
+      }}
+    >
+      {children}
+    </Grid>
+  );
+};
+
+const Description = ({ description }: { description: string }) => {
+  const { getContrastColor } = useContrastText();
+
+  return (
+    <FeatureDescription
+      sx={{
+        fontSize: {
+          lg: 50,
+          md: 30,
+          sm: 15,
+          xs: 25,
+        },
+        color: getContrastColor(),
+      }}
+    >
+      {description}
+    </FeatureDescription>
+  );
+};
+
 export const SectionTwo = () => {
+  const { getContrastColor } = useContrastText();
+
+  const { t: translate } = useTranslation(TranslationNameSpaces.Typography);
+
   return (
     <Grid //main wrapper
       justifyContent="center"
@@ -60,26 +118,22 @@ export const SectionTwo = () => {
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: {
-            lg: '50% 25% 25% 50% / 0% 50% 50% 0%',
-            sm: '50% 25% 25% 50% / 0% 50% 50% 0%',
+            sm: '0',
             xs: '50%',
           },
           borderTopLeftRadius: {
-            lg: '30px',
-            sm: '30px',
+            sm: '20px',
           },
           borderBottomLeftRadius: {
-            lg: '30px',
-            sm: '30px',
+            sm: '20px',
           },
           textAlign: 'center',
           bgcolor: 'primary.main',
+          p: 4,
         }}
         variants={featureQuestionAnimation}
       >
         <Typography
-          variant="h2"
-          color="#FFF"
           sx={{
             fontSize: {
               lg: 50,
@@ -87,14 +141,12 @@ export const SectionTwo = () => {
               sm: 15,
               xs: 25,
             },
-            padding: {
-              lg: '10% 15%',
-              sm: '15% 20%',
-            },
+            color: getContrastColor(),
           }}
         >
-          What are the <br /> key features <br /> of a <br />
-          PRO-Boards app?
+          {translate(TypographyTranslationKeys.SectionTwoText, {
+            ns: TranslationNameSpaces.Typography,
+          })}
         </Typography>
       </Grid>
       <Grid //features wrapper
@@ -112,93 +164,27 @@ export const SectionTwo = () => {
           rowGap: '20px',
         }}
       >
-        <Grid //first feature
-          item
-          component={motion.div}
-          variants={elementAnimation}
-          custom={3}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '33.3%',
-            bgcolor: 'primary.main',
-            borderRadius: '20px',
-          }}
-        >
-          <FeatureDescription
-            variant="h3"
-            // color="#FFF"
-            sx={{
-              fontSize: {
-                lg: 50,
-                md: 30,
-                sm: 15,
-                xs: 25,
-              },
-            }}
-          >
-            Easily addition and editing items
-          </FeatureDescription>
-        </Grid>
-        <Grid //second feature
-          item
-          component={motion.div}
-          variants={elementAnimation}
-          custom={6}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '33.3%',
-            bgcolor: 'primary.main',
-            borderRadius: '20px',
-          }}
-        >
-          <FeatureDescription
-            variant="h3"
-            // color="#FFF"
-            sx={{
-              fontSize: {
-                lg: 50,
-                md: 30,
-                sm: 15,
-                xs: 25,
-              },
-            }}
-          >
-            Task labels and tags for better organization
-          </FeatureDescription>
-        </Grid>
-        <Grid //third feature
-          item
-          component={motion.div}
-          variants={elementAnimation}
-          custom={9}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '33.3%',
-            bgcolor: 'primary.main',
-            borderRadius: '20px',
-          }}
-        >
-          <FeatureDescription
-            variant="h3"
-            // color="#FFF"
-            sx={{
-              fontSize: {
-                lg: 50,
-                md: 30,
-                sm: 15,
-                xs: 25,
-              },
-            }}
-          >
-            Customizable themes and community themes library
-          </FeatureDescription>
-        </Grid>
+        <FeatureWrapper delay={3}>
+          <Description
+            description={translate(TypographyTranslationKeys.SectionTwoAdditionItems, {
+              ns: TranslationNameSpaces.Typography,
+            })}
+          />
+        </FeatureWrapper>
+        <FeatureWrapper delay={6}>
+          <Description
+            description={translate(TypographyTranslationKeys.SectionTwoTask, {
+              ns: TranslationNameSpaces.Typography,
+            })}
+          />
+        </FeatureWrapper>
+        <FeatureWrapper delay={9}>
+          <Description
+            description={translate(TypographyTranslationKeys.SectionTwoThemes, {
+              ns: TranslationNameSpaces.Typography,
+            })}
+          />
+        </FeatureWrapper>
       </Grid>
     </Grid>
   );

@@ -1,6 +1,6 @@
 import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
-import { Box, TextField, Typography, Button } from '@mui/material';
+import { TextField, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'enum/AppRoutes';
 import { useContext, useEffect, useState } from 'react';
@@ -11,37 +11,64 @@ import Paper from '@mui/material/Paper/Paper';
 import PasswordInput from 'components/PasswordInput';
 import UploadButton from 'components/UploadButton/UploadButton';
 import { DefaultThemes } from 'enum/DefaultThemes';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
+import { useTranslation } from 'react-i18next';
+import Collapse from '@mui/material/Collapse/Collapse';
+import Avatar from '@mui/material/Avatar/Avatar';
 
 enum FirebaseErrors {
   Password = 'auth/weak-password',
   Email = 'auth/email-already-in-use',
-}
-
-enum RegisterSteps {
-  EmailPassword = 'EmailPassword',
-  UserInfo = 'UserInfo',
+  InCorrectEmail = 'auth/invalid-email',
 }
 
 const SignUpPage = () => {
-  const { auth, firestore } = useContext(FirebaseContext);
+  const { auth, firestore, user } = useContext(FirebaseContext);
   const [createUserWithEmailAndPassword, createdUser, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
   const [updateProfile] = useUpdateProfile(auth);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [isEmailError, setIsEmailError] = useState(false);
   const [password, setPassword] = useState('');
+  const [isPasswordError, setIsPasswordError] = useState(false);
   const [login, setLogin] = useState('');
   const [loginError, setLoginError] = useState(false);
   const [avatar, setAvatar] = useState('');
-  const [registerStep, setRegisterStep] = useState<RegisterSteps>(RegisterSteps.EmailPassword);
+
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const isButtonDisabled = loginError || !login || !email || !password;
-  const isEmailError = error?.code === FirebaseErrors.Email;
-  const isPasswordError = error?.code === FirebaseErrors.Password;
 
   useEffect(() => {
     handleCreateUserRecord();
   }, [createdUser]);
+
+  useEffect(() => {
+    if (error) {
+      if (error.code === FirebaseErrors.Email || error.code === FirebaseErrors.InCorrectEmail) {
+        setIsEmailError(true);
+      }
+      if (error.code === FirebaseErrors.Password) {
+        setIsPasswordError(true);
+      }
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (user) {
+      navigate(AppRoutes.Boards);
+    }
+  }, [user]);
 
   const handleCreateUserRecord = async () => {
     if (createdUser) {
@@ -49,15 +76,13 @@ const SignUpPage = () => {
         photoURL: avatar,
         displayName: login,
       });
-      const { user } = createdUser;
-      await setDoc(doc(firestore, Collections.Users, user.uid), {
+
+      await setDoc(doc(firestore, Collections.Users, createdUser.user.uid), {
         boards: [],
         avatar,
         login: login.toLowerCase(),
         currentTheme: DefaultThemes.DefaultLight,
       });
-
-      navigate(AppRoutes.Boards);
     }
   };
 
@@ -75,68 +100,85 @@ const SignUpPage = () => {
     }
   };
 
-  const renderStep = () => {
-    switch (registerStep) {
-      case RegisterSteps.EmailPassword:
-        return (
-          <>
-            <TextField
-              required
-              size="small"
-              value={email}
-              label="E-mail address"
-              error={isEmailError}
-              helperText={isEmailError && 'Email is already taken'}
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <PasswordInput
-              error={isPasswordError}
-              errorMessage="Password is too weak"
-              value={password}
-              setValue={setPassword}
-            />
-            <Button variant="contained" onClick={() => setRegisterStep(RegisterSteps.UserInfo)}>
-              Next
-            </Button>
-          </>
-        );
-      case RegisterSteps.UserInfo:
-        return (
-          <>
-            <TextField
-              label="Login"
-              required
-              value={login}
-              size="small"
-              onChange={(e) => {
-                if (loginError) {
-                  setLoginError(false);
-                }
-                setLogin(e.target.value.trim());
-              }}
-              error={loginError}
-              helperText={loginError && 'Login is already busy'}
-              onBlur={handleCheckLogin}
-            />
-            <UploadButton getFileUrl={setAvatar} />
-            <Button onClick={() => setRegisterStep(RegisterSteps.EmailPassword)}>Back</Button>
-            <Button disabled={isButtonDisabled} variant="contained" onClick={handleCreateUser}>
-              Register
-            </Button>
-          </>
-        );
-    }
-  };
-
   return (
     <Paper sx={{ p: 4, display: 'flex', flexDirection: 'column', rowGap: '2rem' }} elevation={12}>
-      <Box>
-        <Typography variant="h4"> Hello, Welcome!</Typography>
-      </Box>
-      <Typography>Create your free account </Typography>
-      {renderStep()}
-      <ModalLoader isOpen={loading} />
+      <Typography>
+        {translate(TypographyTranslationKeys.CreateAccount, {
+          ns: TranslationNameSpaces.Typography,
+        })}
+      </Typography>
+      <TextField
+        color="secondary"
+        required
+        size="small"
+        value={email}
+        label={translate(InputsTranslationKeys.EMailAddress, {
+          ns: TranslationNameSpaces.Inputs,
+        })}
+        error={isEmailError}
+        helperText={
+          isEmailError &&
+          translate(TypographyTranslationKeys.EmailTaken, {
+            ns: TranslationNameSpaces.Typography,
+          })
+        }
+        type="email"
+        onChange={(e) => {
+          if (isEmailError) {
+            setIsEmailError(false);
+          }
+          setEmail(e.target.value);
+        }}
+      />
+      <PasswordInput
+        error={isPasswordError}
+        errorMessage={translate(TypographyTranslationKeys.WeakPassword, {
+          ns: TranslationNameSpaces.Typography,
+        })}
+        value={password}
+        setValue={(value) => {
+          if (isPasswordError) {
+            setIsPasswordError(false);
+          }
+          setPassword(value);
+        }}
+      />
+      <TextField
+        color="secondary"
+        label={translate(ButtonTranslationKeys.Login, {
+          ns: TranslationNameSpaces.Buttons,
+        })}
+        required
+        value={login}
+        size="small"
+        onChange={(e) => {
+          if (loginError) {
+            setLoginError(false);
+          }
+          setLogin(e.target.value.trim());
+        }}
+        error={loginError}
+        helperText={
+          loginError &&
+          translate(TypographyTranslationKeys.LoginTaken, {
+            ns: TranslationNameSpaces.Typography,
+          })
+        }
+        onBlur={handleCheckLogin}
+      />
+      <UploadButton getFileUrl={setAvatar} />
+      <Collapse in={!!avatar} sx={{ margin: '0 auto' }}>
+        <Avatar sx={{ width: '4rem', height: '4rem' }} src={avatar} />
+      </Collapse>
+      <Button
+        color="secondary"
+        disabled={isButtonDisabled}
+        variant="contained"
+        onClick={handleCreateUser}
+      >
+        {translate(ButtonTranslationKeys.Register)}
+      </Button>
+      <ModalLoader isOpen={loading || (!!createdUser && !user)} />
     </Paper>
   );
 };

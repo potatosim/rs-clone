@@ -7,6 +7,12 @@ import { AppRoutes } from 'enum/AppRoutes';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useContext } from 'react';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const sectionAnimation = {
   hidden: {
@@ -24,6 +30,11 @@ export const SectionOne = () => {
   const { auth } = useContext(FirebaseContext);
   const [user] = useAuthState(auth);
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
+
   return (
     <Grid
       container
@@ -31,6 +42,7 @@ export const SectionOne = () => {
       initial="hidden"
       whileInView="visible"
       component={motion.div}
+      viewport={{ amount: 0.8, once: true }}
       sx={{
         width: { lg: '80%', xs: '100%' },
         marginTop: {
@@ -40,9 +52,7 @@ export const SectionOne = () => {
         },
         paddingLeft: 0,
         paddingBottom: {
-          lg: 40,
-          md: 25,
-          sm: 15,
+          sm: 10,
           xs: 5,
         },
         justifyContent: 'center',
@@ -63,7 +73,9 @@ export const SectionOne = () => {
             },
           }}
         >
-          Meet the best way to boost your productivity with easy and powerful tool
+          {translate(TypographyTranslationKeys.SectionOneText, {
+            ns: TranslationNameSpaces.Typography,
+          })}
         </Typography>
         <Button
           component={motion.div}
@@ -78,7 +90,7 @@ export const SectionOne = () => {
             component={Link}
             to={user ? AppRoutes.Boards : AppRoutes.LoginPage}
           >
-            Get Started
+            {translate(ButtonTranslationKeys.GetStarted)}
           </Typography>
         </Button>
       </Grid>

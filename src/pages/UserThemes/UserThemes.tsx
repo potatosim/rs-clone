@@ -8,6 +8,12 @@ import ThemeItem from 'components/UserThemes/ThemeItem';
 import ThemeCreator from 'components/UserThemes/ThemeCreator';
 import { defaultDark, defaultLight } from 'helpers/defaultThemes';
 import { sortByThemeName } from 'helpers/sortByThemeName';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -20,16 +26,22 @@ const PageContentWrapper = styled(Box)`
 const UserThemes = () => {
   const [isCreating, setIsCreating] = useState(false);
   const { userThemes } = useGetUserThemes();
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
 
   return (
     <PageContentWrapper>
       <CssBaseline />
       <Typography variant="h3" align="center" sx={{ m: '1rem' }}>
-        Available Themes
+        {translate(TypographyTranslationKeys.AvailableThemes, {
+          ns: TranslationNameSpaces.Typography,
+        })}
       </Typography>
       <Link to={AppRoutes.AllThemes} style={{ textDecoration: 'none' }}>
         <Button variant="contained" color="secondary" sx={{ m: '0.5rem' }}>
-          Community themes
+          {translate(ButtonTranslationKeys.CommunityThemes, { ns: TranslationNameSpaces.Buttons })}
         </Button>
       </Link>
       <Button
@@ -38,7 +50,9 @@ const UserThemes = () => {
         sx={{ m: '1rem auto 2rem' }}
         onClick={() => setIsCreating(true)}
       >
-        Create new theme
+        {translate(ButtonTranslationKeys.CreateNewTheme, {
+          ns: TranslationNameSpaces.Buttons,
+        })}
       </Button>
       {isCreating && <ThemeCreator setIsCreating={setIsCreating} />}
       <Container maxWidth={false}>

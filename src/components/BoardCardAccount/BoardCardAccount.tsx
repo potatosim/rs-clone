@@ -1,10 +1,11 @@
 import { Paper, styled } from '@mui/material';
-import Typography from '@mui/material/Typography/Typography';
+
 import { BackgroundWrapper } from 'components/common/BackgroundWrapper';
-import { AppRoutes } from 'enum/AppRoutes';
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
 import { IBoardItem } from 'types/Board';
+import Typography from '@mui/material/Typography/Typography';
+import { getBoardPageUrl } from 'helpers/getBoardPageUrl';
+import { useNavigate } from 'react-router-dom';
 
 interface BoardCardAccountProps {
   board: IBoardItem;
@@ -23,10 +24,7 @@ const BoardCardAccount: FC<BoardCardAccountProps> = ({ board }) => {
   const navigate = useNavigate();
 
   return (
-    <CardWrapper
-      elevation={12}
-      onClick={() => navigate(AppRoutes.Board.replace(':boardId', board.id))}
-    >
+    <CardWrapper elevation={12} onClick={() => navigate(getBoardPageUrl(board.id))}>
       <Paper sx={{ maxHeight: '40px' }}>
         <Typography
           padding="0 0.5rem"

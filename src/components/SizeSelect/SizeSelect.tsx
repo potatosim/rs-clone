@@ -8,16 +8,18 @@ import {
   Typography,
 } from '@mui/material';
 import { OptionItem } from 'components/common/CustomSelect';
+import { InputsTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface SizeItem {
+interface ISizeItem {
   size: string;
   color: string;
   symbol: string;
 }
 
-export const sizeItems: SizeItem[] = [
+export const sizeItems: ISizeItem[] = [
   {
     size: 'X-Large',
     color: '#ff0000',
@@ -45,15 +47,21 @@ export const sizeItems: SizeItem[] = [
   },
 ];
 
-const sizes: OptionItem[] = sizeItems.map(({ color, size, symbol }) => ({
-  value: size,
-  title: (
+const SizeItem = ({ color, size, symbol }: ISizeItem) => {
+  const { t: translate } = useTranslation(TranslationNameSpaces.Typography);
+
+  return (
     <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
       <Box sx={{ borderRadius: '50%', bgcolor: color, width: 16, height: 16 }} />
       <Box>{symbol}</Box>
-      <Typography>{size}</Typography>
+      <Typography>{translate(size.toLowerCase())}</Typography>
     </Box>
-  ),
+  );
+};
+
+const sizes: OptionItem[] = sizeItems.map(({ color, size, symbol }) => ({
+  value: size,
+  title: <SizeItem color={color} size={size} symbol={symbol} />,
 }));
 
 interface SelectProps {
@@ -62,13 +70,18 @@ interface SelectProps {
 }
 
 const SizeSelect: FC<SelectProps> = ({ currentSize, onSizeChange }) => {
+  const { t: translate } = useTranslation(TranslationNameSpaces.Inputs);
+
   return (
     <FormControl size="small">
-      <InputLabel id="size-select-label">Size</InputLabel>
+      <InputLabel color="secondary" id="size-select-label">
+        {translate(InputsTranslationKeys.Size)}
+      </InputLabel>
       <Select
+        color="secondary"
         labelId="size-select-label"
         id="size-select"
-        label="Size"
+        label={translate(InputsTranslationKeys.Size)}
         value={currentSize || 'Size'}
         onChange={onSizeChange}
       >

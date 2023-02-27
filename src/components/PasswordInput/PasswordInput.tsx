@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useTranslation } from 'react-i18next';
+import { InputsTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 
 interface PasswordInputProps {
   value: string;
@@ -14,19 +16,24 @@ interface PasswordInputProps {
 const PasswordInput = ({ error, errorMessage, setValue, value }: PasswordInputProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
+  const { t: translate } = useTranslation(TranslationNameSpaces.Inputs);
+
   return (
     <TextField
+      color="secondary"
       size="small"
       required
       value={value}
-      label="Password"
+      label={translate(InputsTranslationKeys.Password, {
+        ns: TranslationNameSpaces.Inputs,
+      })}
       error={error}
       helperText={error && errorMessage}
       type={isVisible ? 'text' : 'password'}
       onChange={(e) => setValue(e.target.value)}
       InputProps={{
         endAdornment: (
-          <IconButton onClick={() => setIsVisible(!isVisible)}>
+          <IconButton color="secondary" onClick={() => setIsVisible(!isVisible)}>
             {isVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
           </IconButton>
         ),

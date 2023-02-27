@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { keyframes } from '@emotion/react';
 import ghostImg from 'static/images/ghost.png';
 import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
+import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
 
 const HoverEffect = keyframes`
   0% {
@@ -25,6 +27,8 @@ const ContentWrapper = styled(Box)(() => ({
 
 const MessageWrapper = styled(Box)(() => ({}));
 const NotFoundPage = () => {
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
+
   return (
     <>
       <ContentWrapper>
@@ -34,7 +38,7 @@ const NotFoundPage = () => {
             Sorry, we can't find that page. Don't worry though, everything is still awesome!
           </Typography>
           <Button sx={{ marginTop: 5 }} variant="contained" component={Link} to="/">
-            Go Home
+            {translate(ButtonTranslationKeys.GoHome)}
           </Button>
         </MessageWrapper>
 

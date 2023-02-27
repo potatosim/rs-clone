@@ -6,8 +6,14 @@ import { FormWrapper } from 'components/common/FormWrapper';
 import { ModalWrapper } from 'components/common/ModalWrapper';
 import TabPanel from 'components/TabPanel/TabPanel';
 import UploadButton from 'components/UploadButton/UploadButton';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+} from 'enum/Translations';
 import React, { useState } from 'react';
 import { TwitterPicker } from 'react-color';
+import { useTranslation } from 'react-i18next';
 import { BackgroundType } from 'types/Background';
 import { IBoardItem } from 'types/Board';
 
@@ -37,6 +43,11 @@ const BoardForm = ({ isOpen, handleSubmit, onClose, buttonTitle, board }: BoardF
     board && board.background.type === 'color' ? board.background.source : '#ffffff',
   );
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+  ]);
+
   const handleChangeBackgroundType = (
     event: React.SyntheticEvent<Element, Event>,
     value: BackgroundType,
@@ -62,20 +73,29 @@ const BoardForm = ({ isOpen, handleSubmit, onClose, buttonTitle, board }: BoardF
 
   return (
     <ModalWrapper keepMounted={false} open={isOpen} onClose={onClose}>
-      <Box sx={{ display: 'flex', columnGap: '2rem', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          columnGap: '2rem',
+          alignItems: 'center',
+        }}
+      >
         <FormWrapper sx={{ minHeight: 400 }}>
           <TextField
+            color="secondary"
             fullWidth
             value={title}
             required
-            label="Title of the board"
+            label={translate(InputsTranslationKeys.TitleOfTheBoard, {
+              ns: TranslationNameSpaces.Inputs,
+            })}
             onChange={(e) => setTitle(e.target.value)}
             size="small"
           />
 
-          <Tabs value={backgroundType} textColor="secondary" onChange={handleChangeBackgroundType}>
-            <StyledTab value={'color'} label={'Color'} />
-            <StyledTab value={'image'} label={'Image'} />
+          <Tabs textColor="secondary" value={backgroundType} onChange={handleChangeBackgroundType}>
+            <StyledTab value={'color'} label={translate(ButtonTranslationKeys.Color)} />
+            <StyledTab value={'image'} label={translate(ButtonTranslationKeys.Image)} />
           </Tabs>
           <TabPanel index="color" value={backgroundType}>
             <TwitterPicker color={color} onChangeComplete={(c) => setColor(c.hex)} />
@@ -84,11 +104,21 @@ const BoardForm = ({ isOpen, handleSubmit, onClose, buttonTitle, board }: BoardF
             <UploadButton getFileUrl={setFileUrl} />
           </TabPanel>
           <BoardUserSelect userIds={userIds} setUserIds={setUserIds} />
-          <Button disabled={!title.trim()} variant="outlined" type="submit" onClick={handleClick}>
+          <Button
+            color="secondary"
+            disabled={!title.trim()}
+            variant="outlined"
+            type="submit"
+            onClick={handleClick}
+          >
             {buttonTitle}
           </Button>
         </FormWrapper>
-        <Collapse sx={{ pointerEvents: 'none' }} orientation="horizontal" in={!!title}>
+        <Collapse
+          sx={{ pointerEvents: 'none', '@media (max-width: 768px)': { minWidth: '350px' } }}
+          orientation="horizontal"
+          in={!!title}
+        >
           <BoardCard
             board={{
               title,

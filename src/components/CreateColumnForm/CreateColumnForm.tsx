@@ -6,6 +6,13 @@ import { ModalWrapper } from 'components/common/ModalWrapper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useAddColumn } from 'hooks/columnHooks/useAddColumn';
+import { useTranslation } from 'react-i18next';
+import {
+  ButtonTranslationKeys,
+  InputsTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 interface CreateColumnFormProps {
   boardId: string;
@@ -23,6 +30,12 @@ const CreateColumnForm: FC<CreateColumnFormProps> = ({
   const [columnTitle, setColumnTitle] = useState<string>('');
   const addColumn = useAddColumn(columnTitle, boardId, columnLength);
 
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Inputs,
+    TranslationNameSpaces.Typography,
+  ]);
+
   const handleCreateColumn = async () => {
     handleClose();
     setColumnTitle('');
@@ -32,22 +45,30 @@ const CreateColumnForm: FC<CreateColumnFormProps> = ({
   return (
     <ModalWrapper open={isModalOpen} onClose={handleClose}>
       <FormWrapper>
-        <Typography>Add new column</Typography>
+        <Typography>
+          {translate(TypographyTranslationKeys.AddNewColumn, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+        </Typography>
         <TextField
+          color="secondary"
           value={columnTitle}
           required
-          label="Title of the column"
+          label={translate(InputsTranslationKeys.TitleOfTheColumn, {
+            ns: TranslationNameSpaces.Inputs,
+          })}
           onChange={(e) => setColumnTitle(e.target.value)}
           size="small"
         />
 
         <Button
+          color="secondary"
           disabled={!columnTitle.trim().length}
           variant="outlined"
           type="submit"
           onClick={handleCreateColumn}
         >
-          Add
+          {translate(ButtonTranslationKeys.Add, { ns: TranslationNameSpaces.Buttons })}
         </Button>
       </FormWrapper>
     </ModalWrapper>
