@@ -41,7 +41,7 @@ const LoginPage = () => {
           avatar: googleAccount.user.photoURL,
           boards: [],
           login: googleAccount.user.displayName,
-          currentTheme: DefaultThemes.DefaultDark,
+          currentTheme: DefaultThemes.DefaultLight,
         });
       }
       navigate(AppRoutes.Boards);

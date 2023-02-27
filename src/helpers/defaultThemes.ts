@@ -15,9 +15,6 @@ export const defaultDark: ITheme = {
   mode: 'dark',
 };
 
-// E6BD28
-// D1541F
-
 export const defaultLight: ITheme = {
   creator: '',
   holders: [],
