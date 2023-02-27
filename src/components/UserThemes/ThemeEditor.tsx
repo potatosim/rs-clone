@@ -10,6 +10,9 @@ import {
   Divider,
   Checkbox,
   FormControlLabel,
+  Switch,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
@@ -45,7 +48,6 @@ const ModalContentWrapper = styled(Paper)`
   justify-content: space-between;
   max-width: 1100px;
   width: 100%;
-  height: 75vh;
   margin: 25px;
   border: 10px solid grey;
 `;
@@ -66,6 +68,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
   primary,
   secondary,
   isPublic,
+  mode,
   setIsEditing,
 }) => {
   const { firestore } = useContext(FirebaseContext);
@@ -73,7 +76,9 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
   const [newPrimary, setNewPrimary] = useState<string>(primary);
   const [newSecondary, setNewSecondary] = useState<string>(secondary);
   const [checked, setChecked] = useState<boolean>(isPublic);
+  const [themeMode, setMode] = useState<'light' | 'dark'>(mode);
   const { user } = useContext(UserContext);
+  const theme = useTheme();
 
   const editTheme = async () => {
     if (user) {
@@ -83,14 +88,22 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
         primary: newPrimary,
         secondary: newSecondary,
         isPublic: checked,
+        mode: themeMode,
       });
     }
   };
 
   return (
     <ModalWrapper>
-      <ModalContentWrapper elevation={24}>
-        <Box sx={{ maxWidth: '500px', width: '100%', flexShrink: '10' }}>
+      <ModalContentWrapper
+        elevation={24}
+        sx={{
+          flexDirection: { sm: 'row', xs: 'column' },
+          maxHeight: '100%',
+          overflowY: 'auto',
+        }}
+      >
+        <Box sx={{ maxWidth: '600px', width: '100%', flexShrink: '10', p: '0 auto' }}>
           <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">Name</Typography>
@@ -155,11 +168,40 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
+          <Accordion square disableGutters={true}>
+            <AccordionSummary expandIcon={<ArrowIcon />}>
+              <Typography variant="h6">Mode</Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography>Light</Typography>
+              <Switch
+                defaultChecked={mode === 'dark' ? true : false}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setMode('dark');
+                  } else {
+                    setMode('light');
+                  }
+                }}
+              />
+              <Typography>Dark</Typography>
+            </AccordionDetails>
+          </Accordion>
+          <Divider sx={{ backgroundColor: 'black' }} />
         </Box>
-        <Divider orientation="vertical" sx={{ backgroundColor: 'grey', width: '4px' }} />
+        <Divider
+          orientation={useMediaQuery(theme.breakpoints.down('sm')) ? 'horizontal' : 'vertical'}
+          sx={{ backgroundColor: 'grey', width: '4px' }}
+          flexItem={true}
+        />
         <ThumbnailWrapper>
-          <ThemeThumbnail name={newName} primary={newPrimary} secondary={newSecondary} />
-          <Box sx={{ mt: '1rem' }}>
+          <ThemeThumbnail
+            name={newName}
+            primary={newPrimary}
+            secondary={newSecondary}
+            mode={themeMode}
+          />
+          <Box sx={{ m: '1rem auto 2rem' }}>
             <Button
               variant="contained"
               sx={{ width: '100px', mr: '1rem' }}

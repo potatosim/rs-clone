@@ -73,7 +73,7 @@ const BoardForm = ({ isOpen, handleSubmit, onClose, buttonTitle, board }: BoardF
             size="small"
           />
 
-          <Tabs value={backgroundType} onChange={handleChangeBackgroundType}>
+          <Tabs value={backgroundType} textColor="secondary" onChange={handleChangeBackgroundType}>
             <StyledTab value={'color'} label={'Color'} />
             <StyledTab value={'image'} label={'Image'} />
           </Tabs>

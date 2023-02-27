@@ -54,7 +54,7 @@ const SignUpPage = () => {
         boards: [],
         avatar,
         login: login.toLowerCase(),
-        currentTheme: DefaultThemes.DefaultDark,
+        currentTheme: DefaultThemes.DefaultLight,
       });
 
       navigate(AppRoutes.Boards);

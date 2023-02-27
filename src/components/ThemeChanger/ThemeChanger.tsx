@@ -34,7 +34,7 @@ const ThemeChanger: FC<ThemeProviderProps> = ({ children }) => {
         setCurrentTheme(createdTheme);
       }
     } else {
-      setCurrentTheme(defaultThemes.defaultDark);
+      setCurrentTheme(defaultThemes.defaultLight);
     }
   };
 

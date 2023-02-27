@@ -53,7 +53,7 @@ export const usersConverter: FirestoreDataConverter<IUserItem> = {
 
 export const themeConverter: FirestoreDataConverter<ITheme> = {
   toFirestore(theme: WithFieldValue<ITheme>): DocumentData {
-    return { name: theme.name, primary: theme.primary, secondary: theme.secondary };
+    return theme;
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): ITheme {
     const data = snapshot.data(options);

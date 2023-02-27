@@ -10,8 +10,8 @@ export const defaultDark: ITheme = {
   id: DefaultThemes.DefaultDark,
   isPublic: false,
   name: 'Default Dark',
-  primary: '#202026',
-  secondary: '#fefe00',
+  primary: '#262620',
+  secondary: '#FECB00',
   mode: 'dark',
 };
 
@@ -22,6 +22,6 @@ export const defaultLight: ITheme = {
   isPublic: false,
   mode: 'light',
   name: 'Default Light',
-  primary: '#202026',
-  secondary: '#fefe00',
+  primary: '#262620',
+  secondary: '#FECB00',
 };
