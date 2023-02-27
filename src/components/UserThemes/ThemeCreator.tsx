@@ -11,6 +11,8 @@ import {
   FormControlLabel,
   Checkbox,
   Switch,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
@@ -44,7 +46,6 @@ const ModalContentWrapper = styled(Paper)`
   justify-content: space-between;
   max-width: 1100px;
   width: 100%;
-  height: 75vh;
   margin: 25px;
   border: 10px solid grey;
 `;
@@ -67,6 +68,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   const [checked, setChecked] = useState<boolean>(false);
   const [mode, setMode] = useState<'light' | 'dark'>('light');
   const { user } = useContext(UserContext);
+  const theme = useTheme();
 
   const addTheme = async () => {
     if (user) {
@@ -85,8 +87,15 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
 
   return (
     <ModalWrapper>
-      <ModalContentWrapper elevation={24}>
-        <Box sx={{ maxWidth: '500px', width: '100%', flexShrink: '10' }}>
+      <ModalContentWrapper
+        elevation={24}
+        sx={{
+          flexDirection: { sm: 'row', xs: 'column' },
+          maxHeight: '100%',
+          overflowY: 'auto',
+        }}
+      >
+        <Box sx={{ maxWidth: '600px', width: '100%', flexShrink: '10', p: '0 auto' }}>
           <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">Name</Typography>
@@ -171,10 +180,14 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
         </Box>
-        <Divider orientation="vertical" sx={{ backgroundColor: 'grey', width: '4px' }} />
+        <Divider
+          orientation={useMediaQuery(theme.breakpoints.down('sm')) ? 'horizontal' : 'vertical'}
+          sx={{ backgroundColor: 'grey', width: '4px' }}
+          flexItem={true}
+        />
         <ThumbnailWrapper>
           <ThemeThumbnail name={name} primary={primary} secondary={secondary} mode={mode} />
-          <Box sx={{ mt: '1rem' }}>
+          <Box sx={{ m: '1rem auto 2rem' }}>
             <Button
               variant="contained"
               sx={{ width: '100px', mr: '1rem' }}

@@ -4,13 +4,12 @@ import {
   Button,
   Paper,
   TextField,
-  Theme,
   ThemeProvider,
   Toolbar,
   Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { generateTheme } from 'helpers/generateTheme';
 import { ITheme } from 'types/Theme';
 
@@ -30,7 +29,7 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) 
         p: '5px',
       }}
     >
-      <Typography variant="h5" sx={{ textAlign: 'center' }}>
+      <Typography variant="h5" sx={{ textAlign: 'center', m: '1rem auto' }}>
         {name}
       </Typography>
       <Box sx={{ border: '4px solid black', borderRadius: '5px', m: '0 15px 15px' }}>
@@ -49,12 +48,8 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) 
               flexDirection: 'column',
               maxHeight: '400px',
               height: '300px',
-              
             }}
           >
-            <Typography variant="h4" sx={{ m: '5px 10px' }}>
-              Primary Background
-            </Typography>
             <Paper
               square
               elevation={12}
@@ -62,65 +57,23 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) 
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                width: '75%',
-                height: '70%',
-                m: ' 5px auto 10px',
+                width: '100%',
+                height: '100%',
               }}
             >
-              <Typography variant="h5" sx={{ m: '10px' }}>
-                Secondary Background
+              <Typography variant="h5" sx={{ mt: '25px' }}>
+                Text
               </Typography>
-              <Button variant="contained" color="secondary" sx={{ maxWidth: '200px' }}>
-                Secondary Color
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ maxWidth: '200px', m: '25px auto' }}
+              >
+                Button
               </Button>
               <TextField label="Field" color="primary" sx={{ m: '1rem auto' }} />
             </Paper>
           </Box>
-          {/* <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'start',
-            alignItems: 'center',
-            height: '40px',
-            backgroundColor: primary,
-          }}
-        >
-          <MenuIcon sx={{ m: '1rem' }} />
-          <Typography variant="h6">Logo</Typography>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            maxHeight: '400px',
-            height: '300px',
-            backgroundColor: 'background.default',
-          }}
-        >
-          <Typography variant="h4" sx={{ m: '5px 10px' }}>
-            Primary Background
-          </Typography>
-          <Paper
-            square
-            elevation={12}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '75%',
-              height: '70%',
-              m: ' 5px auto 10px',
-              backgroundColor: 'background.paper',
-            }}
-          >
-            <Typography variant="h5" sx={{ m: '10px' }}>
-              Secondary Background
-            </Typography>
-            <Button variant="contained" sx={{ backgroundColor: secondary }}>
-              Secondary Color
-            </Button>
-          </Paper>
-        </Box> */}
         </ThemeProvider>
       </Box>
     </Box>
