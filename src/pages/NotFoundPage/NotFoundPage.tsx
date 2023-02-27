@@ -21,15 +21,16 @@ const HoverEffect = keyframes`
 `;
 
 const ContentWrapper = styled(Box)(() => ({
+  flex: '1 1 auto',
   position: 'absolute',
-  width: '100%',
-  height: '100%',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
 }));
 
-const MessageWrapper = styled(Box)(() => ({}));
+const MessageWrapper = styled(Box)(() => ({
+  padding: '2rem',
+}));
 const NotFoundPage = () => {
   const { t: translate } = useTranslation([
     TranslationNameSpaces.Buttons,
@@ -37,29 +38,28 @@ const NotFoundPage = () => {
   ]);
 
   return (
-    <>
-      <ContentWrapper>
-        <MessageWrapper>
-          <Typography>
-            {translate(TypographyTranslationKeys.Error404, {
-              ns: TranslationNameSpaces.Typography,
-            })}
-          </Typography>
-          <Typography variant="h6">
-            {translate(TypographyTranslationKeys.PageNotFound, {
-              ns: TranslationNameSpaces.Typography,
-            })}
-          </Typography>
-          <Button sx={{ marginTop: 5 }} variant="contained" component={Link} to="/">
-            {translate(ButtonTranslationKeys.GoHome)}
-          </Button>
-        </MessageWrapper>
-
-        <Box sx={{ animation: `${HoverEffect} 2s ease-in-out infinite alternate` }}>
-          <img src={ghostImg} />
-        </Box>
-      </ContentWrapper>
-    </>
+    <ContentWrapper>
+      <MessageWrapper>
+        <Typography>
+          {translate(TypographyTranslationKeys.Error404, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+        </Typography>
+        <Typography variant="h6">
+          {translate(TypographyTranslationKeys.PageNotFound, {
+            ns: TranslationNameSpaces.Typography,
+          })}
+        </Typography>
+        <Button sx={{ marginTop: 5 }} variant="contained" component={Link} to="/">
+          {translate(ButtonTranslationKeys.GoHome)}
+        </Button>
+      </MessageWrapper>
+      <Box
+        sx={{ animation: `${HoverEffect} 2s ease-in-out infinite alternate`, maxWidth: '400px' }}
+      >
+        <img style={{ width: '100%' }} src={ghostImg} />
+      </Box>
+    </ContentWrapper>
   );
 };
 
