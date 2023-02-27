@@ -170,13 +170,9 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             </AccordionSummary>
             <AccordionDetails>
               <FormControlLabel
-                control={<Checkbox checked={checked} />}
+                control={<Checkbox color="secondary" checked={checked} />}
                 onChange={() => {
-                  if (checked) {
-                    setChecked(false);
-                  } else {
-                    setChecked(true);
-                  }
+                  setChecked(!checked);
                 }}
                 label={translate(InputsTranslationKeys.AddToCommunityThemes, {
                   ns: TranslationNameSpaces.Inputs,

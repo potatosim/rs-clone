@@ -3,13 +3,24 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Typography from '@mui/material/Typography';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
 import { Collections } from 'enum/Collection';
-import { arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+  writeBatch,
+} from 'firebase/firestore';
 import { deleteFromHolders } from 'helpers/deleteFromHolders';
 import { FC, useContext, useState } from 'react';
 import { ITheme } from 'types/Theme';
 import ThemeEditor from 'components/Theme/ThemeEditor';
 import { UserContext } from 'components/RequireAuth';
-import { usersConverter } from 'helpers/converters';
+import { themeConverter, usersConverter } from 'helpers/converters';
 import { IUserItem } from 'types/User';
 import { toast, ToastContainer } from 'react-toastify';
 import { isDefaultTheme } from 'helpers/defaultThemes';
@@ -20,6 +31,7 @@ import {
   TranslationNameSpaces,
   TypographyTranslationKeys,
 } from 'enum/Translations';
+import { DefaultThemes } from 'enum/DefaultThemes';
 
 interface IThemeItem extends ITheme {
   status: 'userTheme' | 'communityTheme';
@@ -41,6 +53,33 @@ const ThemeCard: FC<IThemeItem> = (props) => {
         holders: arrayUnion(user.id),
       });
     }
+  };
+
+  const handleDeleteTheme = async () => {
+    const usersWithTheme = await getDocs(
+      query(collection(firestore, Collections.Users), where('currentTheme', '==', props.id)),
+    );
+    const batch = writeBatch(firestore);
+    if (user.id === props.creator) {
+      batch.delete(doc(firestore, Collections.Themes, props.id));
+    } else {
+      batch.update<ITheme>(
+        doc(firestore, Collections.Themes, props.id).withConverter(themeConverter),
+        {
+          holders: arrayRemove(user.id),
+        },
+      );
+    }
+    usersWithTheme.docs.map((item) => {
+      batch.update<IUserItem>(
+        doc(firestore, Collections.Users, item.id).withConverter(usersConverter),
+        {
+          currentTheme: DefaultThemes.DefaultLight,
+        },
+      );
+    });
+
+    await batch.commit();
   };
 
   return (
@@ -96,17 +135,7 @@ const ThemeCard: FC<IThemeItem> = (props) => {
             )}
             {isEditing && <ThemeEditor {...props} setIsEditing={setIsEditing} />}
             {!isDefaultTheme(props.id) && (
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => {
-                  if (user.id === props.creator) {
-                    deleteDoc(doc(firestore, Collections.Themes, props.id));
-                  } else {
-                    deleteFromHolders(firestore, props.id, user.id);
-                  }
-                }}
-              >
+              <Button variant="contained" color="secondary" onClick={handleDeleteTheme}>
                 {translate(ButtonTranslationKeys.Delete)}
               </Button>
             )}
