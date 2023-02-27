@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import {
   Box,
   FormControl,
@@ -47,15 +48,25 @@ export const sizeItems: ISizeItem[] = [
   },
 ];
 
+const SelectedBox = styled(Box)`
+  display: flex;
+  column-gap: 1rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    column-gap: 0.5rem;
+  }
+`;
+
 const SizeItem = ({ color, size, symbol }: ISizeItem) => {
   const { t: translate } = useTranslation(TranslationNameSpaces.Typography);
 
   return (
-    <Box sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}>
+    <SelectedBox>
       <Box sx={{ borderRadius: '50%', bgcolor: color, width: 16, height: 16 }} />
       <Box>{symbol}</Box>
       <Typography>{translate(size.toLowerCase())}</Typography>
-    </Box>
+    </SelectedBox>
   );
 };
 

@@ -77,9 +77,6 @@ export enum InputsTranslationKeys {
   EMailAddress = 'eMailAddress',
   NoDescriptionProvided = 'noDescriptionProvided',
   EnterSomeText = 'enterSomeText',
-  Mode = 'mode',
-  Light = 'light',
-  Dark = 'dark',
 }
 
 export enum TypographyTranslationKeys {
@@ -105,7 +102,6 @@ export enum TypographyTranslationKeys {
   PrimaryBackground = 'primaryBackground',
   SecondaryBackground = 'secondaryBackground',
   Logo = 'logo',
-  NewTheme = 'newTheme',
   Urgent = 'urgent',
   High = 'high',
   Medium = 'medium',
@@ -114,9 +110,18 @@ export enum TypographyTranslationKeys {
   CreateAccount = 'createAccount',
   LoginTaken = 'loginTaken',
   EmailTaken = 'emailTaken',
+  IncorrectEmail = 'incorrectEmail',
   WeakPassword = 'weakPassword',
   AvailableThemes = 'availableThemes',
   PermissionToBoard = 'permissionToBoard',
   UserExist = 'userExist',
   BoardExist = 'boardExist',
+  ThemesNotFound = 'themesNotFound',
+  ToastifyWarn = 'toastifyWarn',
+  Mode = 'mode',
+  Light = 'light',
+  Dark = 'dark',
+  LoginToAccount = 'loginToAccount',
+  Login = 'login',
+  WrongPassword = 'wrongPassword',
 }

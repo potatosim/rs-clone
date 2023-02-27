@@ -15,7 +15,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import { isDefaultTheme } from 'helpers/defaultThemes';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
-import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 interface IThemeItem extends ITheme {
   status: 'userTheme' | 'communityTheme';
@@ -26,7 +30,10 @@ const ThemeItem: FC<IThemeItem> = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useContext(UserContext);
 
-  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
 
   const handlerAddTheme = async () => {
     if (user && props.holders.every((uid) => uid !== user.id)) {
@@ -76,7 +83,11 @@ const ThemeItem: FC<IThemeItem> = (props) => {
                   if (user.id === props.creator) {
                     setIsEditing(true);
                   } else {
-                    toast.warn('You cannot edit the themes of another user');
+                    toast.warn(
+                      `${translate(TypographyTranslationKeys.ToastifyWarn, {
+                        ns: TranslationNameSpaces.Typography,
+                      })}`,
+                    );
                   }
                 }}
               >

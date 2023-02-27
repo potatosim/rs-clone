@@ -13,11 +13,7 @@ import LanguageButton from 'components/LanguageButton';
 const Header = () => {
   const { user } = useContext(FirebaseContext);
 
-  const { t: translate, i18n } = useTranslation(TranslationNameSpaces.Buttons);
-
-  const changeLanguageHandler = (language: string) => {
-    i18n.changeLanguage(language);
-  };
+  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
 
   return (
     <AppBar position="fixed">
@@ -45,7 +41,7 @@ const Header = () => {
           />
         </Card>
         {user && (
-          <ButtonGroup color="secondary">
+          <ButtonGroup variant="contained" color="secondary">
             <Button component={Link} to={AppRoutes.Boards}>
               {translate(ButtonTranslationKeys.Boards)}
             </Button>
@@ -54,15 +50,7 @@ const Header = () => {
 
         <Box display="flex" alignItems="center" columnGap="1rem">
           <>
-            <LanguageButton
-              language={i18n.language}
-              onClick={
-                i18n.language === 'en'
-                  ? () => changeLanguageHandler('ru')
-                  : () => changeLanguageHandler('en')
-              }
-            />
-
+            <LanguageButton />
             {user ? (
               <UserMenu />
             ) : (

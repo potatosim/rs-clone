@@ -15,6 +15,10 @@ const StyledCardHeader = styled(Box)`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+
+  @media (max-width: 768px) {
+    order: 1;
+  }
 `;
 
 interface TaskHeaderProps {

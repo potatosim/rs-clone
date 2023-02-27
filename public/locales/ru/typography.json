@@ -21,7 +21,6 @@
   "primaryBackground": "Основной фон",
   "secondaryBackground": "Текст",
   "logo": "Лого",
-  "newTheme": "Новая тема",
   "urgent": "Срочная",
   "high": "Высокий",
   "medium": "Средний",
@@ -38,5 +37,14 @@
   "availableThemes": "Доступные темы",
   "permissionToBoard": "У Вас нет доступа к данной доске",
   "userExist": "Такого пользователя не существует",
-  "boardExist": "Такой доски не существует"
+  "boardExist": "Такой доски не существует",
+  "themesNotFound": "Пока здесь нет тем",
+  "toastifyWarn": "Вы не можете редактировать темы других пользователей",
+  "mode": "Режим",
+  "light": "Светлый",
+  "dark": "Тёмный",
+  "loginToAccount": "Войдите в Ваш аккаунт",
+  "incorrectEmail": "Неверный Email",
+  "login": "Логин",
+  "wrongPassword": "Неверный пароль"
 }

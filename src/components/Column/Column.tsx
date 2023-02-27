@@ -25,7 +25,7 @@ interface BoardColumnProps {
 const ColumnWrapper = styled(Paper)`
   display: flex;
   flex-direction: column;
-  width: 270px;
+  width: 300px;
 `;
 
 const ScrollableColumnWrapper = styled('div')`

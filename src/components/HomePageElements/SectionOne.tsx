@@ -82,11 +82,11 @@ export const SectionOne = () => {
           variants={sectionAnimation}
           custom={5}
           variant="contained"
-          sx={{ padding: '10px 20px', marginTop: '20px' }}
+          sx={{ padding: '0', marginTop: '20px' }}
         >
           <Typography
             color="inherit"
-            sx={{ textDecoration: 'none' }}
+            sx={{ textDecoration: 'none', padding: '10px 20px' }}
             component={Link}
             to={user ? AppRoutes.Boards : AppRoutes.LoginPage}
           >

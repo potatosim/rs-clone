@@ -22,6 +22,17 @@ const StyledTab = styled(Tab)`
   font-size: 1rem;
 `;
 
+const ContentWrapper = styled(Box)`
+  display: flex;
+  column-gap: 2rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    row-gap: 2rem;
+    flex-direction: column;
+  }
+`;
+
 interface BoardFormProps {
   isOpen: boolean;
   onClose: () => void;
@@ -73,13 +84,7 @@ const BoardForm = ({ isOpen, handleSubmit, onClose, buttonTitle, board }: BoardF
 
   return (
     <ModalWrapper keepMounted={false} open={isOpen} onClose={onClose}>
-      <Box
-        sx={{
-          display: 'flex',
-          columnGap: '2rem',
-          alignItems: 'center',
-        }}
-      >
+      <ContentWrapper>
         <FormWrapper sx={{ minHeight: 400 }}>
           <TextField
             color="secondary"
@@ -134,7 +139,7 @@ const BoardForm = ({ isOpen, handleSubmit, onClose, buttonTitle, board }: BoardF
             handleRenameBoard={() => {}}
           />
         </Collapse>
-      </Box>
+      </ContentWrapper>
     </ModalWrapper>
   );
 };

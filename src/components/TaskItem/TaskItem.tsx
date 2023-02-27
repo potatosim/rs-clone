@@ -37,18 +37,28 @@ interface TaskItemProps {
 }
 
 const StyledCard = styled(Card)`
-  width: 70%;
-  height: 650px;
+  width: 100%;
+  min-height: 650px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 `;
 
 const StyledCardContent = styled(CardContent)`
   grid-area: 2 / 1 / 7 / 4;
   border-right: 2px double lightgrey;
+
+  @media (max-width: 768px) {
+    order: 3;
+  }
 `;
 
 const StyledCardContentOptions = styled(CardContent)`
@@ -56,10 +66,26 @@ const StyledCardContentOptions = styled(CardContent)`
   padding: 2rem;
   row-gap: 2rem;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas:
+      'select select'
+      'select select'
+      'button button';
+  }
 `;
 
 const StyledBox = styled(Box)`
   grid-area: 2 / 4 / 7 / 5;
+
+  @media (max-width: 768px) {
+    order: 2;
+  }
 `;
 
 const getCurrentColumnOption = (columns: IColumnItem[], task: ITaskItem): OptionItem => {
@@ -202,6 +228,7 @@ const Task: FC<TaskItemProps> = ({ taskId, isTaskOpen, columns, boardId }) => {
               onClick={handleDelete}
               variant="contained"
               startIcon={<DeleteForeverIcon />}
+              sx={{ gridArea: 'button' }}
             >
               {translate(ButtonTranslationKeys.DeleteThisTask)}
             </Button>

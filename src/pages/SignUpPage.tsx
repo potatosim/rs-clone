@@ -20,12 +20,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import Collapse from '@mui/material/Collapse/Collapse';
 import Avatar from '@mui/material/Avatar/Avatar';
-
-enum FirebaseErrors {
-  Password = 'auth/weak-password',
-  Email = 'auth/email-already-in-use',
-  InCorrectEmail = 'auth/invalid-email',
-}
+import { FirebaseErrors } from 'enum/FirebaseErrors';
 
 const SignUpPage = () => {
   const { auth, firestore, user } = useContext(FirebaseContext);
@@ -145,8 +140,8 @@ const SignUpPage = () => {
       />
       <TextField
         color="secondary"
-        label={translate(ButtonTranslationKeys.Login, {
-          ns: TranslationNameSpaces.Buttons,
+        label={translate(TypographyTranslationKeys.Login, {
+          ns: TranslationNameSpaces.Typography,
         })}
         required
         value={login}

@@ -13,6 +13,7 @@ import {
   Switch,
   useTheme,
   useMediaQuery,
+  ButtonGroup,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
 import ThemeThumbnail from './ThemeThumbnail';
@@ -30,23 +31,11 @@ import {
   TranslationNameSpaces,
   TypographyTranslationKeys,
 } from 'enum/Translations';
+import { ModalWrapper } from 'components/common/ModalWrapper';
 
 interface ThemeCreatorProps extends ITheme {
   setIsEditing(value: boolean): void;
 }
-
-const ModalWrapper = styled(Box)`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background: rgba(158, 158, 158, 0.7);
-`;
 
 const ModalContentWrapper = styled(Paper)`
   position: fixed;
@@ -67,6 +56,7 @@ const ThumbnailWrapper = styled(Box)`
   max-width: 600px;
   width: 100%;
   flex-grow: 10;
+  padding: 1rem;
 `;
 
 const ThemeCreator: FC<ThemeCreatorProps> = ({
@@ -107,13 +97,16 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
   };
 
   return (
-    <ModalWrapper>
+    <ModalWrapper open={true} onClose={() => setIsEditing(false)}>
       <ModalContentWrapper
         elevation={24}
         sx={{
           flexDirection: { sm: 'row', xs: 'column' },
           maxHeight: '100%',
           overflowY: 'auto',
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
         }}
       >
         <Box sx={{ maxWidth: '600px', width: '100%', flexShrink: '10', p: '0 auto' }}>
@@ -205,10 +198,18 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
           <Divider sx={{ backgroundColor: 'black' }} />
           <Accordion square disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
-              <Typography variant="h6">Mode</Typography>
+              <Typography variant="h6">
+                {translate(TypographyTranslationKeys.Mode, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography>Light</Typography>
+              <Typography>
+                {translate(TypographyTranslationKeys.Light, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+              </Typography>
               <Switch
                 defaultChecked={mode === 'dark' ? true : false}
                 onChange={(e) => {
@@ -219,7 +220,11 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
                   }
                 }}
               />
-              <Typography>Dark</Typography>
+              <Typography>
+                {translate(TypographyTranslationKeys.Dark, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+              </Typography>
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
@@ -236,18 +241,14 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             secondary={newSecondary}
             mode={themeMode}
           />
-          <Box sx={{ m: '1rem auto 2rem' }}>
-            <Button
-              variant="contained"
-              sx={{ width: '100px', mr: '1rem' }}
-              onClick={() => editTheme()}
-            >
+          <ButtonGroup>
+            <Button variant="contained" onClick={() => editTheme()}>
               {translate(ButtonTranslationKeys.Confirm)}
             </Button>
-            <Button variant="contained" sx={{ width: '100px' }} onClick={() => setIsEditing(false)}>
+            <Button variant="contained" onClick={() => setIsEditing(false)}>
               {translate(ButtonTranslationKeys.Cancel)}
             </Button>
-          </Box>
+          </ButtonGroup>
         </ThumbnailWrapper>
       </ModalContentWrapper>
     </ModalWrapper>

@@ -21,7 +21,6 @@
   "primaryBackground": "Primary Background",
   "secondaryBackground": "Text",
   "logo": "Logo",
-  "newTheme": "New Theme",
   "urgent": "Urgent",
   "high": "High",
   "medium": "Medium",
@@ -38,5 +37,14 @@
   "availableThemes": "Available Themes",
   "permissionToBoard": "You don't have permission to access this board",
   "userExist": "Such user doesn't exist",
-  "boardExist": "Such board doesn't exist"
+  "boardExist": "Such board doesn't exist",
+  "themesNotFound": "Themes not found",
+  "toastifyWarn": "You cannot edit themes of another user",
+  "mode": "Mode",
+  "light": "Light",
+  "dark": "Dark",
+  "loginToAccount": "Login to your account",
+  "incorrectEmail": "Incorrect Email",
+  "login": "Login",
+  "wrongPassword": "Wrong Password"
 }

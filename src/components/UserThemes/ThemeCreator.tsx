@@ -28,23 +28,12 @@ import {
   TranslationNameSpaces,
   TypographyTranslationKeys,
 } from 'enum/Translations';
+import { ModalWrapper } from 'components/common/ModalWrapper';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 interface ThemeCreatorProps {
   setIsCreating: (value: boolean) => void;
 }
-
-const ModalWrapper = styled(Box)`
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background: rgba(158, 158, 158, 0.7);
-`;
 
 const ModalContentWrapper = styled(Paper)`
   position: fixed;
@@ -65,6 +54,7 @@ const ThumbnailWrapper = styled(Box)`
   max-width: 600px;
   width: 100%;
   flex-grow: 10;
+  padding: 1rem;
 `;
 
 const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
@@ -74,9 +64,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
     TranslationNameSpaces.Inputs,
     TranslationNameSpaces.Typography,
   ]);
-  const [name, setName] = useState<string>(
-    `${translate(TypographyTranslationKeys.NewTheme, { ns: TranslationNameSpaces.Typography })}`,
-  );
+  const [name, setName] = useState<string>('New Theme');
   const [primary, setPrimary] = useState<string>('#9E9E9E');
   const [secondary, setSecondary] = useState<string>('#9E9E9E');
   const [checked, setChecked] = useState<boolean>(false);
@@ -100,13 +88,16 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
   };
 
   return (
-    <ModalWrapper>
+    <ModalWrapper open={true} onClose={() => setIsCreating(false)}>
       <ModalContentWrapper
         elevation={24}
         sx={{
           flexDirection: { sm: 'row', xs: 'column' },
           maxHeight: '100%',
           overflowY: 'auto',
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
         }}
       >
         <Box sx={{ maxWidth: '600px', width: '100%', flexShrink: '10', p: '0 auto' }}>
@@ -196,10 +187,18 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
           <Divider sx={{ backgroundColor: 'black' }} />
           <Accordion square disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
-              <Typography variant="h6">Mode</Typography>
+              <Typography variant="h6">
+                {translate(TypographyTranslationKeys.Mode, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography>Light</Typography>
+              <Typography>
+                {translate(TypographyTranslationKeys.Light, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+              </Typography>
               <Switch
                 onChange={(e) => {
                   if (e.target.checked) {
@@ -209,7 +208,11 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
                   }
                 }}
               />
-              <Typography>Dark</Typography>
+              <Typography>
+                {translate(TypographyTranslationKeys.Dark, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+              </Typography>
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
@@ -221,22 +224,14 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
         />
         <ThumbnailWrapper>
           <ThemeThumbnail name={name} primary={primary} secondary={secondary} mode={mode} />
-          <Box sx={{ m: '1rem auto 2rem' }}>
-            <Button
-              variant="contained"
-              sx={{ width: '100px', mr: '1rem' }}
-              onClick={() => addTheme()}
-            >
+          <ButtonGroup>
+            <Button variant="contained" onClick={() => addTheme()}>
               {translate(ButtonTranslationKeys.Create)}
             </Button>
-            <Button
-              variant="contained"
-              sx={{ width: '100px' }}
-              onClick={() => setIsCreating(false)}
-            >
+            <Button variant="contained" onClick={() => setIsCreating(false)}>
               {translate(ButtonTranslationKeys.Cancel)}
             </Button>
-          </Box>
+          </ButtonGroup>
         </ThumbnailWrapper>
       </ModalContentWrapper>
     </ModalWrapper>

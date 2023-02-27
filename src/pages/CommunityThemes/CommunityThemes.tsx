@@ -6,7 +6,11 @@ import { useGetPublicThemes } from 'hooks/themesHooks/useGetPublicThemes';
 import ThemeItem from 'components/UserThemes/ThemeItem';
 import { sortByThemeName } from 'helpers/sortByThemeName';
 import { useTranslation } from 'react-i18next';
-import { ButtonTranslationKeys, TranslationNameSpaces } from 'enum/Translations';
+import {
+  ButtonTranslationKeys,
+  TranslationNameSpaces,
+  TypographyTranslationKeys,
+} from 'enum/Translations';
 
 const PageContentWrapper = styled(Box)`
   display: flex;
@@ -19,7 +23,10 @@ const PageContentWrapper = styled(Box)`
 const CommunityThemes = () => {
   const { publicThemes } = useGetPublicThemes();
 
-  const { t: translate } = useTranslation(TranslationNameSpaces.Buttons);
+  const { t: translate } = useTranslation([
+    TranslationNameSpaces.Buttons,
+    TranslationNameSpaces.Typography,
+  ]);
 
   return (
     <PageContentWrapper>
@@ -42,7 +49,9 @@ const CommunityThemes = () => {
           </Grid>
         ) : (
           <Typography variant="h4" align="center">
-            Themes not found
+            {translate(TypographyTranslationKeys.ThemesNotFound, {
+              ns: TranslationNameSpaces.Typography,
+            })}
           </Typography>
         )}
       </Container>

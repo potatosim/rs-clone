@@ -86,7 +86,13 @@ const ThemeThumbnail: FC<ThumbnailProps> = ({ name, primary, secondary, mode }) 
               >
                 {translate(ButtonTranslationKeys.SecondaryColor)}
               </Button>
-              <TextField label="Field" color="primary" sx={{ m: '1rem auto' }} />
+              <TextField
+                label={translate(TypographyTranslationKeys.SecondaryBackground, {
+                  ns: TranslationNameSpaces.Typography,
+                })}
+                color="primary"
+                sx={{ m: '1rem auto' }}
+              />
             </Paper>
           </Box>
         </ThemeProvider>

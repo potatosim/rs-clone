@@ -19,8 +19,8 @@ export const TextArea = styled(TextareaAutosize)`
   resize: none;
   height: 50px;
   border-radius: 5px;
-  color: ${({ theme }) => theme.palette.getContrastText(theme.palette.primary.main)};
-  background-color: ${({ theme }) => theme.palette.primary.main};
+  color: ${({ theme }) => theme.palette.getContrastText(theme.palette.background.paper)};
+  background-color: ${({ theme }) => theme.palette.background.paper};
   outline: none;
   border-color: ${({ theme }) => theme.palette.secondary.main};
   font-size: 1rem;

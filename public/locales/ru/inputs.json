@@ -4,7 +4,7 @@
   "titleOfTheTask": "Имя задачи",
   "description": "Описание",
   "priority": "Приоритет",
-  "size": "Сложность",
+  "size": "Размер",
   "assignee": "Исполнитель",
   "participants": "Участники",
   "status": "Статус",
@@ -18,8 +18,5 @@
   "addToCommunityThemes": "Добавить в темы сообщества",
   "eMailAddress": "Электронная почта",
   "noDescriptionProvided": "Описание отсутствует",
-  "enterSomeText": "Введите Ваше сообщение...",
-  "mode": "Режим",
-  "light": "Светлый",
-  "dark": "Тёмный"
+  "enterSomeText": "Введите Ваше сообщение..."
 }
