@@ -7,7 +7,6 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
-  deleteDoc,
   doc,
   getDocs,
   query,
@@ -15,7 +14,6 @@ import {
   where,
   writeBatch,
 } from 'firebase/firestore';
-import { deleteFromHolders } from 'helpers/deleteFromHolders';
 import { FC, useContext, useState } from 'react';
 import { ITheme } from 'types/Theme';
 import ThemeEditor from 'components/Theme/ThemeEditor';
