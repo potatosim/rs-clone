@@ -16,7 +16,7 @@ import {
   ButtonGroup,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
-import ThemeThumbnail from './ThemeThumbnail';
+import ThemeThumbnail from 'components/Theme/ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
 import { doc, updateDoc } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -32,6 +32,7 @@ import {
   TypographyTranslationKeys,
 } from 'enum/Translations';
 import { ModalWrapper } from 'components/common/ModalWrapper';
+import { TwitterPicker } from 'react-color';
 
 interface ThemeCreatorProps extends ITheme {
   setIsEditing(value: boolean): void;
@@ -121,6 +122,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             <AccordionDetails>
               <TextField
                 label={translate(InputsTranslationKeys.Name, { ns: TranslationNameSpaces.Inputs })}
+                color="secondary"
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
@@ -138,19 +140,11 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <TextField
-                label={translate(InputsTranslationKeys.Primary, {
-                  ns: TranslationNameSpaces.Inputs,
-                })}
-                type="color"
-                value={newPrimary}
-                onChange={(e) => setNewPrimary(e.target.value)}
-                sx={{ width: '250px', mb: '20px' }}
-              />
+              <TwitterPicker color={newPrimary} onChangeComplete={(c) => setNewPrimary(c.hex)} />
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
-          <Accordion square disableGutters={true}>
+          <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">
                 {translate(InputsTranslationKeys.Primary, {
@@ -159,19 +153,14 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <TextField
-                label={translate(InputsTranslationKeys.Primary, {
-                  ns: TranslationNameSpaces.Inputs,
-                })}
-                type="color"
-                value={newSecondary}
-                onChange={(e) => setNewSecondary(e.target.value)}
-                sx={{ width: '250px' }}
+              <TwitterPicker
+                color={newSecondary}
+                onChangeComplete={(c) => setNewSecondary(c.hex)}
               />
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
-          <Accordion square disableGutters={true}>
+          <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">
                 {translate(TypographyTranslationKeys.Privacy, {
@@ -181,13 +170,9 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             </AccordionSummary>
             <AccordionDetails>
               <FormControlLabel
-                control={<Checkbox checked={checked} />}
+                control={<Checkbox color="secondary" checked={checked} />}
                 onChange={() => {
-                  if (checked) {
-                    setChecked(false);
-                  } else {
-                    setChecked(true);
-                  }
+                  setChecked(!checked);
                 }}
                 label={translate(InputsTranslationKeys.AddToCommunityThemes, {
                   ns: TranslationNameSpaces.Inputs,
@@ -196,7 +181,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             </AccordionDetails>
           </Accordion>
           <Divider sx={{ backgroundColor: 'black' }} />
-          <Accordion square disableGutters={true}>
+          <Accordion disableGutters={true}>
             <AccordionSummary expandIcon={<ArrowIcon />}>
               <Typography variant="h6">
                 {translate(TypographyTranslationKeys.Mode, {
