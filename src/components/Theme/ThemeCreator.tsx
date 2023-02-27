@@ -15,7 +15,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
-import ThemeThumbnail from './ThemeThumbnail';
+import ThemeThumbnail from 'components/Theme/ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
 import { addDoc, collection } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -111,6 +111,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
               <TextField
                 label={translate(InputsTranslationKeys.Name, { ns: TranslationNameSpaces.Inputs })}
                 type="text"
+                color="secondary"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 sx={{ width: '250px', mb: '20px' }}
@@ -132,6 +133,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
                   ns: TranslationNameSpaces.Inputs,
                 })}
                 type="color"
+                color="secondary"
                 value={primary}
                 onChange={(e) => setPrimary(e.target.value)}
                 sx={{ width: '250px', mb: '20px' }}
@@ -153,6 +155,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({ setIsCreating }) => {
                   ns: TranslationNameSpaces.Inputs,
                 })}
                 type="color"
+                color="secondary"
                 value={secondary}
                 onChange={(e) => setSecondary(e.target.value)}
                 sx={{ width: '250px' }}

@@ -7,7 +7,7 @@ import { arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { deleteFromHolders } from 'helpers/deleteFromHolders';
 import { FC, useContext, useState } from 'react';
 import { ITheme } from 'types/Theme';
-import ThemeEditor from './ThemeEditor';
+import ThemeEditor from 'components/Theme/ThemeEditor';
 import { UserContext } from 'components/RequireAuth';
 import { usersConverter } from 'helpers/converters';
 import { IUserItem } from 'types/User';
@@ -25,7 +25,7 @@ interface IThemeItem extends ITheme {
   status: 'userTheme' | 'communityTheme';
 }
 
-const ThemeItem: FC<IThemeItem> = (props) => {
+const ThemeCard: FC<IThemeItem> = (props) => {
   const { firestore } = useContext(FirebaseContext);
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useContext(UserContext);
@@ -127,4 +127,4 @@ const ThemeItem: FC<IThemeItem> = (props) => {
   );
 };
 
-export default ThemeItem;
+export default ThemeCard;

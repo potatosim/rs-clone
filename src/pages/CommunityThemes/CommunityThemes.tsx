@@ -3,7 +3,7 @@ import { AppRoutes } from 'enum/AppRoutes';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useGetPublicThemes } from 'hooks/themesHooks/useGetPublicThemes';
-import ThemeItem from 'components/UserThemes/ThemeItem';
+import ThemeCard from 'components/ThemeCard';
 import { sortByThemeName } from 'helpers/sortByThemeName';
 import { useTranslation } from 'react-i18next';
 import {
@@ -43,7 +43,7 @@ const CommunityThemes = () => {
           <Grid container spacing={2}>
             {sortByThemeName(publicThemes).map((theme) => (
               <Grid key={theme.id} item xs={12} sm={6} md={4} lg={3}>
-                <ThemeItem {...theme} status={'communityTheme'} />
+                <ThemeCard {...theme} status={'communityTheme'} />
               </Grid>
             ))}
           </Grid>

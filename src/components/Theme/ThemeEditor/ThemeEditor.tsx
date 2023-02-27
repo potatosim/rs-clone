@@ -16,7 +16,7 @@ import {
   ButtonGroup,
 } from '@mui/material';
 import { FC, useContext, useState } from 'react';
-import ThemeThumbnail from './ThemeThumbnail';
+import ThemeThumbnail from 'components/Theme/ThemeThumbnail';
 import ArrowIcon from '@mui/icons-material/ExpandMore';
 import { doc, updateDoc } from 'firebase/firestore';
 import { FirebaseContext } from 'components/FirebaseProvider/FirebaseProvider';
@@ -121,6 +121,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
             <AccordionDetails>
               <TextField
                 label={translate(InputsTranslationKeys.Name, { ns: TranslationNameSpaces.Inputs })}
+                color="secondary"
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
@@ -143,6 +144,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
                   ns: TranslationNameSpaces.Inputs,
                 })}
                 type="color"
+                color="secondary"
                 value={newPrimary}
                 onChange={(e) => setNewPrimary(e.target.value)}
                 sx={{ width: '250px', mb: '20px' }}
@@ -164,6 +166,7 @@ const ThemeCreator: FC<ThemeCreatorProps> = ({
                   ns: TranslationNameSpaces.Inputs,
                 })}
                 type="color"
+                color="secondary"
                 value={newSecondary}
                 onChange={(e) => setNewSecondary(e.target.value)}
                 sx={{ width: '250px' }}
