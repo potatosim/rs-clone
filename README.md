@@ -1,5 +1,17 @@
 # PRO-Boards
 
+# **Technologies used:**
+
+- React + TypeScript
+- React Router Dom - to implement routing and secure routes.
+- Material UI - as a good UI library with their themes and styled components.
+- Eslint + prettier - to improve code quality.
+- Firebase - as a backend, database, auth service and file storage.
+- i18next - for localization.
+- framer-motion - for our animations.
+- react-beautiful-dnd - for D&D in boards section.
+- react-toastify - for notifications.
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
@@ -100,7 +112,9 @@ service cloud.firestore {
 ```
 
 ## Running application
+
 1. Start application.
+
 ```
 npm start
 ```
