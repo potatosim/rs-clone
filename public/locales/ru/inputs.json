@@ -1,0 +1,22 @@
+{
+  "titleOfTheBoard": "Имя доски",
+  "titleOfTheColumn": "Имя колонки",
+  "titleOfTheTask": "Имя задачи",
+  "description": "Описание",
+  "priority": "Приоритет",
+  "size": "Размер",
+  "assignee": "Исполнитель",
+  "participants": "Участники",
+  "status": "Статус",
+  "password": "Пароль",
+  "title": "Имя",
+  "history": "История",
+  "comments": "Комментарии",
+  "name": "Имя",
+  "primary": "Основной цвет",
+  "secondary": "Вспомогательный цвет",
+  "addToCommunityThemes": "Добавить в темы сообщества",
+  "eMailAddress": "Электронная почта",
+  "noDescriptionProvided": "Описание отсутствует",
+  "enterSomeText": "Введите Ваше сообщение..."
+}
